@@ -7,21 +7,21 @@ import { styles, throttle, isHTMLElement, query } from '../../utils';
 /**
  * The throttle duration in milliseconds for resizing gutter rows.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 const THROTTLE_DURATION = 100;
 
 /**
  * The class name for a gutter element.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 const GUTTER_CLASS_NAME = `${ PROJECT_CODE_SHORT }__gutter`;
 
 /**
  * The class name for row element in a gutter.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 const GUTTER_ROW_CLASS_NAME = `${ GUTTER_CLASS_NAME }__row`;
 
@@ -29,7 +29,7 @@ const GUTTER_ROW_CLASS_NAME = `${ GUTTER_CLASS_NAME }__row`;
  * The component for creating a gutter and its rows.
  * This is usually activated by other components through the `gutter` option.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export function Gutter( { lines, event, root, options }: Renderer ): void {
   // Wait for initialization of other components.

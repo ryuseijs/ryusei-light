@@ -2,6 +2,6 @@
  * The line break character.
  *
  * @private
- * @since 1.0.0
+ * @since 0.0.1
  */
 export const LINE_BREAK = '\n';

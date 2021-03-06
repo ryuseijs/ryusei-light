@@ -1,7 +1,7 @@
 /**
  * Inserts the provided element(s) after the `ref` element.
  *
- * @since 1.0.0
+ * @since 0.0.1
  *
  * @param ref  - A new element is inserted after this element.
  * @param elms - An element or elements to insert.

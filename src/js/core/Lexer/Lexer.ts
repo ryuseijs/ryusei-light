@@ -12,7 +12,7 @@ const isStickySupported = ! isUndefined( /x/.sticky );
 /**
  * The class for creating a simple lexer by a Language object.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export class Lexer {
   /**

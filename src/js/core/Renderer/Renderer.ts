@@ -13,7 +13,7 @@ const Components: Record<string, Component> = {};
 /**
  * The class for highlighting code via provided tokens.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export class Renderer {
   /**

@@ -5,7 +5,7 @@ import { Renderer } from '../../core/Renderer/Renderer';
 /**
  * The component for rendering overlay elements.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export function Overlay( { event, options }: Renderer ) {
   event.on( 'mounted', () => {

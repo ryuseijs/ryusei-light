@@ -15,7 +15,7 @@ const lexers: Record<string, Lexer> = {};
 /**
  * The class that tokenizes code for syntax highlighting.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export class RyuseiLight {
   /**

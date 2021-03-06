@@ -4,21 +4,21 @@ import { Renderer } from '../core/Renderer/Renderer';
 /**
  * The type for any function.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export type AnyFunction = ( ...args: any[] ) => any;
 
 /**
  * The type for a single tokenizer.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export type Tokenizer = [ string, RegExp?, string? ];
 
 /**
  * The interface for a Grammar object that contains tokenizers.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export interface Grammar {
   /**
@@ -35,7 +35,7 @@ export interface Grammar {
 /**
  * The interface for a language definition object.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export interface Language {
   /**
@@ -67,21 +67,21 @@ export interface Language {
 /**
  * The type for a token.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export type Token = [ string, string ];
 
 /**
  * The type for a return value of tokenize functions.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export type TokenizeResult = { offset: number, tokens: Token[] };
 
 /**
  * The interface for a language info object.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export interface LanguageInfo {
   /**
@@ -98,14 +98,14 @@ export interface LanguageInfo {
 /**
  * The type for a Component function.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export type Component = ( renderer: Renderer ) => void;
 
 /**
  * The interface for options.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export interface Options {
   /**

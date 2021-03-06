@@ -5,7 +5,7 @@ import { PROJECT_CODE_SHORT } from '../../constants/project';
 /**
  * The component for rendering a language name.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export function LanguageName( { event, info, options }: Renderer ) {
   const { name } = info;

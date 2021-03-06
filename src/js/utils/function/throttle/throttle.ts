@@ -4,7 +4,7 @@ import { AnyFunction } from '../../../types';
 /**
  * Returns a function that invokes the provided function at most once in the specified duration.
  *
- * @since 1.0.0
+ * @since 0.0.1
  *
  * @param callback - A function to throttle.
  * @param interval - A throttle duration in milliseconds.

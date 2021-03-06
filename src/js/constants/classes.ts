@@ -4,7 +4,7 @@ import { PROJECT_CODE, PROJECT_CODE_SHORT } from './project';
 /**
  * The collection of class names.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export const CLASSES = {
   root     : PROJECT_CODE,

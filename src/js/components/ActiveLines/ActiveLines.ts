@@ -8,14 +8,14 @@ import { attr, error, isArray } from '../../utils';
  * The data attribute name for active lines.
  * The value must be an array in JSON format, such as "[ 2, [ 5, 10 ] ]"
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 const ATTRIBUTE_ACTIVE_LINES = `data-${ PROJECT_CODE_SHORT }-active-lines`;
 
 /**
  * The component for highlighting lines.
  *
- * @since 1.0.0
+ * @since 0.0.1
  */
 export function ActiveLines( { event, root, options }: Renderer ): void {
   const lines = ( root && parseData( root ) ) || options.activeLines;
