@@ -1,0 +1,15 @@
+$name-background: #303f4d !default;
+$name-border-radius: 0 0 4px 4px !default;
+$name-color: #93aec7 !default;
+$name-font-size: .8em !default;
+$name-padding: .3em 1em !default;
+
+.rl {
+  &__name {
+    background: $name-background;
+    border-radius: $name-border-radius;
+    color: $name-color;
+    font-size: $name-font-size;
+    padding: $name-padding;
+  }
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ActiveLines</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+  <h3>Options</h3>
+  <pre>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+  </pre>
+
+  <h3>Data Attribute</h3>
+  <pre data-rl-active-lines="[ 3, [ 5, 8 ] ]">
+1
+2
+3
+4
+5
+6
+7
+8
+9
+  </pre>
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/js/components/gutter.min.js"></script>
+  <script src="../../../../dist/js/components/active-lines.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight( { language: 'none' } );
+    ryuseilight.apply( 'pre', { activeLines: [ 2, [ 4, 6 ] ] } );
+  </script>
+</body>
+</html>

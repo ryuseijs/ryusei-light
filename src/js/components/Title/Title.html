@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+  <h3>Data Attribute</h3>
+  <pre class="ryuseilight" data-rl-title="sample.js">
+console.error( 'Something went wrong!' );
+  </pre>
+
+  <h3>Options</h3>
+  <pre class="example-options">
+const container = document.getElementById( 'container' );
+container.classList.add( 'is-active' );
+  </pre>
+
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/js/components/header.min.js"></script>
+  <script src="../../../../dist/js/components/title.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight( { language: 'js' } );
+    ryuseilight.apply( '.ryuseilight' );
+    ryuseilight.apply( '.example-options', { title: 'Title From Options' } );
+  </script>
+</body>
+</html>

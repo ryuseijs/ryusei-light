@@ -1,0 +1,22 @@
+.rl {
+  &__overlay {
+    box-sizing: border-box;
+    position: absolute;
+    width: 100%;
+
+    &--top-left,
+    &--top-right {
+      display: flex;
+      left: 0;
+      top: 0;
+    }
+
+    &--top-left {
+      justify-content: flex-start;
+    }
+
+    &--top-right {
+      justify-content: flex-end;
+    }
+  }
+}

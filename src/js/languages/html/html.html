@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+  <h3>Practical Example</h3>
+  <pre>
+&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+
+  &lt;meta property=&quot;og:title&quot; content=&quot;Markup Highlighting Example&quot;&gt;
+  &lt;meta property=&quot;og:url&quot; content=&quot;https://example.com&quot;&gt;
+  &lt;meta property=&quot;og:description&quot; content=&quot;Markup highlighting example&quot;&gt;
+  &lt;meta property=&quot;og:image&quot; content=&quot;images/featured-image.jpg&quot;&gt;
+  &lt;meta property=&quot;og:site_name&quot; content=&quot;Feather Highlight&quot;&gt;
+  &lt;meta name=&quot;title&quot; content=&quot;Markup Example&quot;&gt;
+  &lt;meta name=&quot;description&quot; content=&quot;Markup highlighting example&quot;&gt;
+
+  &lt;link rel=&quot;shortcut icon&quot; href=&quot;https://example.com/images/icon.png&quot;&gt;
+  &lt;link rel=&quot;icon&quot; href=&quot;https://example.com/images/icon.png&quot;&gt;
+  &lt;link rel=&quot;apple-touch-icon&quot; sizes=&quot;152x152&quot; href=&quot;https://example.com/images/apple-touch-icon.png&quot;&gt;
+  &lt;link rel=&#039;dns-prefetch&#039; href=&#039;//s.w.org&#039; /&gt;
+
+  &lt;title&gt;Markup&lt;/title&gt;
+
+  &lt;script src=&quot;./main.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://example.com/library.js&quot;&gt;&lt;/script&gt;
+
+  &lt;!-- Embed styles --&gt;
+  &lt;style&gt;
+    /* Define variables */
+    :root {
+      --text-color: #333;
+    }
+
+    @font-face {
+      font-family: &#039;Roboto&#039;;
+      font-style: normal;
+      font-weight: 300;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/roboto/v20/KFOlCnqEu92Fr1MmSU5fCRc4EsA.woff2) format(&#039;woff2&#039;);
+      unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+    }
+
+    body
+    {
+      color: var( --text-color );
+      padding: 0 !important;
+    }
+
+    #container {
+      padding: 2rem 2rem 4rem;
+    }
+
+    @media ( max-width: 1200px ) {
+      #toc {
+        padding: 1rem;
+      }
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;header id=&quot;main-header&quot; class=&quot;l-masthead p-masthead&quot;&gt;
+  &lt;div class=&quot;p-branding&quot;&gt;
+    &lt;span class=&quot;p-branding__logo&quot;&gt;
+      &lt;a
+        href=&quot;https://example.com/&quot;
+        class=&quot;custom-logo-link&quot;
+        rel=&quot;home&quot;
+      &gt;
+          &lt;img width=&quot;167&quot; height=&quot;54&quot; src=&quot;https://example.com/images/logo-white-small.png&quot; class=&quot;custom-logo&quot; alt=&quot;Branding Logo&quot;&gt;
+      &lt;/a&gt;
+    &lt;/span&gt;
+  &lt;/div&gt;
+
+  &lt;nav id=&quot;main-navigation&quot; class=&quot;p-navigation&quot;&gt;
+    &lt;div class=&quot;menu-main-container&quot;&gt;
+      &lt;ul id=&quot;header-navigation-list&quot; class=&quot;p-navigation__list&quot;&gt;
+        &lt;li id=&quot;menu-item-1&quot; class=&quot;menu-item menu-item-1&quot;&gt;
+          &lt;a href=&quot;https://example.com&quot; aria-current=&quot;page&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li id=&quot;menu-item-2&quot; class=&quot;menu-item menu-item-2&quot;&gt;
+          &lt;a href=&quot;https://example.com/category/documents/&quot;&gt;Documents&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li id=&quot;menu-item-3&quot; class=&quot;menu-item menu-item-3&quot;&gt;
+          &lt;a target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://github.com/&quot;&gt;GitHub&lt;/a&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;
+
+&lt;main id=&quot;main&quot; class=&quot;p-main&quot;&gt;
+  &lt;section class=&quot;p-section&quot;&gt;
+    &lt;h2&gt;Demo&lt;/h2&gt;
+    &lt;p&gt;
+      Here is a very &lt;strong&gt;simple&lt;/strong&gt; example:
+    &lt;/p&gt;
+    &lt;div class=&quot;p-example__splide&quot;&gt;
+      &lt;div
+        id=&quot;example&quot;
+        class=&quot;p-example&quot;
+        data-options='{&quot;height&quot;:&quot;9rem&quot;,&quot;breakpoints&quot;:{&quot;600&quot;:{&quot;height&quot;:&quot;6rem&quot;}}}'
+      &gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+
+&lt;script&gt;
+  // Small script code
+  const main = document.getElementById( &#039;main&#039; );
+  main.addEventListener( &#039;click&#039;, function () {
+    console.log( &#039;clicked&#039; );
+  } );
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+  </pre>
+
+  <h3>Comments</h3>
+  <pre>
+&lt;!-- Comment --&gt;
+&lt;!--
+  Multiline
+  Comment
+--&gt;
+  </pre>
+
+  <h3>Tags/Attributes</h3>
+  <pre>
+&lt;a
+  id=&quot;link&quot;
+  href=&quot;https://example.com/&quot;
+  class=&quot;custom-logo-link&quot;
+  rel=&quot;home&quot;
+&gt;
+  &lt;figure style=&quot;padding: 2rem&quot;&gt;
+    &lt;img src=&quot;https//example.com/images/image.jpg&quot; alt=&quot;An awesome image&quot;&gt;
+    &lt;figcaption&gt;An awesome image&lt;/figcaption&gt;
+  &lt;/figure&gt;
+&lt;/a&gt;
+  </pre>
+
+  <h3>Style Tag</h3>
+  <pre>
+&lt;style&gt;
+  input[type=&quot;submit&quot;] {
+    padding: 1em 2em;
+  }
+
+  .container {
+    color: blue;
+  }
+
+  .container .button {
+    color: blue;
+  }
+
+  .container &gt; .button {
+    color: blue;
+  }
+
+  .container + .button {
+    color: blue;
+  }
+
+  .container ~ .button {
+    color: blue;
+  }
+
+  @font-face {
+    font-family: &#039;Roboto&#039;;
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/roboto/v20/KFOlCnqEu92Fr1MmSU5fCRc4EsA.woff2) format(&#039;woff2&#039;);
+    unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+  }
+&lt;/style&gt;
+  </pre>
+
+  <h3>Script Tag</h3>
+  <pre>
+&lt;script&gt;
+const object = { a: 1, b: 2, c: 3 };
+const values = [];
+
+Object.keys( object ).forEach( key => {
+  const value = object[ key ];
+
+  if ( typeof value === 'number' ) {
+    values.push( object[ key ] * 2 );
+  }
+} );
+
+console.log( values );
+&lt;/script&gt;
+  </pre>
+
+  <h3>HTML Entities</h3>
+  <pre>
+&amp;lt; &amp;gt; &amp;amp; &amp;quot; &amp;apos;
+&amp;cent; &amp;pound; &amp;yen; &amp;euro; &amp;copy; &amp;reg;
+&amp;#60; &amp;#162;
+  </pre>
+
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/languages/html.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight();
+    ryuseilight.apply( 'pre', { language: 'markup' } );
+  </script>
+</body>
+</html>

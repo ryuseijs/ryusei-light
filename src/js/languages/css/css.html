@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CSS</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <h3>Practical Example</h3>
+  <pre>
+/*
+ * Main styles
+ */
+:root {
+  --text-color: #333;
+}
+
+body {
+  color: var( --text-color );
+  padding: 0 !important;
+}
+
+#container {
+  padding: 2rem 2rem 4rem;
+}
+
+@media ( /* ( max-width: 900px ) */ max-width: 1200px ) {
+  #toc {
+     padding: 1rem;
+  }
+}
+
+/*
+ * Components
+ */
+.button {
+  display: inline-flex;
+  padding: .3em 2em;
+  border: 2px solid hsla( 0, 0%, 100%, .3 );
+  border-radius: 10px;
+  background: white;
+  color: var( --text-color );
+  text-align: center;
+  /*
+    font-family: Roboto, 'Avenir Next Pro', sans-serif;
+    font-size: .9rem;
+  */
+  line-height: 1.5;
+  text-transform: uppercase;
+  transform: translate( 10px, 10px ) scaleY( .9 );
+}
+
+.button:hover {
+  background: rgba( 255, 255, 0, .1 );
+}
+
+.button:active {
+  outline: 2px solid hsla( 0, 0%, 100%, .6 );
+}
+
+.button::before {
+  content: attr( data-title number, 0 );
+}
+
+@import 'components.css';
+  </pre>
+
+  <h3>Comments/Strings</h3>
+  <pre>
+/**
+ * Multiline comment
+ * 'Should not be a string'
+ * "Should not be a string"
+ */
+
+/* Multiline comment in a single line */
+
+// Should not be a comment
+
+'Single quote'
+'Single \'quote\' with escape'
+'Single 'quote' with single quote'
+'Single "quote" with double quote'
+
+"Double quote"
+"Double \"quote\" with escape"
+"Double "quote" with double quote"
+"Double 'quote' with single quote"
+
+'Multiline \
+single \
+quote'
+
+"Multiline \
+double \
+quote"
+
+'/* Should not be a comment */'
+"/* Should not be a comment */"
+  </pre>
+
+  <h3>Bracket Position</h3>
+  <pre>
+body{
+  padding: 0 !important;
+}
+
+body {
+  padding: 0 !important;
+}
+
+body { padding: 0 !important }
+
+body
+{
+  padding: 0 !important;
+}
+  </pre>
+
+  <h3>Selectors And Combinators</h3>
+  <pre>
+* {
+  box-sizing: border-box;
+}
+
+ul {
+  margin: 0;
+}
+
+input[type="submit"] {
+  padding: 1em 2em;
+}
+
+.container {
+  color: blue;
+}
+
+.container .button {
+  color: blue;
+}
+
+.container > .button {
+  color: blue;
+}
+
+.container + .button {
+  color: blue;
+}
+
+.container ~ .button {
+  color: blue;
+}
+  </pre>
+
+  <h3>@rule</h3>
+  <pre>
+@charset "utf-8";
+
+@import url( "style.css" ) body;
+@import 'style.css';
+@import url( 'style.css' ) screen and ( orientation:landscape );
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/roboto/v20/KFOlCnqEu92Fr1MmSU5fCRc4EsA.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+
+@media screen and (max-width: 1000px) {
+  body {
+    padding: 3rem;
+  }
+}
+
+@supports (display: grid) {
+  @supports (display: grid) {
+    @media screen and (max-width: 1000px) {
+      .container {
+        display: grid;
+      }
+    }
+  }
+}
+
+@supports not (display: grid) {
+  @media screen and (max-width: 1000px) {
+    .container {
+      display: flex;
+    }
+  }
+}
+
+@media only screen
+  and (min-width: 320px)
+  and (max-width: 480px)
+  and (resolution: 150dpi) {
+    body { line-height: 1.4; }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  90% {
+    opacity: 0.2;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+  </pre>
+
+  <h3>Function</h3>
+  <pre>
+.container {
+  width: calc( 100% - 2rem );
+  transition: opacity 2s cubic-bezier( .17,.67,.83,.67 );
+}
+
+.container::before {
+  content: attr( data-container-prefix );
+}
+
+.container::after {
+  content: counter( container-counter );
+}
+  </pre>
+
+  <h3>Keyword</h3>
+  <pre>
+* {
+  !important important initial inherit unset
+}
+  </pre>
+
+  <h3>Number</h3>
+  <pre>
+* {
+  0 1 1.23 .23 +1.23 -1.23
+  #0033FF #0033ff #333 #CCC #ccc
+}
+  </pre>
+
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/languages/css.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight();
+    ryuseilight.apply( 'pre', { language: 'css' } );
+  </script>
+</body>
+</html>

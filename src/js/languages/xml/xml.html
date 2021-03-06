@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>XML</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+  <pre>
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;?xml-stylesheet href=&quot;catalog.xsl&quot; type=&quot;text/xsl&quot;?&gt;
+&lt;!DOCTYPE catalog SYSTEM &quot;catalog.dtd&quot;&gt;
+&lt;catalog&gt;
+   &lt;product description=&quot;Cardigan Sweater&quot; product_image=&quot;cardigan.jpg&quot;&gt;
+      &lt;catalog_item gender=&quot;Men&#039;s&quot;&gt;
+         &lt;item_number&gt;QWZ5671&lt;/item_number&gt;
+         &lt;price&gt;39.95&lt;/price&gt;
+         &lt;size description=&quot;Medium&quot;&gt;
+            &lt;color_swatch image=&quot;red_cardigan.jpg&quot;&gt;Red&lt;/color_swatch&gt;
+            &lt;color_swatch image=&quot;burgundy_cardigan.jpg&quot;&gt;Burgundy&lt;/color_swatch&gt;
+         &lt;/size&gt;
+         &lt;size description=&quot;Large&quot;&gt;
+            &lt;color_swatch image=&quot;red_cardigan.jpg&quot;&gt;Red&lt;/color_swatch&gt;
+            &lt;color_swatch image=&quot;burgundy_cardigan.jpg&quot;&gt;Burgundy&lt;/color_swatch&gt;
+         &lt;/size&gt;
+      &lt;/catalog_item&gt;
+      &lt;catalog_item gender=&quot;Women&#039;s&quot;&gt;
+         &lt;item_number&gt;RRX9856&lt;/item_number&gt;
+         &lt;price&gt;42.50&lt;/price&gt;
+         &lt;size description=&quot;Small&quot;&gt;
+            &lt;color_swatch image=&quot;red_cardigan.jpg&quot;&gt;Red&lt;/color_swatch&gt;
+            &lt;color_swatch image=&quot;navy_cardigan.jpg&quot;&gt;Navy&lt;/color_swatch&gt;
+            &lt;color_swatch image=&quot;burgundy_cardigan.jpg&quot;&gt;Burgundy&lt;/color_swatch&gt;
+         &lt;/size&gt;
+         &lt;size description=&quot;Medium&quot;&gt;
+            &lt;color_swatch image=&quot;red_cardigan.jpg&quot;&gt;Red&lt;/color_swatch&gt;
+            &lt;color_swatch image=&quot;navy_cardigan.jpg&quot;&gt;Navy&lt;/color_swatch&gt;
+            &lt;color_swatch image=&quot;burgundy_cardigan.jpg&quot;&gt;Burgundy&lt;/color_swatch&gt;
+            &lt;color_swatch image=&quot;black_cardigan.jpg&quot;&gt;Black&lt;/color_swatch&gt;
+         &lt;/size&gt;
+         &lt;size description=&quot;Large&quot;&gt;
+            &lt;color_swatch image=&quot;navy_cardigan.jpg&quot;&gt;Navy&lt;/color_swatch&gt;
+            &lt;color_swatch image=&quot;black_cardigan.jpg&quot;&gt;Black&lt;/color_swatch&gt;
+         &lt;/size&gt;
+         &lt;size description=&quot;Extra Large&quot;&gt;
+            &lt;color_swatch image=&quot;burgundy_cardigan.jpg&quot;&gt;Burgundy&lt;/color_swatch&gt;
+            &lt;color_swatch image=&quot;black_cardigan.jpg&quot;&gt;Black&lt;/color_swatch&gt;
+         &lt;/size&gt;
+      &lt;/catalog_item&gt;
+   &lt;/product&gt;
+&lt;/catalog&gt;
+  </pre>
+
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/languages/xml.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight();
+    ryuseilight.apply( 'pre', { language: 'xml' } );
+  </script>
+</body>
+</html>

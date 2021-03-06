@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JSON</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <h3>Practical Example</h3>
+  <pre>
+{
+  "users": {
+    "title": "Users",
+    "list": [
+      {
+        "name": "John Doe",
+        "id": "001",
+        "age": 38,
+        "entries": [ 1, 3, 4 ],
+        "premium": true,
+        "icon": null
+      },
+      {
+        "name": "Jane Doe",
+        "id": "002",
+        "age": 27,
+        "entries": [ 1, 8, 12 ],
+        "premium": false,
+        "icon": "./images/002.jpg"
+      }
+    ]
+  }
+}
+  </pre>
+
+  <h3>Prop</h3>
+  <pre>
+{
+  "prop": "value",
+  "escaped\"": ""
+}
+  </pre>
+
+  <h3>String</h3>
+  <pre>
+{
+  "prop": "value",
+  "brackets in a string": "{ value }",
+  "escaped": "\"esc\"aped\""
+}
+  </pre>
+
+  <h3>Number</h3>
+  <pre>
+{
+  "integer": 1,
+  "negative integer": -1,
+  "float": 1.23,
+  "negative float": -1.23,
+  "invalid float": .23,
+  "exp": 1e10,
+  "exp+": [ 1e+10, 1E+10 ],
+  "exp-": [ 1e-10, 1E-10 ],
+  "exp with fraction": 1.2e10,
+  "exp+ with fraction": [ 1.2e+10, 1.2E+10 ],
+  "exp- with fraction": [ 1.2e-10, 1.2E-10 ]
+}
+  </pre>
+
+  <h3>Keyword/Boolean</h3>
+  <pre>
+{
+  "null": 1,
+  "true": true,
+  "false": false
+}
+  </pre>
+
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/languages/json.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight( { language: 'json' } );
+    ryuseilight.apply( 'pre' );
+  </script>
+</body>
+</html>

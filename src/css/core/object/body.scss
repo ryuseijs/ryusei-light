@@ -1,0 +1,10 @@
+.rl {
+  &__body {
+    display: flex;
+    overflow: auto;
+
+    &--wrap {
+      white-space: pre-wrap;
+    }
+  }
+}

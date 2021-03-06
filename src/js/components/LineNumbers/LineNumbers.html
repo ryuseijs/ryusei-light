@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LineNumbers</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+  <h3>Options</h3>
+  <pre>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+  </pre>
+
+  <h3>Data Attribute</h3>
+  <pre data-rl-line-numbers="120">
+1
+2
+3
+4
+5
+6
+7
+8
+9
+  </pre>
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/js/components/gutter.min.js"></script>
+  <script src="../../../../dist/js/components/line-numbers.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight();
+    ryuseilight.apply( 'pre', { language: 'none', lineNumbers: true } );
+  </script>
+</body>
+</html>

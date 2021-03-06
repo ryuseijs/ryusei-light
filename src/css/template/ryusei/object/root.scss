@@ -1,0 +1,16 @@
+$background: #1f272f !default;
+$color: #bdd7f0 !default;
+$font-size: 14px !default;
+$line-height: 1.5 !default;
+$selection-background: #4a5c6d !default;
+
+.ryuseilight {
+  background: $background;
+  color: $color;
+  font-size: $font-size;
+  line-height: $line-height;
+
+  ::selection {
+    background-color: $selection-background;
+  }
+}

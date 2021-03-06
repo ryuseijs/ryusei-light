@@ -1,0 +1,11 @@
+.rl {
+  &__gutter {
+    flex: 0 0 auto;
+    user-select: none;
+
+    &__row {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}

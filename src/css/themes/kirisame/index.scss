@@ -1,0 +1,61 @@
+@use '../../template/ryusei' with (
+  $background: #fafcff,
+  $color: #4e5560,
+  $font-size: 14px,
+  $line-height: 1.5,
+  $selection-background: #d8e3f1,
+
+  $scrollbar-size: 10px,
+  $scrollbar-track-background: #d8e3f1,
+  $scrollbar-thumb-background: #a2bdde,
+  $scrollbar-corner-background: #ebf3fb,
+
+  $code-padding: 1em 0,
+  $code-overlay-padding: 1.8em 0,
+
+  $gutter-background: #f5faff,
+  $gutter-row-color: #bed1e9,
+  $gutter-row-padding: 0 .5em,
+  $gutter-row-background-active: #ebf3fb,
+  $gutter-row-color-active: #7699c4,
+
+  $header-background: #ebf3fb,
+  $header-color: #8baad1,
+  $header-padding: .5em 1em,
+
+  $line-min-height: 1.5em,
+  $line-side-padding: 1.5em,
+  $line-side-padding-gutter: 1em,
+  $line-border-left-width: 2px,
+  $line-background-active: #ebf3fb,
+  $line-border-left-color-active: #a2bdde,
+
+  $name-background: #ebf3fb,
+  $name-border-radius: 0 0 4px 4px,
+  $name-color: #8baad1,
+  $name-font-size: .8em,
+  $name-padding: .3em 1em,
+
+  $overlay-padding: 0 1.5em,
+
+  $token-keyword: #e75a77,
+  $token-comment: #8baad1,
+  $token-tag: #f75766,
+  $token-selector: #72bc31,
+  $token-attr: #06b297,
+  $token-prop: #06b297,
+  $token-value: #3d82e0,
+  $token-variable: #3d82e0,
+  $token-entity: #5d639e,
+  $token-prolog: #7699c4,
+  $token-string: #e8932d,
+  $token-number: #9b63f0,
+  $token-boolean: #e75a77,
+  $token-function: #2698d6,
+  $token-class: #06b297,
+  $token-decorator: #5d639e,
+  $token-regexp: #e8932d,
+  $token-operator: #e75a77,
+  $token-bracket: #8baad1,
+  $token-symbol: #8baad1
+);

@@ -1,0 +1,7 @@
+$overlay-padding: 0 1.5em !default;
+
+.rl {
+  &__overlay {
+    padding: $overlay-padding;
+  }
+}

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TypeScript</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+  <h3>Practical Example</h3>
+  <pre class="ryuseilight">
+/**
+ * The interface for elements.
+ */
+export interface Elements {
+  /**
+   * A root element.
+   */
+  root: HTMLElement;
+
+  /**
+   * A container element that contains code.
+   */
+  code: HTMLElement;
+}
+
+/**
+ * The class for highlighting code via provided tokens.
+ *
+ * @since 1.0.0
+ */
+export class Highlighter {
+  /**
+   * Holds elements.
+   */
+  protected elements: Elements;
+
+  /**
+   * Holds options.
+   */
+  protected readonly options: Options;
+
+  /**
+   * Holds the EventBus instance.
+   */
+  protected readonly event: EventBus = new EventBus();
+
+  /**
+   * The Highlighter constructor.
+   *
+   * @param elm     - An element to highlight.
+   * @param options - Optional. Options.
+   */
+  constructor( elm: HTMLElement, options: Options ) {
+    this.elements = {
+      root: elm,
+      code: create( 'div', { class: `${ PROJECT_CODE }__code` } ),
+    }
+
+    this.options = options;
+    this.init();
+  }
+
+  /**
+   * Initializes the instance.
+   */
+  protected init(): void {
+    forOwn( Components, Component => {
+      Component( this.elements, this.event, this.options );
+    } );
+
+    this.event.emit( 'mounted', this );
+  }
+
+  /**
+   * Creates a div element for each line.
+   *
+   * @return A created div element.
+   */
+  protected createLine(): HTMLDivElement {
+    return create( 'div', { class: `${ PROJECT_CODE }__line` } );
+  }
+
+  /**
+   * Creates a span element for each token.
+   *
+   * @param category - A category name.
+   * @param value    - A text value.
+   *
+   * @return A created span element.
+   */
+  protected createSpan( category: string, value: string ): HTMLSpanElement {
+    const className = `${ PROJECT_CODE_SHORT }__token ${ PROJECT_CODE_SHORT }__${ category }`;
+    const span      = create( 'span', { class: className } );
+    text( span, value );
+    return span;
+  }
+
+  /**
+   * Append tokens to the provided element with creating div elements for each line.
+   *
+   * @param elm    - An element to append tokens to.
+   * @param tokens - An array with tokens.
+   */
+  protected append( elm: HTMLElement, tokens: Token[] ): void {
+    let line = this.createLine();
+    const lines = [ line ];
+
+    tokens.forEach( ( token ) => {
+      if ( token[ 0 ] === 'eol' ) {
+        line = this.createLine();
+        lines.push( line );
+      } else {
+        append( line, this.createSpan( token[ 0 ], token[ 1 ] ) );
+      }
+    } );
+
+    append( elm, ...lines );
+  }
+
+  /**
+   * Render tokens as HTML elements.
+   *
+   * @param tokens - Tokens to render.
+   */
+  render( tokens: Token[] ): void {
+    const { root, code } = this.elements;
+    this.append( code, tokens );
+
+    text( root, '' );
+    append( root, code );
+    root.classList.add( PROJECT_CODE );
+
+    this.event.emit( 'rendered', this );
+  }
+
+  /**
+   * Destroys the instance.
+   */
+  destroy(): void {
+    this.event.emit( 'destroy' );
+    this.elements = null;
+  }
+}
+  </pre>
+
+  <h3>Comments/Strings</h3>
+  <pre>
+/**
+ * Multiline comment
+ * 'Should not be a string'
+ * "Should not be a string"
+ */
+/* Multiline comment in a single line */
+
+// Single line comment
+// 'Should not be a string'
+// "Should not be a string"
+
+'Single quote'
+'Single \'quote\' with escape'
+'Single 'quote' with single quote'
+'Single "quote" with double quote'
+'Single `quote` with back quote'
+
+"Double quote"
+"Double \"quote\" with escape"
+"Double "quote" with double quote"
+"Double 'quote' with single quote"
+"Double `quote` with back quote"
+
+`Back quote`
+'Back \`quote\` with escape'
+'Back `quote` with back quote'
+'Back 'quote' with single quote'
+'Back "quote" with double quote'
+
+'/* Should not be a comment */'
+'// Should not be a comment'
+
+"/* Should not be a comment */"
+"// Should not be a comment"
+
+`/* Should not be a comment */`
+`// Should not be a comment`
+  </pre>
+
+  <h3>RegExp</h3>
+  <pre>
+/^.*?[\n\s]/gmsi
+  </pre>
+
+  <h3>Template Literal</h3>
+  <pre>
+`Multiline
+    template
+      literal`
+
+`The result will be ${ ( a + b ) * 3 }`
+
+// Nested template literal
+`container ${
+  isMobile()
+  // ${ comment }
+  // `
+  ? 'is-mobile'
+  : `container--${ page.isFront() ? 'front' : 'page' }`
+}`;
+  </pre>
+
+  <h3>Function/Generics</h3>
+  <pre>
+// Function
+function apply&lt;T extends object>( value: T ) {}
+
+// Anonymous function
+function apply&lt;T extends object>( value: T ) {}
+
+// Arrow function
+&lt;T extends object> ( value: T ) => {}
+
+// Method
+{
+  apply&lt;T extends object>( value: T ) {}
+}
+
+type Assign&lt;T, U> = Omit&lt;T, keyof U> & U;
+
+export function assign&lt;T extends object, U extends object[]>( object: T, ...sources: U ): Assign&lt;T, U> {
+    const keys: Array&lt;string | symbol> = getKeys( source );
+
+    if ( a < 1 && b > d ) {
+      console.log( a );
+    }
+
+    for ( let i = 0; i < keys.length; i++ ) {
+    }
+  }
+
+  return object;
+}
+  </pre>
+
+  <h3>Typing</h3>
+  <pre>
+declare var process: any;
+
+type Token = [ string, number, ...RegExp[] ];
+
+interface CustomDivElement extends HTMLDivElement {
+  selectionStart: number,
+  selectionEnd: number,
+  setSelection( number, number ): void;
+}
+
+namespace Lexer {
+  export interface Grammar {
+    main: Tokenizers[];
+    [ key: string ]: Tokenizers[];
+  }
+}
+
+function isArray&lt;T>( subject: T[] ): subject is T[] {
+  return Array.isArray( subject );
+}
+  </pre>
+
+  <h3>Keywords</h3>
+  <pre>
+declare, keyof, namespace, readonly, type, string,
+number, boolean, bigint, symbol, any, never, unknown
+  </pre>
+
+  <h3>Class</h3>
+  <pre>
+Object.keys( object );
+
+class Component {
+  constructor() {
+  }
+}
+
+const component = new Component();
+  </pre>
+
+  <h3>Boolean</h3>
+  <pre>
+true, false
+  </pre>
+
+  <h3>Number</h3>
+  <pre>
+0 1 1.23 .23 +1.23 -1.23
+1e10 1e+10 1e-10 1E10 1E+10 1E-10
+1.2e10 1.2e+10 1.2e-10 1.2E10 1.2E+10 1.2E-10
+  </pre>
+
+  <h3>Operator</h3>
+  <pre>
++ - ~ ! / * % ** < > <= >= == != === !==
+<< >> >>> & | ^ && || ?? ?.
+= *= **= /= %= += -= <<= >>= >>>= &= ^= |= &&= ||= ??= :
+  </pre>
+
+  <h3>Bracket</h3>
+  <pre>
+{} () []
+  </pre>
+
+  <h3>Symbol</h3>
+  <pre>
+; . , @
+;;;; .... ,,,, @@@@
+  </pre>
+
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/languages/typescript.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight();
+    ryuseilight.apply( 'pre', { language: 'typescript' } );
+  </script>
+</body>
+</html>

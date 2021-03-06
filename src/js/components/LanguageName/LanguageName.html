@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Language Name</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+  <h3>Top Right</h3>
+  <pre class="top-right">
+console.log( 'Hello!' );
+  </pre>
+
+  <h3>Top Left</h3>
+  <pre class="top-left">
+console.log( 'Hello!' );
+  </pre>
+
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/js/components/overlay.min.js"></script>
+  <script src="../../../../dist/js/components/language-name.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight();
+    ryuseilight.apply( '.top-right', { languageName: true, language: 'js' } );
+    ryuseilight.apply( '.top-left', { languageName: 'topLeft', language: 'js' } );
+  </script>
+</body>
+</html>

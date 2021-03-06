@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JSX</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+  <h3>Practical Example</h3>
+  <pre>
+import React from &#039;react&#039;;
+import { Splide, SplideSlide } from &#039;../../../../src/js&#039;;
+import { createSlides } from &quot;../utils/slides&quot;;
+
+/**
+ * The class for the thumbnail slider example.
+ * Need to call sync() after the component is mounted, using refs.
+ */
+export default class ThumbnailsExample extends React.Component {
+  /**
+   * ThumbnailExample constructor.
+   *
+   * @param {Object} props - Props.
+   */
+  constructor( props ) {
+    super( props );
+
+    this.primaryRef   = React.createRef();
+    this.secondaryRef = React.createRef();
+  }
+
+  /**
+   * Set the sync target right after the component is mounted.
+   */
+  componentDidMount() {
+    this.primaryRef.current.sync( this.secondaryRef.current.splide );
+  }
+
+  /**
+   * Render slides.
+   *
+   * @return {ReactNode[]}
+   */
+  renderSlides() {
+    return createSlides().map( slide =&gt; (
+      &lt;SplideSlide key={ slide.src }&gt;
+        &lt;img src={ slide.src } alt={ slide.alt } /&gt;
+      &lt;/SplideSlide&gt;
+    ) );
+  };
+
+  /**
+   * Render the component.
+   *
+   * @return {ReactNode} - React component.
+   */
+  render() {
+    const primaryOptions = {
+      type      : &#039;loop&#039;,
+      perPage   : 2,
+      perMove   : 1,
+      gap       : &#039;1rem&#039;,
+      pagination: false,
+    };
+
+    const secondaryOptions = {
+      type        : &#039;slide&#039;,
+      rewind      : true,
+      gap         : &#039;1rem&#039;,
+      pagination  : false,
+      fixedWidth  : 110,
+      fixedHeight : 70,
+      cover       : true,
+      focus       : &#039;center&#039;,
+      isNavigation: true,
+      updateOnMove: true,
+    };
+
+    return (
+      &lt;div className=&quot;wrapper&quot;&gt;
+        &lt;h2&gt;Thumbnail Slider&lt;/h2&gt;
+
+        &lt;a
+          href=&quot;https://github.com/Splidejs/react-splide/blob/master/examples/src/js/components/ThumbnailsExample.jsx&quot;
+          target=&quot;_blank&quot;
+          rel=&quot;noopener&quot;
+        &gt;
+          View Code
+        &lt;/a&gt;
+
+        &lt;Splide options={ primaryOptions } ref={ this.primaryRef }&gt;
+          { this.renderSlides() }
+        &lt;/Splide&gt;
+
+        &lt;Splide options={ secondaryOptions } ref={ this.secondaryRef }&gt;
+          { this.renderSlides() }
+        &lt;/Splide&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+  </pre>
+
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/languages/jsx.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight();
+    ryuseilight.apply( 'pre', { language: 'jsx' } );
+  </script>
+</body>
+</html>

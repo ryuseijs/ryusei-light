@@ -1,0 +1,18 @@
+$code-padding: 1em 0 !default;
+$code-overlay-padding: 1.8em 0 !default;
+
+.rl {
+  $root: &;
+
+  &__code {
+    padding: $code-padding;
+  }
+
+  &__container {
+    &.has-top-overlay {
+      #{ $root }__code {
+        padding: $code-overlay-padding;
+      }
+    }
+  }
+}

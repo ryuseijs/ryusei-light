@@ -1,0 +1,35 @@
+@use 'code';
+
+$gutter-background: #222a33 !default;
+$gutter-row-color: #4a5c6d !default;
+$gutter-row-padding: 0 .5em !default;
+$gutter-row-background-active: #2b3742 !default;
+$gutter-row-color-active: #7a91a6 !default;
+
+
+.rl {
+  $root: &;
+
+  &__gutter {
+    background: $gutter-background;
+    padding: code.$code-padding;
+
+    &__row {
+      color: $gutter-row-color;
+      padding: $gutter-row-padding;
+
+      &.is-active {
+        background: $gutter-row-background-active;
+        color: $gutter-row-color-active;
+      }
+    }
+  }
+
+  &__container {
+    &.has-top-overlay {
+      #{ $root }__gutter {
+        padding: code.$code-overlay-padding;
+      }
+    }
+  }
+}

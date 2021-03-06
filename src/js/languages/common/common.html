@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Common</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+  <h3>Practical Example</h3>
+  <pre>
+import { ObjectIteratee } from '../../../../types';
+import { typeAssert } from '../../../error';
+import { isObject } from '../../type';
+
+
+/**
+ * Iterates over an object by its own enumerable keys.
+ * The iteration can be interrupted by returning `false` by the iteratee function.
+ *
+ * @param object   - An object to iterate over.
+ * @param iteratee - An iteratee function called for each element, taking `value`, `key`, and the current `object`.
+ *                   Return `false` explicitly to break the iteration.
+ */
+export function forOwn&lt;T>( object: T, iteratee: ObjectIteratee&lt;T, void | boolean> ): T {
+  isObject( object ) || typeAssert( object );
+
+  const keys = Object.keys( object );
+
+  for ( let i = 0; i < keys.length; i++ ) {
+    if ( iteratee( object[ keys[ i ] ], keys[ i ], object ) === false ) {
+      break;
+    }
+  }
+
+  return object;
+}
+  </pre>
+
+  <h3>Comments/Strings</h3>
+  <pre>
+/**
+ * Multiline comment
+ * 'Should not be a string'
+ * "Should not be a string"
+ */
+/* Multiline comment in a single line */
+
+// Single line comment
+// 'Should not be a string'
+// "Should not be a string"
+
+'Single quote'
+'Single \'quote\' with escape'
+'Single 'quote' with single quote'
+'Single "quote" with double quote'
+'Single `quote` with back quote'
+
+"Double quote"
+"Double \"quote\" with escape"
+"Double "quote" with double quote"
+"Double 'quote' with single quote"
+"Double `quote` with back quote"
+
+`Back quote`
+'Back \`quote\` with escape'
+'Back `quote` with back quote'
+'Back 'quote' with single quote'
+'Back "quote" with double quote'
+
+'/* Should not be a comment */'
+'// Should not be a comment'
+
+"/* Should not be a comment */"
+"// Should not be a comment"
+
+`/* Should not be a comment */`
+`// Should not be a comment`
+  </pre>
+
+  <h3>RegExp</h3>
+  <pre>
+/^.*?[\n\s]/gmsi
+  </pre>
+
+  <h3>Keywords</h3>
+  <pre>
+break, catch, class, continue, do, else, extends, finally, for, function,
+if, implements, in, instanceof, interface, new, null, return, throw, trait,
+try, while
+  </pre>
+
+  <h3>Function</h3>
+  <pre>
+function say( message ) {
+  console.log( message );
+}
+
+document.getElementById( 'main' );
+
+const a = {
+  say() {
+    console.log( 'hi!' );
+  }
+}
+  </pre>
+
+  <h3>Class</h3>
+  <pre>
+Object.keys( object );
+
+class Component {
+  constructor() {
+  }
+}
+
+const component = new Component();
+  </pre>
+
+  <h3>Boolean</h3>
+  <pre>
+true, false
+  </pre>
+
+  <h3>Number</h3>
+  <pre>
+0 1 1.23 .23 +1.23 -1.23
+1e10 1e+10 1e-10 1E10 1E+10 1E-10
+1.2e10 1.2e+10 1.2e-10 1.2E10 1.2E+10 1.2E-10
+  </pre>
+
+  <h3>Operator</h3>
+  <pre>
++ - ~ ! / * % ** < > <= >= == != === !==
+<< >> >>> & | ^ && || ?? ?.
+= *= **= /= %= += -= <<= >>= >>>= &= ^= |= &&= ||= ??= :
+  </pre>
+
+  <h3>Bracket</h3>
+  <pre>
+{} () []
+  </pre>
+
+  <h3>Symbol</h3>
+  <pre>
+; . , @
+;;;; .... ,,,, @@@@
+  </pre>
+
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/languages/common.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight();
+    ryuseilight.apply( 'pre', { language: 'common' } );
+  </script>
+</body>
+</html>

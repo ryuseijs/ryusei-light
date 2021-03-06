@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JavaScript</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+  <h3>Practical Example</h3>
+  <pre>
+import { applyStyle, child } from '../../utils/dom';
+
+
+/**
+ * The component for change an img element to background image of its wrapper.
+ *
+ * @param {Splide} Splide     - A Splide instance.
+ * @param {Object} Components - An object containing components.
+ *
+ * @return {Object} - The component object.
+ */
+export default ( Splide, Components ) => {
+  /**
+   * Hold options.
+   *
+   * @type {Object}
+   */
+  const options = Splide.options;
+
+  /**
+   * Cover component object.
+   *
+   * @type {Object}
+   */
+  const Cover = {
+    /**
+     * Required only when "cover" option is true.
+     *
+     * @type {boolean}
+     */
+    required: options.cover,
+
+    /**
+     * Called when the component is mounted.
+     */
+    mount() {
+      Splide.on( 'lazyload:loaded', img => { cover( img, false ) } );
+      Splide.on( 'mounted updated refresh', () => apply( false ) );
+    },
+
+    /**
+     * Destroy.
+     */
+    destroy() {
+      apply( true );
+    },
+  };
+
+  /**
+   * Apply "cover" to all slides.
+   *
+   * @param {boolean} uncover - If true, "cover" will be clear.
+   */
+  function apply( uncover ) {
+    Components.Elements.each( Slide => {
+      const img = child( Slide.slide, 'IMG' ) || child( Slide.container, 'IMG' );
+
+      if ( img && img.src ) {
+        cover( img, uncover );
+      }
+    } );
+  }
+
+  /**
+   * Set background image of the parent element, using source of the given image element.
+   *
+   * @param {Element} img     - An image element.
+   * @param {boolean} uncover - Reset "cover".
+   */
+  function cover( img, uncover ) {
+    applyStyle( img.parentElement, { background: uncover ? '' : `center/cover no-repeat url("${ img.src }")` } );
+    applyStyle( img, { display: uncover ? '' : 'none' } );
+  }
+
+  return Cover;
+}
+  </pre>
+
+  <h3>Comments/Strings</h3>
+  <pre>
+/**
+ * Multiline comment
+ * 'Should not be a string'
+ * "Should not be a string"
+ */
+/* Multiline comment in a single line */
+
+// Single line comment
+// 'Should not be a string'
+// "Should not be a string"
+
+'Single quote'
+'Single \'quote\' with escape'
+'Single 'quote' with single quote'
+'Single "quote" with double quote'
+'Single `quote` with back quote'
+
+"Double quote"
+"Double \"quote\" with escape"
+"Double "quote" with double quote"
+"Double 'quote' with single quote"
+"Double `quote` with back quote"
+
+`Back quote`
+'Back \`quote\` with escape'
+'Back `quote` with back quote'
+'Back 'quote' with single quote'
+'Back "quote" with double quote'
+
+'/* Should not be a comment */'
+'// Should not be a comment'
+
+"/* Should not be a comment */"
+"// Should not be a comment"
+
+`/* Should not be a comment */`
+`// Should not be a comment`
+  </pre>
+
+  <h3>RegExp</h3>
+  <pre>
+/^.*?[\n\s]/gmsi
+  </pre>
+
+  <h3>Template Literal</h3>
+  <pre>
+`Multiline
+    template
+      literal`
+
+`The result will be ${ ( a + b ) * 3 }`
+
+// Nested template literal
+`container ${
+  isMobile()
+  // ${ comment }
+  // `
+  ? 'is-mobile'
+  : `container--${ page.isFront() ? 'front' : 'page' }`
+}`;
+  </pre>
+
+  <h3>Keywords</h3>
+  <pre>
+break, catch, class, continue, do, else, extends, finally, for, function,
+if, implements, in, instanceof, interface, new, null, return, throw, trait,
+try, while
+  </pre>
+
+  <h3>Function</h3>
+  <pre>
+function say( message ) {
+  console.log( message );
+}
+
+document.getElementById( 'main' );
+
+const a = {
+  say() {
+    console.log( 'hi!' );
+  }
+}
+  </pre>
+
+  <h3>Class</h3>
+  <pre>
+Object.keys( object );
+
+class Component {
+  constructor() {
+  }
+}
+
+const component = new Component();
+  </pre>
+
+  <h3>Boolean</h3>
+  <pre>
+true, false
+  </pre>
+
+  <h3>Number</h3>
+  <pre>
+0 1 1.23 .23 +1.23 -1.23
+1e10 1e+10 1e-10 1E10 1E+10 1E-10
+1.2e10 1.2e+10 1.2e-10 1.2E10 1.2E+10 1.2E-10
+  </pre>
+
+  <h3>Operator</h3>
+  <pre>
++ - ~ ! / * % ** < > <= >= == != === !==
+<< >> >>> & | ^ && || ?? ?.
+= *= **= /= %= += -= <<= >>= >>>= &= ^= |= &&= ||= ??= :
+  </pre>
+
+  <h3>Bracket</h3>
+  <pre>
+{} () []
+  </pre>
+
+  <h3>Symbol</h3>
+  <pre>
+; . , @
+;;;; .... ,,,, @@@@
+  </pre>
+
+  <h3>Decorator</h3>
+  <pre>
+@defineElement( "my-class" )
+class C extends HTMLElement {
+  @reactive prop clicked = false;
+}
+  </pre>
+
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight( { language: 'js' } );
+    ryuseilight.apply( 'pre' );
+  </script>
+</body>
+</html>

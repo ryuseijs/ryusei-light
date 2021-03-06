@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rikka</title>
+  <link href="../../../../dist/css/themes/ryuseilight-rikka.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem;
+    }
+
+    .ryuseilight {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .rl__body {
+      max-height: 30em;
+    }
+  </style>
+</head>
+<body>
+  <h2>Rikka</h2>
+
+  <h3>TypeScript</h3>
+
+  <pre class="ryuseilight" data-rl-active-lines="[7, [13,15]]">
+/**
+ * The component for highlighting lines.
+ *
+ * @since 1.0.0
+ */
+export function ActiveLines( { event, root, options }: Renderer ): void {
+  const lines = ( root && parseData( root ) ) || options.activeLines;
+
+  if ( isArray( lines ) ) {
+    const activeLines = normalize( lines );
+
+    event.on( 'gutter:row:open', ( html, classes, index ) => {
+      if ( activeLines[ index ] ) {
+        classes.push( activeLines[ index ] );
+      }
+    } );
+
+    event.on( 'line:open', ( html, classes, index ) => {
+      if ( activeLines[ index ] ) {
+        classes.push( activeLines[ index ] );
+      }
+    } );
+  }
+}
+
+/**
+ * Normalizes the definition of lines to activate.
+ *
+ * @param lines - An array with line numbers.
+ *
+ * @return An array with normalized line numbers.
+ */
+function normalize( lines: Array&lt;number | [ number, number ]> ): string[] {
+  const numbers = [];
+
+  lines.forEach( range => {
+    if ( ! isArray( range ) ) {
+      range = [ range, range ];
+    }
+
+    const start = ( +range[ 0 ] || 1 ) - 1;
+    const end   = ( +range[ 1 ] || 1 ) - 1;
+
+    for ( let i = start; i <= end; i++ ) {
+      numbers[ i ] = CLASSES.active;
+    }
+  } );
+
+  return numbers;
+}
+  </pre>
+
+  <h3>SCSS</h3>
+
+  <pre class="ryuseilight" data-rl-language="scss" data-rl-title="SCSS Example">
+@import url( '../reset.scss' );
+
+/*
+ * Main styles
+ */
+:root {
+  --text-color: #333;
+}
+
+body {
+  color: var( --text-color );
+  padding: 0 !important;
+}
+
+#container {
+  padding: 2rem 2rem 4rem;
+}
+
+@media only screen
+  and ( min-width: 320px )
+  and ( max-width: 480px )
+  and ( resolution: 150dpi ) {
+    body { line-height: 1.4; }
+}
+
+@media ( /* ( max-width: 900px ) */ max-width: calc( ( 100px ) - 10 ) ) {
+  .wrapper {
+    background-image: url( "wave-#{ $name }.svg" );
+    #{ $border }: 2px solid #ccc;
+  }
+}
+
+@mixin animation( $prefix, $duration ) {
+  $animation: $prefix-#{ unique-id() };
+
+  @keyframes #{ $animation } {
+    @content;
+  }
+
+  animation-name: $animation;
+  animation-duration: $duration;
+}
+
+.dialog {
+  @include animation( 500ms ) {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/*
+ * Components
+ */
+.button {
+  $root: &;
+  $inner: 'inner';
+
+  /*
+    font-family: Roboto, 'Avenir Next Pro', sans-serif;
+    font-size: .9rem;
+  */
+
+  &__#{ $inner } {
+    padding: 1rem;
+  }
+
+  &--primary {
+    color: white;
+
+    #{$root}__inner {
+      background: $main-color;
+    }
+  }
+
+  &:hover {
+    background: rgba( 255, 255, 0, .1 );
+  }
+
+  &:active {
+    outline: 2px solid hsla( 0, 0%, 100%, .6 );
+  }
+
+  &::after {
+    content: attr( data-title number, 0 );
+  }
+}
+  </pre>
+
+  <h3>JSX</h3>
+  <pre class="ryuseilight" data-rl-language="jsx">
+import React from &#039;react&#039;;
+import { Splide, SplideSlide } from &#039;../../../../src/js&#039;;
+import { createSlides } from &quot;../utils/slides&quot;;
+
+/**
+ * The class for the thumbnail slider example.
+ * Need to call sync() after the component is mounted, using refs.
+ */
+export default class ThumbnailsExample extends React.Component {
+  /**
+   * ThumbnailExample constructor.
+   *
+   * @param {Object} props - Props.
+   */
+  constructor( props ) {
+    super( props );
+
+    this.primaryRef   = React.createRef();
+    this.secondaryRef = React.createRef();
+  }
+
+  /**
+   * Set the sync target right after the component is mounted.
+   */
+  componentDidMount() {
+    this.primaryRef.current.sync( this.secondaryRef.current.splide );
+  }
+
+  /**
+   * Render slides.
+   *
+   * @return {ReactNode[]}
+   */
+  renderSlides() {
+    return createSlides().map( slide =&gt; (
+      &lt;SplideSlide key={ slide.src }&gt;
+        &lt;img src={ slide.src } alt={ slide.alt } /&gt;
+      &lt;/SplideSlide&gt;
+    ) );
+  };
+
+  /**
+   * Render the component.
+   *
+   * @return {ReactNode} - React component.
+   */
+  render() {
+    const primaryOptions = {
+      type      : &#039;loop&#039;,
+      perPage   : 2,
+      perMove   : 1,
+      gap       : &#039;1rem&#039;,
+      pagination: false,
+    };
+
+    const secondaryOptions = {
+      type        : &#039;slide&#039;,
+      rewind      : true,
+      gap         : &#039;1rem&#039;,
+      pagination  : false,
+      fixedWidth  : 110,
+      fixedHeight : 70,
+      cover       : true,
+      focus       : &#039;center&#039;,
+      isNavigation: true,
+      updateOnMove: true,
+    };
+
+    return (
+      &lt;div className=&quot;wrapper&quot;&gt;
+        &lt;h2&gt;Thumbnail Slider&lt;/h2&gt;
+
+        &lt;a
+          href=&quot;https://github.com/Splidejs/react-splide/blob/master/examples/src/js/components/ThumbnailsExample.jsx&quot;
+          target=&quot;_blank&quot;
+          rel=&quot;noopener&quot;
+        &gt;
+          View Code
+        &lt;/a&gt;
+
+        &lt;Splide options={ primaryOptions } ref={ this.primaryRef }&gt;
+          { this.renderSlides() }
+        &lt;/Splide&gt;
+
+        &lt;Splide options={ secondaryOptions } ref={ this.secondaryRef }&gt;
+          { this.renderSlides() }
+        &lt;/Splide&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+  </pre>
+
+  <script src="../../../../dist/js/ryuseilight-complete.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight();
+    ryuseilight.apply( 'pre', {
+      language: 'ts',
+      lineNumbers: true,
+      languageName: true,
+    } );
+  </script>
+</body>
+</html>

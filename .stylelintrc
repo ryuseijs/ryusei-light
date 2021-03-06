@@ -1,0 +1,14 @@
+{
+  "extends": "stylelint-config-sass-guidelines",
+  "plugins": [
+    "stylelint-scss",
+    "stylelint-order"
+  ],
+  "rules": {
+    "number-leading-zero": "never",
+    "max-nesting-depth": 5,
+    "selector-max-compound-selectors": 10,
+    "function-parentheses-space-inside": "always",
+    "block-no-empty": null
+  }
+}

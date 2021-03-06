@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VUE</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+  <h3>Practical Example</h3>
+  <pre>
+&lt;template&gt;
+  &lt;div class=&quot;wrapper&quot;&gt;
+    &lt;h2&gt;Thumbnail Slider&lt;/h2&gt;
+
+    &lt;div class=&quot;description&quot;&gt;
+      &lt;a
+        href=&quot;https://github.com/Splidejs/vue-splide/blob/master/examples/src/js/examples/components/ThumbnailsExample.vue&quot;
+        target=&quot;_blank&quot;
+        rel=&quot;noopener&quot;
+      &gt;
+        View Code
+      &lt;/a&gt;
+    &lt;/div&gt;
+
+    &lt;splide
+      :options=&quot;primaryOptions&quot;
+      ref=&quot;primary&quot;
+    &gt;
+      &lt;splide-slide v-for=&quot;slide in slides&quot; :key=&quot;slide.src&quot;&gt;
+        &lt;img :src=&quot;slide.src&quot; alt=&quot;slide.alt&quot;&gt;
+      &lt;/splide-slide&gt;
+    &lt;/splide&gt;
+
+    &lt;splide
+      :options=&quot;secondaryOptions&quot;
+      ref=&quot;secondary&quot;
+    &gt;
+      &lt;splide-slide v-for=&quot;slide in slides&quot; :key=&quot;slide.src&quot;&gt;
+        &lt;img :src=&quot;slide.src&quot; alt=&quot;slide.alt&quot;&gt;
+      &lt;/splide-slide&gt;
+    &lt;/splide&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+  import { Splide, SplideSlide } from &#039;../../../../../src/js&#039;;
+  import { createSlides } from &#039;../../utils/slides&#039;;
+  export default {
+    components: {
+      Splide,
+      SplideSlide,
+    },
+    data() {
+      return {
+        primaryOptions: {
+          type      : &#039;loop&#039;,
+          perPage   : 2,
+          perMove   : 1,
+          gap       : &#039;1rem&#039;,
+          pagination: false,
+        },
+        secondaryOptions: {
+          type        : &#039;slide&#039;,
+          rewind      : true,
+          gap         : &#039;1rem&#039;,
+          pagination  : false,
+          fixedWidth  : 110,
+          fixedHeight : 70,
+          cover       : true,
+          focus       : &#039;center&#039;,
+          isNavigation: true,
+          updateOnMove: true,
+        },
+        slides: createSlides(),
+        count : 0,
+      }
+    },
+    mounted() {
+      // Set the sync target.
+      this.$refs.primary.sync( this.$refs.secondary.splide );
+    },
+  }
+&lt;/script&gt;
+  </pre>
+
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/languages/vue.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight();
+    ryuseilight.apply( 'pre', { language: 'vue' } );
+  </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+$line-min-height: 1.5em !default;
+$line-side-padding: 1.5em !default;
+$line-side-padding-gutter: 1em !default;
+$line-border-left-width: 2px !default;
+$line-background-active: #2b3742 !default;
+$line-border-left-color-active: #5fbef5 !default;
+
+.rl {
+  $root: &;
+
+  &__line {
+    border-left: $line-border-left-width solid transparent;
+    box-sizing: border-box;
+    min-height: $line-min-height;
+    padding: 0 $line-side-padding 0 calc( #{ $line-side-padding } - #{ $line-border-left-width } );
+
+    &.is-active {
+      background: $line-background-active;
+      border-left-color: $line-border-left-color-active;
+    }
+  }
+
+  &__container {
+    &.has-gutter {
+      #{ $root }__line {
+        padding: 0 $line-side-padding-gutter 0 calc( #{ $line-side-padding-gutter } - #{ $line-border-left-width } );
+      }
+    }
+  }
+}
