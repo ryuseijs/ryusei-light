@@ -1,8 +1,9 @@
 {
   "name": "@ryuseijs/ryusei-light",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Naotoshi Fujita",
   "license": "MIT",
+  "module": "dist/js/ryuseilight.esm.js",
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",

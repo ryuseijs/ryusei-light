@@ -2,14 +2,12 @@
   "compilerOptions": {
     "target": "es6",
     "module": "es2015",
-    "sourceMap": true,
     "rootDir": "./src",
     "allowJs": true,
     "declaration": false,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "removeComments": true
+    "skipLibCheck": true
   },
   "include": [ "src/**/*.ts" ],
   "exclude": [

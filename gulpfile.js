@@ -13,6 +13,12 @@ const path         = require( 'path' );
 const gzip         = require( 'gulp-gzip' );
 const package      = require( './package' );
 
+const banner = `/*!
+ * RyuseiLight.js
+ * Version  : ${ package.version }
+ * License  : ${ package.license }
+ * Copyright: 2020 ${ package.author }
+ */`;
 
 // Builds the script files.
 gulp.task( 'build:js', () => {
@@ -20,17 +26,11 @@ gulp.task( 'build:js', () => {
     buildScript( 'default' ),
     buildScript( 'components' ),
     buildScript( 'complete' ),
+    buildEsm(),
   ] );
 } );
 
 function buildScript( type ) {
-  const banner = `/*!
- * RyuseiLight.js
- * Version  : ${ package.version }
- * License  : ${ package.license }
- * Copyright: 2020 ${ package.author }
- */`;
-
   const file = type === 'default' ? `./dist/js/ryuseilight.min.js` : `./dist/js/ryuseilight-${ type }.min.js`;
 
   rollup.rollup( {
@@ -59,6 +59,33 @@ function buildScript( type ) {
     }
   } );
 }
+
+function buildEsm() {
+  rollup.rollup( {
+    input  : './src/js/index.ts',
+    plugins: [
+      typescript(),
+      babel.getBabelOutputPlugin( {
+        presets: [
+          [
+            '@babel/preset-env',
+            {
+              modules: false,
+              loose  : true,
+            }
+          ]
+        ]
+      } ),
+    ]
+  } ).then( bundle => {
+    return bundle.write( {
+      banner,
+      file  : './dist/js/ryuseilight.esm.js',
+      format: 'esm',
+    } );
+  } );
+}
+
 
 // Builds css files.
 gulp.task( 'build:css', async () => {
