@@ -1,6 +1,3 @@
-import { RyuseiLight } from './core/RyuseiLight/RyuseiLight';
-
-
-if ( typeof window !== 'undefined' ) {
-  window[ 'RyuseiLight' ] = RyuseiLight;
-}
+export { RyuseiLight } from './core/RyuseiLight/RyuseiLight';
+export * from './components';
+export * from './languages';
