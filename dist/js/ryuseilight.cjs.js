@@ -4,13 +4,18 @@
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
+'use strict';
 
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 /**
  * The line break character.
  *
  * @private
  * @since 0.0.1
  */
+
 var LINE_BREAK = '\n';
 var CATEGORY_KEYWORD = 'keyword';
 var CATEGORY_COMMENT = 'comment';
@@ -1594,5 +1599,7 @@ var index$1 = /*#__PURE__*/Object.freeze({
   Overlay: Overlay,
   Title: Title
 });
-export default RyuseiLight;
-export { RyuseiLight, index$1 as components, index as languages };
+exports.RyuseiLight = RyuseiLight;
+exports.components = index$1;
+exports["default"] = RyuseiLight;
+exports.languages = index;

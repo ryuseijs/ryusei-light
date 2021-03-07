@@ -13,6 +13,7 @@ const path         = require( 'path' );
 const gzip         = require( 'gulp-gzip' );
 const package      = require( './package' );
 
+
 const banner = `/*!
  * RyuseiLight.js
  * Version  : ${ package.version }
@@ -26,7 +27,8 @@ gulp.task( 'build:js', () => {
     buildScript( 'default' ),
     buildScript( 'components' ),
     buildScript( 'complete' ),
-    buildEsm(),
+    buildModule( 'esm' ),
+    buildModule( 'cjs' ),
   ] );
 } );
 
@@ -60,7 +62,7 @@ function buildScript( type ) {
   } );
 }
 
-function buildEsm() {
+function buildModule( format = 'esm' ) {
   rollup.rollup( {
     input  : './src/js/index.ts',
     plugins: [
@@ -80,12 +82,12 @@ function buildEsm() {
   } ).then( bundle => {
     return bundle.write( {
       banner,
-      file  : './dist/js/ryuseilight.esm.js',
-      format: 'esm',
+      file  : `./dist/js/ryuseilight.${ format }.js`,
+      format,
+      exports: 'named',
     } );
   } );
 }
-
 
 // Builds css files.
 gulp.task( 'build:css', async () => {
