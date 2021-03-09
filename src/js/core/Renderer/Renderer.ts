@@ -1,3 +1,4 @@
+import { LINE_BREAK } from '../../constants/characters';
 import { Options, LanguageInfo, Token, Component } from '../../types';
 import { EventBus } from '../../event/EventBus';
 import { PROJECT_CODE_SHORT } from '../../constants/project';
@@ -80,7 +81,7 @@ export class Renderer {
     if ( lines.length ) {
       const tokens = lines[ lines.length - 1 ];
 
-      if ( tokens.length === 1 && ! tokens[ 0 ][ 1 ].trim() ) {
+      if ( ! tokens.length || ( tokens.length === 1 && ! tokens[ 0 ][ 1 ].trim() ) ) {
         // Removes the last empty line.
         lines.pop();
       }
@@ -108,16 +109,20 @@ export class Renderer {
       event.emit( 'line:open', append, classes, i );
       append( `<div class="${ classes.join( ' ' ) }">` );
 
-      for ( let j = 0; j < tokens.length; j++ ) {
-        const token   = tokens[ j ];
-        const classes = [ `${ CLASSES.token } ${ PROJECT_CODE_SHORT }__${ token[ 0 ] }` ];
+      if ( tokens.length ) {
+        for ( let j = 0; j < tokens.length; j++ ) {
+          const token   = tokens[ j ];
+          const classes = [ `${ CLASSES.token } ${ PROJECT_CODE_SHORT }__${ token[ 0 ] }` ];
 
-        event.emit( 'token', token, classes );
+          event.emit( 'token', token, classes );
 
-        append( `<${ tag } class="${ classes.join( ' ' ) }">${ escapeHtml( token[ 1 ] ) }</${ tag }>` );
+          append( `<${ tag } class="${ classes.join( ' ' ) }">${ escapeHtml( token[ 1 ] ) }</${ tag }>` );
+        }
+      } else {
+        append( LINE_BREAK );
       }
 
-      append( `</div>` );
+      append( '</div>' );
       event.emit( 'line:closed', append, i );
     }
   }

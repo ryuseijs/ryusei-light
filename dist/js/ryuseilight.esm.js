@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 0.0.4
+ * Version  : 0.0.6
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -727,7 +727,7 @@ var Renderer = /*#__PURE__*/function () {
     if (lines.length) {
       var tokens = lines[lines.length - 1];
 
-      if (tokens.length === 1 && !tokens[0][1].trim()) {
+      if (!tokens.length || tokens.length === 1 && !tokens[0][1].trim()) {
         // Removes the last empty line.
         lines.pop();
       }
@@ -757,14 +757,18 @@ var Renderer = /*#__PURE__*/function () {
       event.emit('line:open', append, classes, i);
       append("<div class=\"" + classes.join(' ') + "\">");
 
-      for (var j = 0; j < tokens.length; j++) {
-        var token = tokens[j];
-        var _classes = [CLASSES.token + " " + PROJECT_CODE_SHORT + "__" + token[0]];
-        event.emit('token', token, _classes);
-        append("<" + tag + " class=\"" + _classes.join(' ') + "\">" + escapeHtml(token[1]) + "</" + tag + ">");
+      if (tokens.length) {
+        for (var j = 0; j < tokens.length; j++) {
+          var token = tokens[j];
+          var _classes = [CLASSES.token + " " + PROJECT_CODE_SHORT + "__" + token[0]];
+          event.emit('token', token, _classes);
+          append("<" + tag + " class=\"" + _classes.join(' ') + "\">" + escapeHtml(token[1]) + "</" + tag + ">");
+        }
+      } else {
+        append(LINE_BREAK);
       }
 
-      append("</div>");
+      append('</div>');
       event.emit('line:closed', append, i);
     }
   }
@@ -1239,8 +1243,10 @@ var RyuseiLight = /*#__PURE__*/function () {
       var elm = elms[i];
 
       if (isHTMLElement(elm)) {
-        options.language = attr(elm, ATTRIBUTE_LANGUAGE) || options.language;
-        var renderer = this.getRenderer(text(elm), elm, options);
+        var elmOptions = assign({}, options, {
+          language: attr(elm, ATTRIBUTE_LANGUAGE) || undefined
+        });
+        var renderer = this.getRenderer(text(elm), elm, elmOptions);
         var isPre = elm instanceof HTMLPreElement;
 
         if (isPre) {

@@ -1,9 +1,9 @@
 {
   "name": "@ryuseijs/ryusei-light",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "Naotoshi Fujita",
   "license": "MIT",
-  "main": "dist/js/ryuseilight.min.js",
+  "main": "dist/js/ryuseilight.cjs.js",
   "module": "dist/js/ryuseilight.esm.js",
   "devDependencies": {
     "@babel/core": "^7.12.10",

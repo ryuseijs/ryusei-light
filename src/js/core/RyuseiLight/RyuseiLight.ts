@@ -117,10 +117,9 @@ export class RyuseiLight {
       const elm = elms[ i ];
 
       if ( isHTMLElement( elm ) ) {
-        options.language = attr( elm, ATTRIBUTE_LANGUAGE ) || options.language;
-
-        const renderer = this.getRenderer( text( elm ), elm, options );
-        const isPre    = elm instanceof HTMLPreElement;
+        const elmOptions = assign( {}, options, { language: attr( elm, ATTRIBUTE_LANGUAGE ) || undefined } );
+        const renderer   = this.getRenderer( text( elm ), elm, elmOptions );
+        const isPre      = elm instanceof HTMLPreElement;
 
         if ( isPre ) {
           addClass( elm, [ CLASSES.root, `${ CLASSES.root }--${ renderer.info.id }` ] );
