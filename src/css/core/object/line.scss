@@ -2,8 +2,10 @@
   &__line {
     min-height: 1.5em;
 
-    code, span {
+    code,
+    span {
       background: transparent;
+      padding: 0;
     }
   }
 }
