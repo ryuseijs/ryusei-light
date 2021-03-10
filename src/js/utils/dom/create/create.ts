@@ -3,7 +3,7 @@ import { addClass } from '../addClass/addClass';
 
 
 /**
- * Creates a HTML element.
+ * Creates an HTML element.
  *
  * @param tag     - A tag name.
  * @param classes - Optional. Classes to add.

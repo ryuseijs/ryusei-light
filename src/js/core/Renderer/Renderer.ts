@@ -132,7 +132,7 @@ export class Renderer {
    *
    * @param pre - Whether to wrap elements by `pre` or not.
    *
-   * @return A HTML string.
+   * @return An HTML string.
    */
   html( pre = true ): string {
     const event = this.event;

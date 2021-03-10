@@ -54,11 +54,11 @@ export function isUndefined( subject: any ): subject is undefined {
 }
 
 /**
- * Checks if the given subject is a HTMLElement instance or not.
+ * Checks if the given subject is an HTMLElement instance or not.
  *
  * @param subject - A subject to check.
  *
- * @return `true` if the subject is a HTMLElement instance, or otherwise `false`.
+ * @return `true` if the subject is an HTMLElement instance, or otherwise `false`.
  */
 export function isHTMLElement( subject: any ): subject is HTMLElement {
   return subject instanceof HTMLElement;

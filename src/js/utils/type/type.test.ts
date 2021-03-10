@@ -73,7 +73,7 @@ describe( 'Type methods', () => {
   } );
 
   describe( 'isHTMLElement', () => {
-    test( 'can return `true` if a subject is a HTMLElement instance.', () => {
+    test( 'can return `true` if a subject is an HTMLElement instance.', () => {
       [ document.body, document.createElement( 'div' ) ].forEach( subject => {
         expect( isHTMLElement( subject ) ).toBe( true );
       } );
