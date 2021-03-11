@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 0.0.6
+ * Version  : 0.0.7
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -83,11 +83,11 @@ function isUndefined(subject) {
   return typeof subject === 'undefined';
 }
 /**
- * Checks if the given subject is a HTMLElement instance or not.
+ * Checks if the given subject is an HTMLElement instance or not.
  *
  * @param subject - A subject to check.
  *
- * @return `true` if the subject is a HTMLElement instance, or otherwise `false`.
+ * @return `true` if the subject is an HTMLElement instance, or otherwise `false`.
  */
 
 
@@ -777,7 +777,7 @@ var Renderer = /*#__PURE__*/function () {
    *
    * @param pre - Whether to wrap elements by `pre` or not.
    *
-   * @return A HTML string.
+   * @return An HTML string.
    */
   ;
 
@@ -911,8 +911,9 @@ function javascript() {
   var main = grammar.main;
   before(main, CATEGORY_KEYWORD, [[CATEGORY_KEYWORD, /\b(?:as|async|await|case|catch|const|debugger|default|delete|enum|export|from|import|let|package|private|protected|public|super|switch|static|this|typeof|undefined|var|void|with|yield)\b/], [CATEGORY_KEYWORD, /\b((get|set)(?= *\S+\(\)))/], ['#backtick', /`/, '@rest'], [CATEGORY_DECORATOR, /@[^\s(@]+/]]);
   assign(grammar, {
-    backtick: [[CATEGORY_STRING, /^`/], ['#expression', /\${/, '@rest'], [CATEGORY_STRING, /\$[^{]/], [CATEGORY_STRING, /[^`$]+/], [CATEGORY_STRING, /`/, '@break']],
-    expression: [[CATEGORY_BRACKET, /^\${/], ['#expression', /\${/, '@rest'], [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_COMMENT, REGEXP_SLASH_COMMENT], ['#backtick', /`/, '@rest'], [CATEGORY_BRACKET, /}/, '@break'], ['#main']]
+    backtick: [[CATEGORY_STRING, /^`/], [CATEGORY_STRING, /\$[^{]/], ['#expression', /\${/, '@rest'], [CATEGORY_STRING, /(\\[$`]|[^`$])+/], [CATEGORY_STRING, /`/, '@break']],
+    expression: [[CATEGORY_BRACKET, /^\${/], // [ '#expression', /[^\\]\${/, '@rest' ],
+    [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_COMMENT, REGEXP_SLASH_COMMENT], ['#backtick', /`/, '@rest'], [CATEGORY_BRACKET, /}/, '@break'], ['#main']]
   });
   return language;
 }

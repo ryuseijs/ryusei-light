@@ -119,7 +119,7 @@ export interface Options {
   language?: string;
 
   /**
-   * Determines whether to use `span` element instead of `code ` for each fragment or not.
+   * Determines whether to use `span` element instead of `code` for each fragment or not.
    */
   span?: boolean;
 

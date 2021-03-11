@@ -141,7 +141,7 @@ export default ( Splide, Components ) => {
 `The result will be ${ ( a + b ) * 3 }`
 
 // Nested template literal
-`container ${
+`container \` \${ ${
   isMobile()
   // ${ comment }
   // `
@@ -196,12 +196,12 @@ true, false
 1.2e10 1.2e+10 1.2e-10 1.2E10 1.2E+10 1.2E-10
   </pre>
 
-  <h3>Operator</h3>
-  <pre>
-+ - ~ ! / * % ** < > <= >= == != === !==
-<< >> >>> & | ^ && || ?? ?.
-= *= **= /= %= += -= <<= >>= >>>= &= ^= |= &&= ||= ??= :
-  </pre>
+<!--  <h3>Operator</h3>-->
+<!--  <pre>-->
+<!--+ - ~ ! / * % ** < > <= >= == != === !==-->
+<!--<< >> >>> & | ^ && || ?? ?.-->
+<!--= *= **= /= %= += -= <<= >>= >>>= &= ^= |= &&= ||= ??= :-->
+<!--  </pre>-->
 
   <h3>Bracket</h3>
   <pre>
@@ -224,7 +224,7 @@ class C extends HTMLElement {
 
   <script src="../../../../dist/js/ryuseilight.min.js"></script>
   <script>
-    const ryuseilight = new RyuseiLight( { language: 'js' } );
+    var ryuseilight = new RyuseiLight( { language: 'js' } );
     ryuseilight.apply( 'pre' );
   </script>
 </body>

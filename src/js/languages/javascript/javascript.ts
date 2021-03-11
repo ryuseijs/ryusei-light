@@ -34,15 +34,14 @@ export function javascript(): Language {
   assign( grammar, {
     backtick: [
       [ CATEGORY_STRING, /^`/ ],
-      [ '#expression', /\${/, '@rest' ],
       [ CATEGORY_STRING, /\$[^{]/ ],
-      [ CATEGORY_STRING, /[^`$]+/ ],
+      [ '#expression', /\${/, '@rest' ],
+      [ CATEGORY_STRING, /(\\[$`]|[^`$])+/ ],
       [ CATEGORY_STRING, /`/, '@break' ],
     ],
 
     expression: [
       [ CATEGORY_BRACKET, /^\${/ ],
-      [ '#expression', /\${/, '@rest' ],
       [ CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT ],
       [ CATEGORY_COMMENT, REGEXP_SLASH_COMMENT ],
       [ '#backtick', /`/, '@rest' ],
