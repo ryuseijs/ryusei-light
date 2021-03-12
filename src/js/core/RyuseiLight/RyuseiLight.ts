@@ -101,7 +101,7 @@ export class RyuseiLight {
 
     const language     = options.language;
     const { name, id } = RyuseiLight.getLexer( language ).language;
-    return new Renderer( code, RyuseiLight.tokenize( code, language ), { name, id }, elm, options );
+    return new Renderer( RyuseiLight.tokenize( code, language ), { name, id }, elm, options );
   }
 
   /**

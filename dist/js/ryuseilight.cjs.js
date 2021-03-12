@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 0.0.8
+ * Version  : 0.0.9
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -715,13 +715,12 @@ var Renderer = /*#__PURE__*/function () {
   /**
    * The Renderer constructor.
    *
-   * @param code    - Raw code.
    * @param lines   - Lines with tokens to render.
    * @param info    - The language info object.
    * @param root    - Optional. A root element to highlight.
    * @param options - Options.
    */
-  function Renderer(code, lines, info, root, options) {
+  function Renderer(lines, info, root, options) {
     if (options === void 0) {
       options = {};
     }
@@ -735,7 +734,6 @@ var Renderer = /*#__PURE__*/function () {
      */
 
     this.event = new EventBus();
-    this.code = code;
     this.lines = lines;
     this.info = info;
     this.root = root;
@@ -1263,7 +1261,7 @@ var RyuseiLight = /*#__PURE__*/function () {
     var _RyuseiLight$getLexer = RyuseiLight.getLexer(language).language,
         name = _RyuseiLight$getLexer.name,
         id = _RyuseiLight$getLexer.id;
-    return new Renderer(code, RyuseiLight.tokenize(code, language), {
+    return new Renderer(RyuseiLight.tokenize(code, language), {
       name: name,
       id: id
     }, elm, options);
