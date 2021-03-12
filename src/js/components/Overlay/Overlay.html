@@ -25,9 +25,8 @@ console.log( 'Hello!' );
   <script src="../../../../dist/js/components/overlay.min.js"></script>
   <script>
     const ryuseilight = new RyuseiLight();
-    ryuseilight.apply( '.top-right', { overlayTopRight: true } );
-    ryuseilight.apply( '.top-left', { overlayTopLeft: true } );
-    ryuseilight.apply( '.tools', { tools: true } );
+    ryuseilight.apply( '.top-right', { overlay: { topRight: true } } );
+    ryuseilight.apply( '.top-left', { overlay: { topLeft: true } } );
   </script>
 </body>
 </html>

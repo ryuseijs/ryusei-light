@@ -31,6 +31,11 @@ export class Renderer {
   }
 
   /**
+   * Holds raw code.
+   */
+  readonly code;
+
+  /**
    * Holds lines with tokens.
    */
   readonly lines = [];
@@ -58,12 +63,14 @@ export class Renderer {
   /**
    * The Renderer constructor.
    *
+   * @param code    - Raw code.
    * @param lines   - Lines with tokens to render.
    * @param info    - The language info object.
    * @param root    - Optional. A root element to highlight.
    * @param options - Options.
    */
-  constructor( lines: Token[][], info: LanguageInfo, root?: HTMLElement, options: Options = {} ) {
+  constructor( code: string, lines: Token[][], info: LanguageInfo, root?: HTMLElement, options: Options = {} ) {
+    this.code    = code;
     this.lines   = lines;
     this.info    = info;
     this.root    = root;

@@ -1,0 +1,35 @@
+$button-background: #7a91a6 !default;
+$button-background-hover: #5fbef5 !default;
+$button-border-radius: 0 0 4px 4px !default;
+$button-font-size: .8em !default;
+$button-color: #2b3742 !default;
+$button-color-hover: #2b3742 !default;
+$button-margin: 0 .5em !default;
+$button-min-width: 4.5em !default;
+$button-padding: .3em 1em !default;
+
+.rl {
+  &__button {
+    background: $button-background;
+    border-radius: $button-border-radius;
+    color: $button-color;
+    font-size: $button-font-size;
+    margin: $button-margin;
+    min-width: $button-min-width;
+    padding: $button-padding;
+    transition: color .15s linear, background-color .15s linear;
+
+    &:active {
+      outline: 0;
+    }
+
+    &:focus {
+      outline: 0;
+    }
+
+    &:hover {
+      background: $button-background-hover;
+      color: $button-color-hover;
+    }
+  }
+}

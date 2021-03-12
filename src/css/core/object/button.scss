@@ -1,0 +1,32 @@
+.rl {
+  &__button {
+    $root: &;
+    border: 0;
+    font-family: inherit;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &__label {
+      &--active {
+        display: none;
+      }
+
+      &--inactive {
+      }
+    }
+
+    &.is-active {
+      #{ $root }__label {
+        &--active {
+          display: inline;
+        }
+
+        &--inactive {
+          display: none;
+        }
+      }
+    }
+  }
+}

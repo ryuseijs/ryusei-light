@@ -162,4 +162,15 @@ export interface Options {
    * Determines whether to display a language name or not.
    */
   languageName?: boolean | 'topLeft' | 'topRight';
+
+  /**
+   * Options for a copy button.
+   */
+  copy?: boolean | {
+    position?: 'topLeft' | 'topRight';
+    html?: string;
+    activeHtml?: string;
+    duration?: number;
+    ariaLabel?: string;
+  }
 }

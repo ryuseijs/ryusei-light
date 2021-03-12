@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 0.0.7
+ * Version  : 0.0.8
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -127,6 +127,21 @@ function addClass(elm, classes) {
   });
 }
 /**
+ * Appends children to the parent element.
+ *
+ * @param parent   - A parent element.
+ * @param children - A child or children to append to the parent.
+ */
+
+
+function append(parent, children) {
+  children = toArray(children);
+
+  for (var i = 0; i < children.length; i++) {
+    parent.appendChild(children[i]);
+  }
+}
+/**
  * Iterates over the provided object by own enumerable keys with calling the iteratee function.
  *
  * @param object   - An object to iterate over.
@@ -187,6 +202,28 @@ function attr(elm, attrs) {
       elm.setAttribute(key, String(value));
     });
   }
+}
+/**
+ * Creates an HTML element.
+ *
+ * @param tag     - A tag name.
+ * @param classes - Optional. Classes to add.
+ * @param parent  - Optional. A parent element where the created element is appended.
+ */
+
+
+function create(tag, classes, parent) {
+  var elm = document.createElement(tag);
+
+  if (classes) {
+    addClass(elm, classes);
+  }
+
+  if (parent) {
+    append(parent, elm);
+  }
+
+  return elm;
 }
 /**
  * Returns an element that matches the provided selector.
@@ -678,12 +715,13 @@ var Renderer = /*#__PURE__*/function () {
   /**
    * The Renderer constructor.
    *
+   * @param code    - Raw code.
    * @param lines   - Lines with tokens to render.
    * @param info    - The language info object.
    * @param root    - Optional. A root element to highlight.
    * @param options - Options.
    */
-  function Renderer(lines, info, root, options) {
+  function Renderer(code, lines, info, root, options) {
     if (options === void 0) {
       options = {};
     }
@@ -697,6 +735,7 @@ var Renderer = /*#__PURE__*/function () {
      */
 
     this.event = new EventBus();
+    this.code = code;
     this.lines = lines;
     this.info = info;
     this.root = root;
@@ -916,9 +955,8 @@ function javascript() {
   var main = grammar.main;
   before(main, CATEGORY_KEYWORD, [[CATEGORY_KEYWORD, /\b(?:as|async|await|case|catch|const|debugger|default|delete|enum|export|from|import|let|package|private|protected|public|super|switch|static|this|typeof|undefined|var|void|with|yield)\b/], [CATEGORY_KEYWORD, /\b((get|set)(?= *\S+\(\)))/], ['#backtick', /`/, '@rest'], [CATEGORY_DECORATOR, /@[^\s(@]+/]]);
   assign(grammar, {
-    backtick: [[CATEGORY_STRING, /^`/], [CATEGORY_STRING, /\$[^{]/], ['#expression', /\${/, '@rest'], [CATEGORY_STRING, /(\\[$`]|[^`$])+/], [CATEGORY_STRING, /`/, '@break']],
-    expression: [[CATEGORY_BRACKET, /^\${/], // [ '#expression', /[^\\]\${/, '@rest' ],
-    [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_COMMENT, REGEXP_SLASH_COMMENT], ['#backtick', /`/, '@rest'], [CATEGORY_BRACKET, /}/, '@break'], ['#main']]
+    backtick: [[CATEGORY_STRING, /^`/], [CATEGORY_STRING, /(\$[^{]|\\[$`]|[^`$])+/], ['#expression', /\${/, '@rest'], [CATEGORY_STRING, /`/, '@break']],
+    expression: [[CATEGORY_BRACKET, /^\${/], [CATEGORY_BRACKET, /}/, '@break'], ['#main']]
   });
   return language;
 }
@@ -1225,7 +1263,7 @@ var RyuseiLight = /*#__PURE__*/function () {
     var _RyuseiLight$getLexer = RyuseiLight.getLexer(language).language,
         name = _RyuseiLight$getLexer.name,
         id = _RyuseiLight$getLexer.id;
-    return new Renderer(RyuseiLight.tokenize(code, language), {
+    return new Renderer(code, RyuseiLight.tokenize(code, language), {
       name: name,
       id: id
     }, elm, options);
@@ -1260,6 +1298,7 @@ var RyuseiLight = /*#__PURE__*/function () {
         }
 
         elm.innerHTML = renderer.html(!isPre);
+        renderer.event.emit('applied', elm);
         this.renderers.push(renderer);
       }
     }
@@ -1383,6 +1422,142 @@ function normalize(lines) {
   return numbers;
 }
 /**
+ * Default options for the Copy component.
+ *
+ * @since 0.0.1
+ */
+
+
+var DEFAULT_OPTIONS = {
+  html: 'Copy',
+  activeHtml: 'Done',
+  duration: 1000,
+  ariaLabel: 'Copy code to clipboard'
+};
+/**
+ * The component for creating a copy button and handling click.
+ *
+ * @since 0.0.1
+ */
+
+function Copy(_ref2) {
+  var lines = _ref2.lines,
+      event = _ref2.event,
+      options = _ref2.options;
+
+  if (options.copy) {
+    var copyOptions = assign({}, DEFAULT_OPTIONS, isObject(options.copy) ? options.copy : {});
+    var buttonClass = PROJECT_CODE_SHORT + "__copy";
+    var labelClass = PROJECT_CODE_SHORT + "__button__label";
+    var position = copyOptions.position === 'topLeft' ? 'topLeft' : 'topRight';
+    options.overlay = options.overlay || {};
+    options.overlay[position] = true;
+    event.on("overlay:" + position, function (append) {
+      append("<button type=\"button\" class=\"rl__button " + buttonClass + "\" aria-label=\"Copy code to clipboard\">");
+      append("<span class=\"" + labelClass + " " + labelClass + "--inactive\">" + copyOptions.html + "</span>");
+      append("<span class=\"" + labelClass + " " + labelClass + "--active\">" + copyOptions.activeHtml + "</span>");
+      append("</button>");
+    });
+    event.on('applied', function (root) {
+      var button = query("." + buttonClass, root);
+      var code = lines.map(function (line) {
+        return line.map(function (token) {
+          return token[1];
+        }).join('');
+      }).join(LINE_BREAK);
+
+      if (button) {
+        var onClick = function onClick() {
+          copy(code, button, copyOptions.duration);
+        };
+
+        button.addEventListener('click', onClick);
+        event.on('destroy', function () {
+          button.removeEventListener('click', onClick);
+        });
+      }
+    });
+  }
+}
+/**
+ * Attempts to copy the provided code by the Clipboard API.
+ *
+ * @param code     - A code to copy.
+ * @param button   - A button element.
+ * @param duration - Duration for the button activation.
+ */
+
+
+function copy(code, button, duration) {
+  var onSuccess = function onSuccess() {
+    if (duration) {
+      toggleClass(button, duration);
+    }
+  };
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(code).then(onSuccess)["catch"](function () {
+      return execCopy(code, onSuccess);
+    });
+  } else {
+    execCopy(code, onSuccess);
+  }
+}
+/**
+ * Attempts to copy the provided code by the `document.execCommand()` for old browsers.
+ * Note that this method is deprecated.
+ *
+ * @param code      - Code to copy.
+ * @param onSuccess - Called after the copy is done.
+ */
+
+
+function execCopy(code, onSuccess) {
+  var textarea = create('textarea');
+  textarea.textContent = code;
+  styles(textarea, {
+    position: 'absolute',
+    left: '-99999px'
+  });
+  append(document.body, textarea);
+  textarea.focus();
+  textarea.select();
+  var failed;
+
+  try {
+    document.execCommand('copy');
+  } catch (e) {
+    alert('Failed to copy.');
+    failed = true;
+  }
+
+  document.body.removeChild(textarea);
+
+  if (!failed) {
+    onSuccess();
+  }
+}
+/**
+ * Toggles the active class of the button.
+ *
+ * @param button   - A button element.
+ * @param duration - Duration for the button activation.
+ */
+
+
+function toggleClass(button, duration) {
+  addClass(button, CLASSES.active);
+  var prop = '_rlTimer';
+
+  if (button[prop]) {
+    clearTimeout(button[prop]);
+  }
+
+  button[prop] = setTimeout(function () {
+    button.classList.remove(CLASSES.active);
+  }, duration);
+}
+/**
  * The throttle duration in milliseconds for resizing gutter rows.
  *
  * @since 0.0.1
@@ -1411,11 +1586,11 @@ var GUTTER_ROW_CLASS_NAME = GUTTER_CLASS_NAME + "__row";
  * @since 0.0.1
  */
 
-function Gutter(_ref2) {
-  var lines = _ref2.lines,
-      event = _ref2.event,
-      root = _ref2.root,
-      options = _ref2.options;
+function Gutter(_ref3) {
+  var lines = _ref3.lines,
+      event = _ref3.event,
+      root = _ref3.root,
+      options = _ref3.options;
   // Wait for initialization of other components.
   event.on('mounted', function () {
     if (!options.gutter) {
@@ -1478,10 +1653,10 @@ function Gutter(_ref2) {
  */
 
 
-function LanguageName(_ref3) {
-  var event = _ref3.event,
-      info = _ref3.info,
-      options = _ref3.options;
+function LanguageName(_ref4) {
+  var event = _ref4.event,
+      info = _ref4.info,
+      options = _ref4.options;
   var name = info.name;
 
   if (options.languageName && name) {
@@ -1508,10 +1683,10 @@ var ATTRIBUTE_LINE_NUMBERS = "data-" + PROJECT_CODE_SHORT + "-line-numbers";
  * @since 0.0.1
  */
 
-function LineNumbers(_ref4) {
-  var root = _ref4.root,
-      event = _ref4.event,
-      options = _ref4.options;
+function LineNumbers(_ref5) {
+  var root = _ref5.root,
+      event = _ref5.event,
+      options = _ref5.options;
   var data = root ? attr(root, ATTRIBUTE_LINE_NUMBERS) : '';
   var number = data === '' ? +options.lineNumbers : +data;
 
@@ -1530,9 +1705,9 @@ function LineNumbers(_ref4) {
  */
 
 
-function Overlay(_ref5) {
-  var event = _ref5.event,
-      options = _ref5.options;
+function Overlay(_ref6) {
+  var event = _ref6.event,
+      options = _ref6.options;
   event.on('mounted', function () {
     var className = PROJECT_CODE_SHORT + "__overlay";
     var _options$overlay = options.overlay,
@@ -1582,10 +1757,10 @@ var ATTRIBUTE_TITLE = "data-" + PROJECT_CODE_SHORT + "-title";
  * @since 0.0.1
  */
 
-function Title(_ref6) {
-  var event = _ref6.event,
-      root = _ref6.root,
-      options = _ref6.options;
+function Title(_ref7) {
+  var event = _ref7.event,
+      root = _ref7.root,
+      options = _ref7.options;
   var title = root && attr(root, ATTRIBUTE_TITLE) || options.title;
 
   if (title) {
@@ -1600,6 +1775,7 @@ function Title(_ref6) {
 var index$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
   ActiveLines: ActiveLines,
+  Copy: Copy,
   Gutter: Gutter,
   LanguageName: LanguageName,
   LineNumbers: LineNumbers,
