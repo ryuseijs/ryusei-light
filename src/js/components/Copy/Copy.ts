@@ -15,7 +15,7 @@ const DEFAULT_OPTIONS = {
   activeHtml: 'Done',
   duration  : 1000,
   ariaLabel : 'Copy code to clipboard',
-}
+};
 
 /**
  * The component for creating a copy button and handling click.

@@ -1,10 +1,6 @@
-import { REGEXP_MULTILINE_COMMENT, REGEXP_SLASH_COMMENT } from '../../constants/regexp';
 import { Language } from '../../types';
 import { common } from '../common/common';
-import {
-  CATEGORY_BRACKET, CATEGORY_COMMENT, CATEGORY_DECORATOR,
-  CATEGORY_KEYWORD, CATEGORY_STRING,
-} from '../../constants/categories';
+import { CATEGORY_BRACKET, CATEGORY_DECORATOR, CATEGORY_KEYWORD, CATEGORY_STRING } from '../../constants/categories';
 import { assign, before } from '../../utils';
 
 
