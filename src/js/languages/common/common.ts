@@ -1,7 +1,7 @@
 import { Language } from '../../types';
 import {
   CATEGORY_BOOLEAN, CATEGORY_BRACKET, CATEGORY_CLASS, CATEGORY_COMMENT, CATEGORY_FUNCTION,
-  CATEGORY_IDENTIFIER, CATEGORY_KEYWORD, CATEGORY_NUMBER, CATEGORY_OPERATOR, CATEGORY_REGEXP,
+  CATEGORY_IDENTIFIER, CATEGORY_KEYWORD, CATEGORY_NUMBER, CATEGORY_OPERATOR,
   CATEGORY_SPACE, CATEGORY_STRING, CATEGORY_SYMBOL,
 } from '../../constants/categories';
 import {
@@ -26,7 +26,6 @@ export function common(): Language {
         [ CATEGORY_STRING, REGEXP_DOUBLE_QUOTE ],
         [ CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT ],
         [ CATEGORY_COMMENT, REGEXP_SLASH_COMMENT ],
-        [ CATEGORY_REGEXP, /\/(\\\/|[^\n])+?\/[a-z]*/ ],
         [ CATEGORY_KEYWORD, /\b(?:break|catch|class|continue|do|else|extends|finally|for|function|if|implements|in|instanceof|interface|new|null|return|throw|trait|try|while)\b/ ],
         [ CATEGORY_CLASS, /\b[A-Z][\w$]*\b/ ], //todo
         [ CATEGORY_FUNCTION, REGEXP_FUNCTION ],

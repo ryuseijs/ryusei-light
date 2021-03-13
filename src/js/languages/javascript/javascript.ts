@@ -1,6 +1,12 @@
 import { Language } from '../../types';
 import { common } from '../common/common';
-import { CATEGORY_BRACKET, CATEGORY_DECORATOR, CATEGORY_KEYWORD, CATEGORY_STRING } from '../../constants/categories';
+import {
+  CATEGORY_BRACKET,
+  CATEGORY_DECORATOR,
+  CATEGORY_KEYWORD,
+  CATEGORY_REGEXP,
+  CATEGORY_STRING,
+} from '../../constants/categories';
 import { assign, before } from '../../utils';
 
 
@@ -20,6 +26,7 @@ export function javascript(): Language {
   const { main }    = grammar;
 
   before( main, CATEGORY_KEYWORD, [
+    [ CATEGORY_REGEXP, /\/(\[.*[^\\]?]|\\\/|.)+?\/[gimsuy]*/ ],
     [ CATEGORY_KEYWORD, /\b(?:as|async|await|case|catch|const|debugger|default|delete|enum|export|from|import|let|package|private|protected|public|super|switch|static|this|typeof|undefined|var|void|with|yield)\b/ ],
     [ CATEGORY_KEYWORD, /\b((get|set)(?= *\S+\(\)))/ ], // todo
     [ '#backtick', /`/, '@rest' ],

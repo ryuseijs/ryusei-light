@@ -129,7 +129,11 @@ export default ( Splide, Components ) => {
 
   <h3>RegExp</h3>
   <pre>
-/^.*?[\n\s]/gmsi
+{
+  a: /^.*?[\n\s]/gmsi,
+  b: /\s+.+(?=[\s/>])/gs,
+  c: /((?![*+?])(?:[^\r\n\[/\\]|\\.|\[(?:[^\r\n\]\\]|\\.)*\])+)\/((?:g(?:im?|mi?)?|i(?:gm?|mg?)?|m(?:gi?|ig?)?)?)/,
+}
   </pre>
 
   <h3>Template Literal</h3>

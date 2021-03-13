@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 0.0.11
+ * Version  : 0.0.12
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -900,7 +900,7 @@ function common() {
     id: 'common',
     name: '',
     grammar: {
-      main: [[CATEGORY_STRING, REGEXP_QUOTE], [CATEGORY_STRING, REGEXP_DOUBLE_QUOTE], [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_COMMENT, REGEXP_SLASH_COMMENT], [CATEGORY_REGEXP, /\/(\\\/|[^\n])+?\/[a-z]*/], [CATEGORY_KEYWORD, /\b(?:break|catch|class|continue|do|else|extends|finally|for|function|if|implements|in|instanceof|interface|new|null|return|throw|trait|try|while)\b/], [CATEGORY_CLASS, /\b[A-Z][\w$]*\b/], [CATEGORY_FUNCTION, REGEXP_FUNCTION], [CATEGORY_BOOLEAN, REGEXP_BOOLEAN], [CATEGORY_IDENTIFIER, /\b[a-z_$][\w$]*\b/], [CATEGORY_NUMBER, REGEXP_NUMBER], [CATEGORY_OPERATOR, /\+[+=]?|-[-=]?|\*\*?=?|\/=?|%=?|&&?=?|\|\|?=?|\?\??=?|<<?=?|>>?=?|[!=]=?=?|[~:^]/], [CATEGORY_BRACKET, REGEXP_BRACKET], [CATEGORY_SYMBOL, /[;.,@]+/], [CATEGORY_SPACE, REGEXP_SPACE]]
+      main: [[CATEGORY_STRING, REGEXP_QUOTE], [CATEGORY_STRING, REGEXP_DOUBLE_QUOTE], [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_COMMENT, REGEXP_SLASH_COMMENT], [CATEGORY_KEYWORD, /\b(?:break|catch|class|continue|do|else|extends|finally|for|function|if|implements|in|instanceof|interface|new|null|return|throw|trait|try|while)\b/], [CATEGORY_CLASS, /\b[A-Z][\w$]*\b/], [CATEGORY_FUNCTION, REGEXP_FUNCTION], [CATEGORY_BOOLEAN, REGEXP_BOOLEAN], [CATEGORY_IDENTIFIER, /\b[a-z_$][\w$]*\b/], [CATEGORY_NUMBER, REGEXP_NUMBER], [CATEGORY_OPERATOR, /\+[+=]?|-[-=]?|\*\*?=?|\/=?|%=?|&&?=?|\|\|?=?|\?\??=?|<<?=?|>>?=?|[!=]=?=?|[~:^]/], [CATEGORY_BRACKET, REGEXP_BRACKET], [CATEGORY_SYMBOL, /[;.,@]+/], [CATEGORY_SPACE, REGEXP_SPACE]]
     }
   };
 }
@@ -946,7 +946,7 @@ function javascript() {
   });
   var grammar = language.grammar;
   var main = grammar.main;
-  before(main, CATEGORY_KEYWORD, [[CATEGORY_KEYWORD, /\b(?:as|async|await|case|catch|const|debugger|default|delete|enum|export|from|import|let|package|private|protected|public|super|switch|static|this|typeof|undefined|var|void|with|yield)\b/], [CATEGORY_KEYWORD, /\b((get|set)(?= *\S+\(\)))/], ['#backtick', /`/, '@rest'], [CATEGORY_DECORATOR, /@[^\s(@]+/]]);
+  before(main, CATEGORY_KEYWORD, [[CATEGORY_REGEXP, /\/(\[.*[^\\]?]|\\\/|.)+?\/[gimsuy]*/], [CATEGORY_KEYWORD, /\b(?:as|async|await|case|catch|const|debugger|default|delete|enum|export|from|import|let|package|private|protected|public|super|switch|static|this|typeof|undefined|var|void|with|yield)\b/], [CATEGORY_KEYWORD, /\b((get|set)(?= *\S+\(\)))/], ['#backtick', /`/, '@rest'], [CATEGORY_DECORATOR, /@[^\s(@]+/]]);
   assign(grammar, {
     backtick: [[CATEGORY_STRING, /^`/], [CATEGORY_STRING, /(\$[^{]|\\[$`]|[^`$])+/], ['#expression', /\${/, '@rest'], [CATEGORY_STRING, /`/, '@break']],
     expression: [[CATEGORY_BRACKET, /^\${/], [CATEGORY_BRACKET, /}/, '@break'], ['#main']]
