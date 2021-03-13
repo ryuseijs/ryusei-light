@@ -18,9 +18,9 @@ export function Overlay( { event, options }: Renderer ) {
         event.emit( 'overlay:topRight', append );
 
         if ( options.tools ) {
-          append( `<div class="${ PROJECT_CODE_SHORT }__tools">` );
+          append( `<span class="${ PROJECT_CODE_SHORT }__tools">` );
           event.emit( 'overlay:tools', append );
-          append( `</div>` );
+          append( `</span>` );
         }
 
         append( `</div>` );

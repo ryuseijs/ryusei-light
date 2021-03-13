@@ -27,12 +27,10 @@ export function Copy( { lines, event, options }: Renderer ): void {
     const copyOptions = assign( {}, DEFAULT_OPTIONS, isObject( options.copy ) ? options.copy : {} );
     const buttonClass = `${ PROJECT_CODE_SHORT }__copy`;
     const labelClass  = `${ PROJECT_CODE_SHORT }__button__label`;
-    const position    = copyOptions.position === 'topLeft' ? 'topLeft' : 'topRight';
 
-    options.overlay = options.overlay || {};
-    options.overlay[ position ] = true;
+    options.tools = true;
 
-    event.on( `overlay:${ position }`, append => {
+    event.on( `overlay:tools`, append => {
       append( `<button type="button" class="rl__button ${ buttonClass }" aria-label="Copy code to clipboard">` );
       append( `<span class="${ labelClass } ${ labelClass }--inactive">${ copyOptions.html }</span>` );
       append( `<span class="${ labelClass } ${ labelClass }--active">${ copyOptions.activeHtml }</span>` );

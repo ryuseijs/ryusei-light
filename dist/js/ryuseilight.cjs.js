@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 0.0.10
+ * Version  : 0.0.11
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -1447,10 +1447,8 @@ function Copy(_ref2) {
     var copyOptions = assign({}, DEFAULT_OPTIONS, isObject(options.copy) ? options.copy : {});
     var buttonClass = PROJECT_CODE_SHORT + "__copy";
     var labelClass = PROJECT_CODE_SHORT + "__button__label";
-    var position = copyOptions.position === 'topLeft' ? 'topLeft' : 'topRight';
-    options.overlay = options.overlay || {};
-    options.overlay[position] = true;
-    event.on("overlay:" + position, function (append) {
+    options.tools = true;
+    event.on("overlay:tools", function (append) {
       append("<button type=\"button\" class=\"rl__button " + buttonClass + "\" aria-label=\"Copy code to clipboard\">");
       append("<span class=\"" + labelClass + " " + labelClass + "--inactive\">" + copyOptions.html + "</span>");
       append("<span class=\"" + labelClass + " " + labelClass + "--active\">" + copyOptions.activeHtml + "</span>");
@@ -1717,9 +1715,9 @@ function Overlay(_ref6) {
         event.emit('overlay:topRight', append);
 
         if (options.tools) {
-          append("<div class=\"" + PROJECT_CODE_SHORT + "__tools\">");
+          append("<span class=\"" + PROJECT_CODE_SHORT + "__tools\">");
           event.emit('overlay:tools', append);
-          append("</div>");
+          append("</span>");
         }
 
         append("</div>");
