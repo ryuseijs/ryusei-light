@@ -43,7 +43,7 @@ export function html(): Language {
     grammar: {
       main: [
         [ CATEGORY_COMMENT, /<!--.*?-->/s ],
-        [ CATEGORY_PROLOG, /<!DOCTYPE.*?>/ ],
+        [ CATEGORY_PROLOG, /<!DOCTYPE.*?>/is ],
         cdata,
         [ '#script', /<script.*?>.*?<\/script>/s ],
         [ '#style', /<style.*?>.*?<\/style>/s ],
