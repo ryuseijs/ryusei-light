@@ -48,6 +48,8 @@
   $button-padding: .3em 1em,
 
   $token-keyword: #e75a77,
+  $token-constant: #06b297,
+  $token-symbol: #06b297,
   $token-comment: #8baad1,
   $token-tag: #f75766,
   $token-selector: #72bc31,
@@ -66,5 +68,5 @@
   $token-regexp: #e8932d,
   $token-operator: #e75a77,
   $token-bracket: #8baad1,
-  $token-symbol: #8baad1
+  $token-delimiter: #8baad1
 );

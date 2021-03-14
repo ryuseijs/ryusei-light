@@ -1,7 +1,7 @@
 import { Language } from '../../types';
 import {
   CATEGORY_BRACKET, CATEGORY_COMMENT, CATEGORY_FUNCTION, CATEGORY_KEYWORD, CATEGORY_NUMBER, CATEGORY_OPERATOR,
-  CATEGORY_PROPERTY, CATEGORY_SELECTOR, CATEGORY_SPACE, CATEGORY_STRING, CATEGORY_SYMBOL, CATEGORY_TAG,
+  CATEGORY_PROPERTY, CATEGORY_SELECTOR, CATEGORY_SPACE, CATEGORY_STRING, CATEGORY_DELIMITER, CATEGORY_TAG,
 } from '../../constants/categories';
 import { REGEXP_MULTILINE_COMMENT, REGEXP_SPACE } from '../../constants/regexp';
 
@@ -63,7 +63,7 @@ export function css(): Language {
         [ '#url', /\burl\(/, '@rest' ],
         [ CATEGORY_SPACE, REGEXP_SPACE ],
         [ CATEGORY_KEYWORD, /[^\s();]+/ ],
-        [ CATEGORY_SYMBOL, /[:;,]/ ],
+        [ CATEGORY_DELIMITER, /[:;,]/ ],
         [ '#paren', /\(/, '@rest' ],
       ],
 
@@ -79,7 +79,7 @@ export function css(): Language {
         [ '#common' ],
         [ CATEGORY_OPERATOR, /[>+~]/ ],
         [ CATEGORY_BRACKET, /[[\]()]/ ],
-        [ CATEGORY_SYMBOL, /=/ ],
+        [ CATEGORY_DELIMITER, /=/ ],
         [ CATEGORY_SELECTOR, /::?\S+/ ],
         [ CATEGORY_SELECTOR, /[\W\d]\S+/ ],
         [ CATEGORY_TAG, /\b[a-zA-Z]+|\*/ ],
@@ -103,7 +103,7 @@ export function css(): Language {
         [ CATEGORY_NUMBER, /#([0-9a-f]{6}|[0-9a-f]{3})/i ],
         [ CATEGORY_NUMBER, /\bU\+[0-9a-f?-]+/i ],
         [ CATEGORY_NUMBER, /[+-]?(\d+\.?\d*|\d*\.?\d+)/ ],
-        [ CATEGORY_SYMBOL, /[:;,]/ ],
+        [ CATEGORY_DELIMITER, /[:;,]/ ],
         [ '#paren', /\(/, '@rest' ],
         [ CATEGORY_BRACKET, /[[\])]/ ],
         [ CATEGORY_SPACE, REGEXP_SPACE ],

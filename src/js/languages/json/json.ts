@@ -2,7 +2,7 @@ import { REGEXP_BOOLEAN, REGEXP_DOUBLE_QUOTE, REGEXP_SPACE } from '../../constan
 import { Language } from '../../types';
 import {
   CATEGORY_BOOLEAN, CATEGORY_BRACKET, CATEGORY_KEYWORD, CATEGORY_NUMBER, CATEGORY_OPERATOR,
-  CATEGORY_PROPERTY, CATEGORY_SPACE, CATEGORY_STRING, CATEGORY_SYMBOL,
+  CATEGORY_PROPERTY, CATEGORY_SPACE, CATEGORY_STRING, CATEGORY_DELIMITER,
 } from '../../constants/categories';
 
 
@@ -27,7 +27,7 @@ export function json(): Language {
         [ CATEGORY_BRACKET, /[{}[]]/ ],
         [ CATEGORY_BOOLEAN, REGEXP_BOOLEAN ],
         [ CATEGORY_OPERATOR, /:/ ],
-        [ CATEGORY_SYMBOL, /[,]/ ],
+        [ CATEGORY_DELIMITER, /[,]/ ],
         [ CATEGORY_SPACE, REGEXP_SPACE ],
       ],
     },

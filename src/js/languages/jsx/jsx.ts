@@ -1,7 +1,7 @@
 import { Language } from '../../types';
 import {
   CATEGORY_ATTRIBUTE, CATEGORY_BRACKET, CATEGORY_CLASS, CATEGORY_SPACE,
-  CATEGORY_SYMBOL, CATEGORY_TAG, CATEGORY_VALUE,
+  CATEGORY_DELIMITER, CATEGORY_TAG, CATEGORY_VALUE,
 } from '../../constants/categories';
 import { REGEXP_SPACE } from '../../constants/regexp';
 import { assign, before } from '../../utils';
@@ -54,14 +54,14 @@ export function jsx(): Language {
       [ CATEGORY_ATTRIBUTE, /[^\s/>"'=]+/ ],
       [ CATEGORY_VALUE, /(['"])(\\\1|.)*?\1/ ],
       [ CATEGORY_SPACE, REGEXP_SPACE ],
-      [ CATEGORY_SYMBOL, /[/=]/ ],
+      [ CATEGORY_DELIMITER, /[/=]/ ],
       [ CATEGORY_BRACKET, />/, '@break' ],
     ],
 
     tagName: [
       [ CATEGORY_BRACKET, /[<>]/ ],
       [ CATEGORY_SPACE, REGEXP_SPACE ],
-      [ CATEGORY_SYMBOL, /\// ],
+      [ CATEGORY_DELIMITER, /\// ],
       [ CATEGORY_CLASS, /[A-Z][\w$-]*/ ],
       [ CATEGORY_TAG, /[^\s/>"'=]+/ ],
     ],

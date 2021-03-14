@@ -1,4 +1,6 @@
 $token-keyword: #5fbef5 !default;
+$token-constant: #f88792 !default;
+$token-symbol: #f88792 !default;
 $token-comment: #7a91a6 !default;
 $token-tag: #5fbef5 !default;
 $token-selector: #2abac4 !default;
@@ -7,6 +9,7 @@ $token-prop: #29b477 !default;
 $token-value: #c5d559 !default;
 $token-variable: #5291e5 !default;
 $token-entity: #9a68f5 !default;
+$token-cdata: #7a91a6 !default;
 $token-prolog: #7a91a6 !default;
 $token-string: #c5d559 !default;
 $token-number: #f88792 !default;
@@ -17,11 +20,19 @@ $token-decorator: #5d639e !default;
 $token-regexp: #c5d559 !default;
 $token-operator: #2abac4 !default;
 $token-bracket: #7a91a6 !default;
-$token-symbol: #7a91a6 !default;
+$token-delimiter: #7a91a6 !default;
 
 .rl {
   &__keyword {
     color: $token-keyword;
+  }
+
+  &__constant {
+    color: $token-constant;
+  }
+
+  &__symbol {
+    color: $token-symbol;
   }
 
   &__comment {
@@ -54,6 +65,10 @@ $token-symbol: #7a91a6 !default;
 
   &__entity {
     color: $token-entity;
+  }
+
+  &__cdata {
+    color: $token-cdata;
   }
 
   &__prolog {
@@ -99,8 +114,8 @@ $token-symbol: #7a91a6 !default;
     color: $token-bracket;
   }
 
-  &__symbol {
-    color: $token-symbol;
+  &__delimiter {
+    color: $token-delimiter;
   }
 
   &__space {

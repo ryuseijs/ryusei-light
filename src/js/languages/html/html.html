@@ -8,6 +8,7 @@
 <body>
   <h3>Practical Example</h3>
   <pre>
+&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
   &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -30,6 +31,12 @@
 
   &lt;script src=&quot;./main.js&quot;&gt;&lt;/script&gt;
   &lt;script src=&quot;https://example.com/library.js&quot;&gt;&lt;/script&gt;
+
+  &lt;script&gt;
+    &lt;![CDATA[
+      &lt;message&gt; CDATA section &lt;/message&gt;
+    ]]&gt;
+  &lt;/script&gt;
 
   &lt;!-- Embed styles --&gt;
   &lt;style&gt;
@@ -66,7 +73,7 @@
 &lt;/head&gt;
 &lt;body&gt;
 &lt;header id=&quot;main-header&quot; class=&quot;l-masthead p-masthead&quot;&gt;
-  &lt;div class=&quot;p-branding&quot;&gt;
+  &lt;div class=&quot;p-branding&quot; style="margin-right: 2px; border: 1px solid #ccc; font-family: 'Times New Roman', serif;"&gt;
     &lt;span class=&quot;p-branding__logo&quot;&gt;
       &lt;a
         href=&quot;https://example.com/&quot;
@@ -210,7 +217,7 @@ console.log( values );
   </pre>
 
   <script src="../../../../dist/js/ryuseilight.min.js"></script>
-  <script src="../../../../dist/languages/html.min.js"></script>
+  <script src="../../../../dist/js/languages/html.min.js"></script>
   <script>
     const ryuseilight = new RyuseiLight();
     ryuseilight.apply( 'pre', { language: 'markup' } );

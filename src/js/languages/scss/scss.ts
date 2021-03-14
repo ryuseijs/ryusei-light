@@ -1,7 +1,7 @@
 import { Language } from '../../types';
 import {
   CATEGORY_BRACKET, CATEGORY_COMMENT, CATEGORY_FUNCTION, CATEGORY_OPERATOR, CATEGORY_PROPERTY,
-  CATEGORY_SELECTOR, CATEGORY_SPACE, CATEGORY_STRING, CATEGORY_SYMBOL,
+  CATEGORY_SELECTOR, CATEGORY_SPACE, CATEGORY_STRING, CATEGORY_DELIMITER,
   CATEGORY_TAG, CATEGORY_VARIABLE,
 } from '../../constants/categories';
 import { REGEXP_MULTILINE_COMMENT, REGEXP_SLASH_COMMENT, REGEXP_SPACE } from '../../constants/regexp';
@@ -70,7 +70,7 @@ export function scss(): Language {
       [ '#findInterp' ],
       [ CATEGORY_OPERATOR, /[>+~]/ ],
       [ CATEGORY_BRACKET, /[[\]()]/ ],
-      [ CATEGORY_SYMBOL, /=/ ],
+      [ CATEGORY_DELIMITER, /=/ ],
       [ CATEGORY_SELECTOR, /::?\S+(?=#{)/ ],
       [ CATEGORY_SELECTOR, /[\W\d]\S+(?=#{)/ ],
       [ CATEGORY_TAG, /\b[a-zA-Z]+\b|\*/ ],

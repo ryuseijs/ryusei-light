@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 0.0.12
+ * Version  : 0.0.13
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -21,6 +21,7 @@ var CATEGORY_PROPERTY = 'prop';
 var CATEGORY_VALUE = 'value';
 var CATEGORY_VARIABLE = 'variable';
 var CATEGORY_ENTITY = 'entity';
+var CATEGORY_CDATA = 'cdata';
 var CATEGORY_PROLOG = 'prolog';
 var CATEGORY_IDENTIFIER = 'identifier';
 var CATEGORY_STRING = 'string';
@@ -32,7 +33,7 @@ var CATEGORY_DECORATOR = 'decorator';
 var CATEGORY_REGEXP = 'regexp';
 var CATEGORY_OPERATOR = 'operator';
 var CATEGORY_BRACKET = 'bracket';
-var CATEGORY_SYMBOL = 'symbol';
+var CATEGORY_DELIMITER = 'delimiter';
 var CATEGORY_SPACE = 'space';
 var CATEGORY_TEXT = 'text';
 /**
@@ -900,7 +901,7 @@ function common() {
     id: 'common',
     name: '',
     grammar: {
-      main: [[CATEGORY_STRING, REGEXP_QUOTE], [CATEGORY_STRING, REGEXP_DOUBLE_QUOTE], [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_COMMENT, REGEXP_SLASH_COMMENT], [CATEGORY_KEYWORD, /\b(?:break|catch|class|continue|do|else|extends|finally|for|function|if|implements|in|instanceof|interface|new|null|return|throw|trait|try|while)\b/], [CATEGORY_CLASS, /\b[A-Z][\w$]*\b/], [CATEGORY_FUNCTION, REGEXP_FUNCTION], [CATEGORY_BOOLEAN, REGEXP_BOOLEAN], [CATEGORY_IDENTIFIER, /\b[a-z_$][\w$]*\b/], [CATEGORY_NUMBER, REGEXP_NUMBER], [CATEGORY_OPERATOR, /\+[+=]?|-[-=]?|\*\*?=?|\/=?|%=?|&&?=?|\|\|?=?|\?\??=?|<<?=?|>>?=?|[!=]=?=?|[~:^]/], [CATEGORY_BRACKET, REGEXP_BRACKET], [CATEGORY_SYMBOL, /[;.,@]+/], [CATEGORY_SPACE, REGEXP_SPACE]]
+      main: [[CATEGORY_STRING, REGEXP_QUOTE], [CATEGORY_STRING, REGEXP_DOUBLE_QUOTE], [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_COMMENT, REGEXP_SLASH_COMMENT], [CATEGORY_KEYWORD, /\b(?:break|catch|class|continue|do|else|extends|finally|for|function|if|implements|in|instanceof|interface|new|null|return|throw|trait|try|while)\b/], [CATEGORY_CLASS, /\b[A-Z][\w$]*\b/], [CATEGORY_FUNCTION, REGEXP_FUNCTION], [CATEGORY_BOOLEAN, REGEXP_BOOLEAN], [CATEGORY_IDENTIFIER, /\b[a-z_$][\w$]*\b/], [CATEGORY_NUMBER, REGEXP_NUMBER], [CATEGORY_OPERATOR, /\+[+=]?|-[-=]?|\*\*?=?|\/=?|%=?|&&?=?|\|\|?=?|\?\??=?|<<?=?|>>?=?|[!=]=?=?|[~:^]/], [CATEGORY_BRACKET, REGEXP_BRACKET], [CATEGORY_DELIMITER, /[;.,]+/], [CATEGORY_SPACE, REGEXP_SPACE]]
     }
   };
 }
@@ -923,11 +924,11 @@ function css() {
       common: [[CATEGORY_STRING, /(["'])[\s\S]*?(?:(?!\\)[\s\S])\1/], [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_SPACE, REGEXP_SPACE]],
       block: [['#findAtrule'], ['#findSelector'], ['#inner', /{/, '@rest'], [CATEGORY_BRACKET, /}/, '@break'], [CATEGORY_SPACE, REGEXP_SPACE]],
       inner: [[CATEGORY_BRACKET, /{/], ['#common'], ['#findBlock'], ['#props'], ['#findAtrule'], ['', /}/, '@back']],
-      atrule: [['#common'], ['#url', /\burl\(/, '@rest'], [CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_KEYWORD, /[^\s();]+/], [CATEGORY_SYMBOL, /[:;,]/], ['#paren', /\(/, '@rest']],
+      atrule: [['#common'], ['#url', /\burl\(/, '@rest'], [CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_KEYWORD, /[^\s();]+/], [CATEGORY_DELIMITER, /[:;,]/], ['#paren', /\(/, '@rest']],
       paren: [[CATEGORY_BRACKET, /^\(/], ['#common'], ['#paren', /\(/, '@rest'], [CATEGORY_BRACKET, /\)/, '@break'], ['#props']],
-      selector: [['#common'], [CATEGORY_OPERATOR, /[>+~]/], [CATEGORY_BRACKET, /[[\]()]/], [CATEGORY_SYMBOL, /=/], [CATEGORY_SELECTOR, /::?\S+/], [CATEGORY_SELECTOR, /[\W\d]\S+/], [CATEGORY_TAG, /\b[a-zA-Z]+|\*/], [CATEGORY_SELECTOR, /\S+/]],
+      selector: [['#common'], [CATEGORY_OPERATOR, /[>+~]/], [CATEGORY_BRACKET, /[[\]()]/], [CATEGORY_DELIMITER, /=/], [CATEGORY_SELECTOR, /::?\S+/], [CATEGORY_SELECTOR, /[\W\d]\S+/], [CATEGORY_TAG, /\b[a-zA-Z]+|\*/], [CATEGORY_SELECTOR, /\S+/]],
       url: [['#common'], [CATEGORY_FUNCTION, /^url/], [CATEGORY_BRACKET, /\(/], [CATEGORY_STRING, /[^)]+/], [CATEGORY_BRACKET, /\)/, '@break']],
-      props: [[CATEGORY_PROPERTY, /[a-z0-9-]+(?=:)/i], ['#url', /\burl\(/, '@rest'], [CATEGORY_FUNCTION, /\b[\w-]+(?=\()\b/], [CATEGORY_KEYWORD, /!important|\b(?:initial|inherit|unset)/], [CATEGORY_PROPERTY, /[a-z0-9-]+(?=:)/], [CATEGORY_NUMBER, /#([0-9a-f]{6}|[0-9a-f]{3})/i], [CATEGORY_NUMBER, /\bU\+[0-9a-f?-]+/i], [CATEGORY_NUMBER, /[+-]?(\d+\.?\d*|\d*\.?\d+)/], [CATEGORY_SYMBOL, /[:;,]/], ['#paren', /\(/, '@rest'], [CATEGORY_BRACKET, /[[\])]/], [CATEGORY_SPACE, REGEXP_SPACE]]
+      props: [[CATEGORY_PROPERTY, /[a-z0-9-]+(?=:)/i], ['#url', /\burl\(/, '@rest'], [CATEGORY_FUNCTION, /\b[\w-]+(?=\()\b/], [CATEGORY_KEYWORD, /!important|\b(?:initial|inherit|unset)/], [CATEGORY_PROPERTY, /[a-z0-9-]+(?=:)/], [CATEGORY_NUMBER, /#([0-9a-f]{6}|[0-9a-f]{3})/i], [CATEGORY_NUMBER, /\bU\+[0-9a-f?-]+/i], [CATEGORY_NUMBER, /[+-]?(\d+\.?\d*|\d*\.?\d+)/], [CATEGORY_DELIMITER, /[:;,]/], ['#paren', /\(/, '@rest'], [CATEGORY_BRACKET, /[[\])]/], [CATEGORY_SPACE, REGEXP_SPACE]]
     }
   };
 }
@@ -961,20 +962,27 @@ function javascript() {
 
 
 function html() {
+  var langJs = javascript();
+  var langCss = css();
+  var cdata = [CATEGORY_CDATA, /<!\[CDATA\[[\s\S]*\]\]>/i]; // Embedded scripts or styles may contain CDATA sections.
+
+  langJs.grammar.main.unshift(cdata);
+  langCss.grammar.main.unshift(cdata);
   return {
     id: 'html',
     alias: ['markup'],
     name: 'HTML',
     use: {
-      javascript: javascript(),
-      css: css()
+      javascript: langJs,
+      css: langCss
     },
     grammar: {
-      main: [[CATEGORY_COMMENT, /<!\x2D\x2D[\s\S]*?\x2D\x2D>/], [CATEGORY_PROLOG, /<!DOCTYPE.*?>/], [CATEGORY_PROLOG, /<!\[CDATA\[[\s\S]*\]\]>/], ['#script', /<script[\s\S]*?>[\s\S]*?<\/script>/], ['#style', /<style[\s\S]*?>[\s\S]*?<\/style>/], ['#tag', /<[\s\S]*?>/], [CATEGORY_ENTITY, /&[\da-z]+;|&#\d+;/i]],
-      script: [['#tag', /^<script[\s\S]*?>/], ['@javascript', /[\s\S]+(?=<\/script>)/], ['#tag', /<\/script>/]],
+      main: [[CATEGORY_COMMENT, /<!\x2D\x2D[\s\S]*?\x2D\x2D>/], [CATEGORY_PROLOG, /<!DOCTYPE.*?>/], cdata, ['#script', /<script[\s\S]*?>[\s\S]*?<\/script>/], ['#style', /<style[\s\S]*?>[\s\S]*?<\/style>/], ['#tag', /<[\s\S]*?>/], [CATEGORY_ENTITY, /&[\da-z]+;|&#\d+;/i]],
+      cdata: [[CATEGORY_CDATA, /<!\[CDATA\[[\s\S]*\]\]>/i]],
+      script: [['#tag', /^<script[\s\S]*?>/], ['#cdata'], ['@javascript', /[\s\S]+(?=<\/script>)/], ['#tag', /<\/script>/]],
       style: [['#tag', /^<style[\s\S]*?>/], ['@css', /[\s\S]+(?=<\/style>)/], ['#tag', /<\/style>/]],
-      tag: [['#attr', /[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]+[\s\S]+(?=[\t-\r \/>\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])/], [CATEGORY_TAG, /[^\s/<>"'=]+/], [CATEGORY_BRACKET, /[<>]/], [CATEGORY_SYMBOL, /[/]/]],
-      attr: [[CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_VALUE, /(['"])(\\\1|.)*?\1/], [CATEGORY_SYMBOL, /[/=]/], [CATEGORY_ATTRIBUTE, /[^\s/>"'=]+/]]
+      tag: [['#attr', /[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]+[\s\S]+(?=[\t-\r \/>\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])/], [CATEGORY_TAG, /[^\s/<>"'=]+/], [CATEGORY_BRACKET, /[<>]/], [CATEGORY_DELIMITER, /[/]/]],
+      attr: [[CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_VALUE, /(['"])(\\\1|.)*?\1/], [CATEGORY_DELIMITER, /[/=]/], [CATEGORY_ATTRIBUTE, /[^\s/>"'=]+/]]
     }
   };
 }
@@ -992,7 +1000,7 @@ function json() {
     id: 'json',
     name: 'JSON',
     grammar: {
-      main: [[CATEGORY_PROPERTY, /".*?[^\\]"(?=:)/], [CATEGORY_STRING, REGEXP_DOUBLE_QUOTE], [CATEGORY_KEYWORD, /\bnull\b/], [CATEGORY_NUMBER, /[+-]?(\d+\.?\d*)([eE][+-]?\d+)?/], [CATEGORY_BRACKET, /[{}[]]/], [CATEGORY_BOOLEAN, REGEXP_BOOLEAN], [CATEGORY_OPERATOR, /:/], [CATEGORY_SYMBOL, /[,]/], [CATEGORY_SPACE, REGEXP_SPACE]]
+      main: [[CATEGORY_PROPERTY, /".*?[^\\]"(?=:)/], [CATEGORY_STRING, REGEXP_DOUBLE_QUOTE], [CATEGORY_KEYWORD, /\bnull\b/], [CATEGORY_NUMBER, /[+-]?(\d+\.?\d*)([eE][+-]?\d+)?/], [CATEGORY_BRACKET, /[{}[]]/], [CATEGORY_BOOLEAN, REGEXP_BOOLEAN], [CATEGORY_OPERATOR, /:/], [CATEGORY_DELIMITER, /[,]/], [CATEGORY_SPACE, REGEXP_SPACE]]
     }
   };
 }
@@ -1021,8 +1029,8 @@ function jsx() {
     pickSelfClosedTag: [['#selfClosedTag', /<[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*?([0-9A-Z_a-z]+?)[\s\S]*?\/>/]],
     pairedTag: [['#openTag', /^</, '@rest'], ['@javascript', /\{[\s\S]*?\}/], ['#pickPairedTag'], ['#pickSelfClosedTag'], ['#tagName', /<\/[\w][^\s]*?>/, '@break']],
     selfClosedTag: [['#openTag', /^</, '@rest']],
-    openTag: [['#tagName', /<\s*[^\s/>"'=]+/], ['@javascript', /\{[\s\S]*?\}/], [CATEGORY_ATTRIBUTE, /[^\s/>"'=]+/], [CATEGORY_VALUE, /(['"])(\\\1|.)*?\1/], [CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_SYMBOL, /[/=]/], [CATEGORY_BRACKET, />/, '@break']],
-    tagName: [[CATEGORY_BRACKET, /[<>]/], [CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_SYMBOL, /\//], [CATEGORY_CLASS, /[A-Z][\w$-]*/], [CATEGORY_TAG, /[^\s/>"'=]+/]]
+    openTag: [['#tagName', /<\s*[^\s/>"'=]+/], ['@javascript', /\{[\s\S]*?\}/], [CATEGORY_ATTRIBUTE, /[^\s/>"'=]+/], [CATEGORY_VALUE, /(['"])(\\\1|.)*?\1/], [CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_DELIMITER, /[/=]/], [CATEGORY_BRACKET, />/, '@break']],
+    tagName: [[CATEGORY_BRACKET, /[<>]/], [CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_DELIMITER, /\//], [CATEGORY_CLASS, /[A-Z][\w$-]*/], [CATEGORY_TAG, /[^\s/>"'=]+/]]
   });
   return language;
 }
@@ -1064,7 +1072,7 @@ function scss() {
     string: [['#singleQuote', /'/, '@rest'], ['#doubleQuote', /"/, '@rest']],
     singleQuote: [[CATEGORY_STRING, /^'/], ['#findInterp'], [CATEGORY_STRING, /(\\'|#[^{]|[^'#])+/], [CATEGORY_STRING, /'/, '@break']],
     doubleQuote: [[CATEGORY_STRING, /^"/], ['#findInterp'], [CATEGORY_STRING, /(\\"|#[^{]|[^"#])+/], [CATEGORY_STRING, /"/, '@break']],
-    selector: [['#common'], ['#findInterp'], [CATEGORY_OPERATOR, /[>+~]/], [CATEGORY_BRACKET, /[[\]()]/], [CATEGORY_SYMBOL, /=/], [CATEGORY_SELECTOR, /::?\S+(?=#{)/], [CATEGORY_SELECTOR, /[\W\d]\S+(?=#{)/], [CATEGORY_TAG, /\b[a-zA-Z]+\b|\*/], [CATEGORY_SELECTOR, /\S+/]],
+    selector: [['#common'], ['#findInterp'], [CATEGORY_OPERATOR, /[>+~]/], [CATEGORY_BRACKET, /[[\]()]/], [CATEGORY_DELIMITER, /=/], [CATEGORY_SELECTOR, /::?\S+(?=#{)/], [CATEGORY_SELECTOR, /[\W\d]\S+(?=#{)/], [CATEGORY_TAG, /\b[a-zA-Z]+\b|\*/], [CATEGORY_SELECTOR, /\S+/]],
     url: [['#common'], ['#findInterp'], [CATEGORY_FUNCTION, /^url/], [CATEGORY_BRACKET, /\(/], [CATEGORY_STRING, /[^)]+(?=#{)/], [CATEGORY_STRING, /[^)]+/], [CATEGORY_BRACKET, /\)/, '@break']],
     interp: [[CATEGORY_BRACKET, /#{/], [CATEGORY_BRACKET, /}/, '@break'], ['#common'], ['#props']]
   });
