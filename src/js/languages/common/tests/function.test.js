@@ -22,6 +22,21 @@ describe( 'common', () => {
     ] );
   } );
 
+  // https://stackoverflow.com/questions/2008279/validate-a-javascript-function-name
+  test( 'can tokenize functions that contains ASCII characters.', () => {
+    expect( `関数()` ).toBeTokenized( 'common', [
+      [ CATEGORY_FUNCTION, '関数' ],
+      [ CATEGORY_BRACKET, '(' ],
+      [ CATEGORY_BRACKET, ')' ],
+    ] );
+
+    expect( `über()` ).toBeTokenized( 'common', [
+      [ CATEGORY_FUNCTION, 'über' ],
+      [ CATEGORY_BRACKET, '(' ],
+      [ CATEGORY_BRACKET, ')' ],
+    ] );
+  } );
+
   test( 'can tokenize member methods.', () => {
     expect( `Array.isArray()` ).toBeTokenized( 'common', [
       [ CATEGORY_CLASS, 'Array' ],

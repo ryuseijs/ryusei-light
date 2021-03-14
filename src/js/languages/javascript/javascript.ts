@@ -1,7 +1,7 @@
 import { Language } from '../../types';
 import { common } from '../common/common';
 import {
-  CATEGORY_BRACKET,
+  CATEGORY_DELIMITER,
   CATEGORY_DECORATOR,
   CATEGORY_KEYWORD,
   CATEGORY_REGEXP,
@@ -43,8 +43,8 @@ export function javascript(): Language {
     ],
 
     expression: [
-      [ CATEGORY_BRACKET, /^\${/ ],
-      [ CATEGORY_BRACKET, /}/, '@break' ],
+      [ CATEGORY_DELIMITER, /^\${/ ],
+      [ CATEGORY_DELIMITER, /}/, '@break' ],
       [ '#main' ],
     ],
   } );

@@ -30,13 +30,13 @@ export function toBeTokenized(
     tokens = tokens.filter( token => token[ 0 ] !== 'space' );
   }
 
-  const pass = expectedTokens.every( ( token, index ) => {
+  const pass = expectedTokens.length === tokens.length && expectedTokens.every( ( token, index ) => {
     return token[ 0 ] === tokens[ index ][ 0 ] && token[ 1 ] === tokens[ index ][ 1 ];
   } );
 
   const message = pass
     ? () => `The code was successfully tokenized to ${ this.utils.printReceived( expectedTokens ) }`
-    : () => `The code was not tokenized to
+    : () => `Tokenization failed:
       Expect: ${ this.utils.printReceived( expectedTokens ) }
       Actual: ${ this.utils.printExpected( tokens ) }
     `;

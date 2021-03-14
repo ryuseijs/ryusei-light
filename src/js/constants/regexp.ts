@@ -1,5 +1,3 @@
-export const REGEXP_FUNCTION = /\b\w+(?= *\()/;
-
 export const REGEXP_FLOAT = /\d+\.?\d*|\d*\.?\d+/;
 
 export const REGEXP_NUMBER = /[+-]?(\d+\.?\d*|\d*\.?\d+)([eE][+-]?\d+)?/;

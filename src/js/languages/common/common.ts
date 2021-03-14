@@ -5,7 +5,7 @@ import {
   CATEGORY_SPACE, CATEGORY_STRING, CATEGORY_DELIMITER,
 } from '../../constants/categories';
 import {
-  REGEXP_BOOLEAN, REGEXP_BRACKET, REGEXP_DOUBLE_QUOTE, REGEXP_FUNCTION, REGEXP_MULTILINE_COMMENT, REGEXP_NUMBER,
+  REGEXP_BOOLEAN, REGEXP_BRACKET, REGEXP_DOUBLE_QUOTE, REGEXP_MULTILINE_COMMENT, REGEXP_NUMBER,
   REGEXP_QUOTE, REGEXP_SLASH_COMMENT, REGEXP_SPACE,
 } from '../../constants/regexp';
 
@@ -28,7 +28,7 @@ export function common(): Language {
         [ CATEGORY_COMMENT, REGEXP_SLASH_COMMENT ],
         [ CATEGORY_KEYWORD, /\b(?:break|catch|class|continue|do|else|extends|finally|for|function|if|implements|in|instanceof|interface|new|null|return|throw|trait|try|while)\b/ ],
         [ CATEGORY_CLASS, /\b[A-Z][\w$]*\b/ ],
-        [ CATEGORY_FUNCTION, REGEXP_FUNCTION ],
+        [ CATEGORY_FUNCTION, /[_$a-z\xA0-\uFFFF][_$a-z0-9\xA0-\uFFFF]*(?=\s*\()/i ],
         [ CATEGORY_BOOLEAN, REGEXP_BOOLEAN ],
         [ CATEGORY_IDENTIFIER, /\b[a-z_$][\w$]*\b/ ],
         [ CATEGORY_NUMBER, REGEXP_NUMBER ],
