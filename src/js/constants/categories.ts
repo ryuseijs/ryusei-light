@@ -3,6 +3,7 @@ export const CATEGORY_CONSTANT   = 'constant';
 export const CATEGORY_COMMENT    = 'comment';
 export const CATEGORY_TAG        = 'tag';
 export const CATEGORY_SELECTOR   = 'selector';
+export const CATEGORY_ATRULE     = 'atrule';
 export const CATEGORY_ATTRIBUTE  = 'attr';
 export const CATEGORY_PROPERTY   = 'prop';
 export const CATEGORY_VALUE      = 'value';

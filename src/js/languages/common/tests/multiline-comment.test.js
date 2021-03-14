@@ -7,29 +7,29 @@ describe( 'common', () => {
     expect( comment1 ).toBeTokenized( 'common', [ [ CATEGORY_COMMENT, comment1 ] ] );
 
     const comment2 = `
-/*
-   comment
- */
-`.trim();
+      /*
+         comment
+       */
+    `;
 
     expect( comment2 ).toBeTokenized( 'common', [
       [ CATEGORY_COMMENT, '/*' ],
-      [ CATEGORY_COMMENT, '   comment' ],
-      [ CATEGORY_COMMENT, ' */' ],
+      [ CATEGORY_COMMENT, '         comment' ],
+      [ CATEGORY_COMMENT, '       */' ],
     ] );
 
     const comment3 = `
-/**
- * comment
- * comment
- */
-`.trim();
+      /**
+       * comment
+       * comment
+       */
+    `;
 
     expect( comment3 ).toBeTokenized( 'common', [
       [ CATEGORY_COMMENT, '/**' ],
-      [ CATEGORY_COMMENT, ' * comment' ],
-      [ CATEGORY_COMMENT, ' * comment' ],
-      [ CATEGORY_COMMENT, ' */' ],
+      [ CATEGORY_COMMENT, '       * comment' ],
+      [ CATEGORY_COMMENT, '       * comment' ],
+      [ CATEGORY_COMMENT, '       */' ],
     ] );
   } );
 
@@ -38,17 +38,17 @@ describe( 'common', () => {
     expect( comment1 ).toBeTokenized( 'common', [ [ CATEGORY_COMMENT, comment1 ] ] );
 
     const comment2 = `
-/**
- * comment
- * \\/ *\\/
- */
-`.trim();
+      /**
+       * comment
+       * \\/ *\\/
+       */
+    `;
 
     expect( comment2 ).toBeTokenized( 'common', [
       [ CATEGORY_COMMENT, '/**' ],
-      [ CATEGORY_COMMENT, ' * comment' ],
-      [ CATEGORY_COMMENT, ' * \\/ *\\/' ],
-      [ CATEGORY_COMMENT, ' */' ],
+      [ CATEGORY_COMMENT, '       * comment' ],
+      [ CATEGORY_COMMENT, '       * \\/ *\\/' ],
+      [ CATEGORY_COMMENT, '       */' ],
     ] );
   } );
 

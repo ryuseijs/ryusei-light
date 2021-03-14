@@ -7,8 +7,8 @@ describe( 'common', () => {
       '{', '}',
       '(', ')',
       '[', ']',
-    ].forEach( operator => {
-      expect( operator ).toBeTokenized( 'common', [ [ CATEGORY_BRACKET, operator ] ] );
+    ].forEach( bracket => {
+      expect( bracket ).toBeTokenized( 'common', [ [ CATEGORY_BRACKET, bracket ] ] );
     } );
   } );
 } );

@@ -16,6 +16,7 @@ var CATEGORY_KEYWORD = 'keyword';
 var CATEGORY_COMMENT = 'comment';
 var CATEGORY_TAG = 'tag';
 var CATEGORY_SELECTOR = 'selector';
+var CATEGORY_ATRULE = 'atrule';
 var CATEGORY_ATTRIBUTE = 'attr';
 var CATEGORY_PROPERTY = 'prop';
 var CATEGORY_VALUE = 'value';
@@ -917,17 +918,17 @@ function css() {
     name: 'CSS',
     grammar: {
       main: [['#common'], ['#findBlock'], ['#findAtrule']],
-      findBlock: [['#block', /(?:(?![\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])[\s\S])(?:(?![;\{\}])[\s\S])+\{[\s\S]*?\}/, '@rest']],
+      findBlock: [['#block', /(?:(?![\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])[\s\S])(?:(?![;\{\}])[\s\S])*\{[\s\S]*?\}/, '@rest']],
       findAtrule: [['#atrule', /@[0-9A-Z_a-z][\s\S]+?(;|(?=[\{\}]))/]],
       findSelector: [['#selector', /(?:(?![\t-\r \/;\{\}\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])[\s\S])[\s\S]*?(?=\{)/]],
       common: [[CATEGORY_STRING, /(["'])[\s\S]*?(?:(?!\\)[\s\S])\1/], [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_SPACE, REGEXP_SPACE]],
       block: [['#findAtrule'], ['#findSelector'], ['#inner', /{/, '@rest'], [CATEGORY_BRACKET, /}/, '@break'], [CATEGORY_SPACE, REGEXP_SPACE]],
       inner: [[CATEGORY_BRACKET, /{/], ['#common'], ['#findBlock'], ['#props'], ['#findAtrule'], ['', /}/, '@back']],
-      atrule: [['#common'], ['#url', /\burl\(/, '@rest'], [CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_KEYWORD, /[^\s();]+/], [CATEGORY_DELIMITER, /[:;,]/], ['#paren', /\(/, '@rest']],
+      atrule: [['#common'], ['#url', /\burl\(/, '@rest'], [CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_ATRULE, /[^\s();]+/], [CATEGORY_DELIMITER, /[:;,]/], ['#paren', /\(/, '@rest']],
       paren: [[CATEGORY_BRACKET, /^\(/], ['#common'], ['#paren', /\(/, '@rest'], [CATEGORY_BRACKET, /\)/, '@break'], ['#props']],
       selector: [['#common'], [CATEGORY_OPERATOR, /[>+~]/], [CATEGORY_BRACKET, /[[\]()]/], [CATEGORY_DELIMITER, /=/], [CATEGORY_SELECTOR, /::?\S+/], [CATEGORY_SELECTOR, /[\W\d]\S+/], [CATEGORY_TAG, /\b[a-zA-Z]+|\*/], [CATEGORY_SELECTOR, /\S+/]],
       url: [['#common'], [CATEGORY_FUNCTION, /^url/], [CATEGORY_BRACKET, /\(/], [CATEGORY_STRING, /[^)]+/], [CATEGORY_BRACKET, /\)/, '@break']],
-      props: [[CATEGORY_PROPERTY, /[a-z0-9-]+(?=:)/i], ['#url', /\burl\(/, '@rest'], [CATEGORY_FUNCTION, /\b[\w-]+(?=\()\b/], [CATEGORY_KEYWORD, /!important|\b(?:initial|inherit|unset)/], [CATEGORY_PROPERTY, /[a-z0-9-]+(?=:)/], [CATEGORY_NUMBER, /#([0-9a-f]{6}|[0-9a-f]{3})/i], [CATEGORY_NUMBER, /\bU\+[0-9a-f?-]+/i], [CATEGORY_NUMBER, /[+-]?(\d+\.?\d*|\d*\.?\d+)/], [CATEGORY_DELIMITER, /[:;,]/], ['#paren', /\(/, '@rest'], [CATEGORY_BRACKET, /[[\])]/], [CATEGORY_SPACE, REGEXP_SPACE]]
+      props: [[CATEGORY_PROPERTY, /[a-z0-9-_\xA0-\uFFFF]+(?=:)/i], ['#url', /\burl\(/, '@rest'], [CATEGORY_FUNCTION, /\b[\w-]+(?=\()\b/], [CATEGORY_KEYWORD, /!important|\b(?:initial|inherit|unset)/], [CATEGORY_PROPERTY, /[a-z0-9-]+(?=:)/], [CATEGORY_NUMBER, /#([0-9a-f]{6}|[0-9a-f]{3})/i], [CATEGORY_NUMBER, /\bU\+[0-9a-f?-]+/i], [CATEGORY_NUMBER, /[+-]?(\d+\.?\d*|\d*\.?\d+)/], [CATEGORY_DELIMITER, /[:;,]/], ['#paren', /\(/, '@rest'], [CATEGORY_BRACKET, /[[\])]/], [CATEGORY_SPACE, REGEXP_SPACE]]
     }
   };
 }

@@ -1,7 +1,18 @@
 import { Language } from '../../types';
 import {
-  CATEGORY_BRACKET, CATEGORY_COMMENT, CATEGORY_FUNCTION, CATEGORY_KEYWORD, CATEGORY_NUMBER, CATEGORY_OPERATOR,
-  CATEGORY_PROPERTY, CATEGORY_SELECTOR, CATEGORY_SPACE, CATEGORY_STRING, CATEGORY_DELIMITER, CATEGORY_TAG,
+  CATEGORY_BRACKET,
+  CATEGORY_COMMENT,
+  CATEGORY_FUNCTION,
+  CATEGORY_KEYWORD,
+  CATEGORY_NUMBER,
+  CATEGORY_OPERATOR,
+  CATEGORY_PROPERTY,
+  CATEGORY_SELECTOR,
+  CATEGORY_SPACE,
+  CATEGORY_STRING,
+  CATEGORY_DELIMITER,
+  CATEGORY_TAG,
+  CATEGORY_ATRULE,
 } from '../../constants/categories';
 import { REGEXP_MULTILINE_COMMENT, REGEXP_SPACE } from '../../constants/regexp';
 
@@ -24,7 +35,7 @@ export function css(): Language {
       ],
 
       findBlock: [
-        [ '#block', /[^\s][^;{}]+{.*?}/s, '@rest' ],
+        [ '#block', /[^\s][^;{}]*{.*?}/s, '@rest' ],
       ],
 
       findAtrule: [
@@ -62,7 +73,7 @@ export function css(): Language {
         [ '#common' ],
         [ '#url', /\burl\(/, '@rest' ],
         [ CATEGORY_SPACE, REGEXP_SPACE ],
-        [ CATEGORY_KEYWORD, /[^\s();]+/ ],
+        [ CATEGORY_ATRULE, /[^\s();]+/ ],
         [ CATEGORY_DELIMITER, /[:;,]/ ],
         [ '#paren', /\(/, '@rest' ],
       ],
@@ -95,7 +106,7 @@ export function css(): Language {
       ],
 
       props: [
-        [ CATEGORY_PROPERTY, /[a-z0-9-]+(?=:)/i ],
+        [ CATEGORY_PROPERTY, /[a-z0-9-_\xA0-\uFFFF]+(?=:)/i ],
         [ '#url', /\burl\(/, '@rest' ],
         [ CATEGORY_FUNCTION, /\b[\w-]+(?=\()\b/ ],
         [ CATEGORY_KEYWORD, /!important|\b(?:initial|inherit|unset)/ ],

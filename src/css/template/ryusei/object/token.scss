@@ -4,6 +4,7 @@ $token-symbol: #f88792 !default;
 $token-comment: #7a91a6 !default;
 $token-tag: #5fbef5 !default;
 $token-selector: #2abac4 !default;
+$token-atrule: #f88792 !default;
 $token-attr: #29b477 !default;
 $token-prop: #29b477 !default;
 $token-value: #c5d559 !default;
@@ -45,6 +46,10 @@ $token-delimiter: #7a91a6 !default;
 
   &__selector {
     color: $token-selector;
+  }
+
+  &__atrule {
+    color: $token-atrule;
   }
 
   &__attr {
