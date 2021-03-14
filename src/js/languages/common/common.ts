@@ -32,7 +32,7 @@ export function common(): Language {
         [ CATEGORY_BOOLEAN, REGEXP_BOOLEAN ],
         [ CATEGORY_IDENTIFIER, /\b[a-z_$][\w$]*\b/ ],
         [ CATEGORY_NUMBER, REGEXP_NUMBER ],
-        [ CATEGORY_OPERATOR, /\+[+=]?|-[-=]?|\*\*?=?|\/=?|%=?|&&?=?|\|\|?=?|\?\??=?|<<?=?|>>?=?|[!=]=?=?|[~:^]/ ],
+        [ CATEGORY_OPERATOR, /\+[+=]?|-[-=]?|\*\*?=?|[/%^]=?|&&?=?|\|\|?=?|\?\??=?|<<?=?|>>>=?|>>?=?|[!=]=?=?|[~:^]/ ],
         [ CATEGORY_BRACKET, REGEXP_BRACKET ],
         [ CATEGORY_DELIMITER, /[;.,]+/ ],
         [ CATEGORY_SPACE, REGEXP_SPACE ],

@@ -7,11 +7,12 @@
     "declaration": false,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "typeRoots": [ "./jest/types" ]
   },
   "include": [ "src/**/*.ts" ],
   "exclude": [
     "node_modules",
-    "**/*.test.ts"
+    "src/**/*.test.ts"
   ]
 }

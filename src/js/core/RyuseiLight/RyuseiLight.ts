@@ -57,6 +57,15 @@ export class RyuseiLight {
   }
 
   /**
+   * Checks if the given language has been already registered or not.
+   *
+   * @param language - A language to check.
+   */
+  static has( language: string ): boolean {
+    return !! lexers[ language ];
+  }
+
+  /**
    * Returns a registered Lexer instance.
    * If it's not found, the `none` lexer will be returned.
    *
