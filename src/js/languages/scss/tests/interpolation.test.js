@@ -72,7 +72,7 @@ describe( 'scss', () => {
       [ CATEGORY_VARIABLE, '$offset' ],
       [ CATEGORY_DELIMITER, '}' ],
       [ CATEGORY_BRACKET, ')' ],
-      [ CATEGORY_BRACKET, '}' ]
+      [ CATEGORY_BRACKET, '}' ],
     ] );
   } );
 
@@ -102,7 +102,7 @@ describe( 'scss', () => {
       [ CATEGORY_DELIMITER, ';' ],
       [ CATEGORY_BRACKET, '}' ],
 
-      [ CATEGORY_BRACKET, '}' ]
+      [ CATEGORY_BRACKET, '}' ],
     ] );
   } );
 } );

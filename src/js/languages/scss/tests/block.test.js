@@ -25,28 +25,28 @@ describe( 'scss', () => {
     `;
 
     expect( scss ).toBeTokenized( 'scss', [
-      [ CATEGORY_TAG, '*'],
-      [ CATEGORY_BRACKET, '{'],
-      [ CATEGORY_BRACKET, '}'],
+      [ CATEGORY_TAG, '*' ],
+      [ CATEGORY_BRACKET, '{' ],
+      [ CATEGORY_BRACKET, '}' ],
 
-      [ CATEGORY_TAG, '*'],
-      [ CATEGORY_BRACKET, '{'],
-      [ CATEGORY_BRACKET, '}'],
+      [ CATEGORY_TAG, '*' ],
+      [ CATEGORY_BRACKET, '{' ],
+      [ CATEGORY_BRACKET, '}' ],
 
-      [ CATEGORY_TAG, 'body'],
-      [ CATEGORY_BRACKET, '{'],
-      [ CATEGORY_PROPERTY, 'padding'],
-      [ CATEGORY_DELIMITER, ':'],
-      [ CATEGORY_NUMBER, '0'],
-      [ CATEGORY_KEYWORD, '!important'],
-      [ CATEGORY_BRACKET, '}'],
+      [ CATEGORY_TAG, 'body' ],
+      [ CATEGORY_BRACKET, '{' ],
+      [ CATEGORY_PROPERTY, 'padding' ],
+      [ CATEGORY_DELIMITER, ':' ],
+      [ CATEGORY_NUMBER, '0' ],
+      [ CATEGORY_KEYWORD, '!important' ],
+      [ CATEGORY_BRACKET, '}' ],
 
-      [ CATEGORY_TAG, 'body'],
-      [ CATEGORY_BRACKET, '{'],
-      [ CATEGORY_PROPERTY, 'padding'],
-      [ CATEGORY_DELIMITER, ':'],
-      [ CATEGORY_NUMBER, '0'],
-      [ CATEGORY_KEYWORD, '!important'],
+      [ CATEGORY_TAG, 'body' ],
+      [ CATEGORY_BRACKET, '{' ],
+      [ CATEGORY_PROPERTY, 'padding' ],
+      [ CATEGORY_DELIMITER, ':' ],
+      [ CATEGORY_NUMBER, '0' ],
+      [ CATEGORY_KEYWORD, '!important' ],
       [ CATEGORY_BRACKET, '}' ],
 
       [ CATEGORY_ATRULE, '@media' ],
@@ -67,7 +67,7 @@ describe( 'scss', () => {
       [ CATEGORY_TEXT, 'rem' ],
       [ CATEGORY_DELIMITER, ';' ],
       [ CATEGORY_BRACKET, '}' ],
-      [ CATEGORY_BRACKET, '}' ]
+      [ CATEGORY_BRACKET, '}' ],
     ] );
   } );
 } );
