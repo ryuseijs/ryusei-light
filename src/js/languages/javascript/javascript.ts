@@ -5,7 +5,7 @@ import {
   CATEGORY_DECORATOR,
   CATEGORY_KEYWORD,
   CATEGORY_REGEXP,
-  CATEGORY_STRING,
+  CATEGORY_STRING, CATEGORY_OPERATOR,
 } from '../../constants/categories';
 import { assign, before } from '../../utils';
 
@@ -31,8 +31,11 @@ export function javascript(): Language {
     [ CATEGORY_KEYWORD, /\b((get|set)(?= *\S+\(\)))/ ], // todo
     [ '#backtick', /`/, '@rest' ],
     [ CATEGORY_DECORATOR, /@[^\s(@]+/ ],
-  ]
-  );
+  ] );
+
+  before( main, CATEGORY_OPERATOR, [
+    [ CATEGORY_OPERATOR, /=>/ ],
+  ] );
 
   assign( grammar, {
     backtick: [

@@ -207,13 +207,13 @@ export class Highlighter {
 }`;
   </pre>
 
-  <h3>Function/Generics</h3>
+  <h3>Functions/Generics</h3>
   <pre>
 // Function
 function apply&lt;T extends object>( value: T ) {}
 
 // Anonymous function
-function apply&lt;T extends object>( value: T ) {}
+const a = function &lt;T extends object>( value: T ) {}
 
 // Arrow function
 &lt;T extends object> ( value: T ) => {}
@@ -270,7 +270,7 @@ declare, keyof, namespace, readonly, type, string,
 number, boolean, bigint, symbol, any, never, unknown
   </pre>
 
-  <h3>Class</h3>
+  <h3>Classes</h3>
   <pre>
 Object.keys( object );
 
@@ -282,34 +282,34 @@ class Component {
 const component = new Component();
   </pre>
 
-  <h3>Boolean</h3>
+  <h3>Booleans</h3>
   <pre>
 true, false
   </pre>
 
-  <h3>Number</h3>
+  <h3>Numbers</h3>
   <pre>
 0 1 1.23 .23 +1.23 -1.23
 1e10 1e+10 1e-10 1E10 1E+10 1E-10
 1.2e10 1.2e+10 1.2e-10 1.2E10 1.2E+10 1.2E-10
   </pre>
 
-  <h3>Operator</h3>
+  <h3>Operators</h3>
   <pre>
 + - ~ ! / * % ** < > <= >= == != === !==
 << >> >>> & | ^ && || ?? ?
 = *= **= /= %= += -= <<= >>= >>>= &= ^= |= &&= ||= ??= :
   </pre>
 
-  <h3>Bracket</h3>
+  <h3>Brackets</h3>
   <pre>
 {} () []
   </pre>
 
-  <h3>Symbol</h3>
+  <h3>Delimiters</h3>
   <pre>
-; . , @
-;;;; .... ,,,, @@@@
+; . ,
+;;;; .... ,,,,
   </pre>
 
   <script src="../../../../dist/js/ryuseilight.min.js"></script>

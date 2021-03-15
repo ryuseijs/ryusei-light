@@ -2,7 +2,7 @@ import { CATEGORY_COMMENT, CATEGORY_STRING } from '../../../constants/categories
 
 
 describe( 'common', () => {
-  test( 'can tokenize single line comments.', () => {
+  test( 'can tokenize a single line comment.', () => {
     const comment1 = `// comment`;
     expect( comment1 ).toBeTokenized( 'common', [ [ CATEGORY_COMMENT, comment1 ] ] );
   } );
