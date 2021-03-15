@@ -4,7 +4,7 @@ import {
 } from '../../../constants/categories';
 
 
-describe( 'css', () => {
+describe( 'json', () => {
   test( 'can tokenize props.', () => {
     const css = `
       body {

@@ -977,7 +977,7 @@ function html() {
       css: langCss
     },
     grammar: {
-      main: [[CATEGORY_COMMENT, /<!\x2D\x2D[\s\S]*?\x2D\x2D>/], [CATEGORY_PROLOG, /<!DOCTYPE.*?>/], cdata, ['#script', /<script[\s\S]*?>[\s\S]*?<\/script>/], ['#style', /<style[\s\S]*?>[\s\S]*?<\/style>/], ['#tag', /<[\s\S]*?>/], [CATEGORY_ENTITY, /&[\da-z]+;|&#\d+;/i]],
+      main: [[CATEGORY_COMMENT, /<!\x2D\x2D[\s\S]*?\x2D\x2D>/], [CATEGORY_PROLOG, /<!DOCTYPE[\s\S]*?>/i], cdata, ['#script', /<script[\s\S]*?>[\s\S]*?<\/script>/], ['#style', /<style[\s\S]*?>[\s\S]*?<\/style>/], ['#tag', /<[\s\S]*?>/], [CATEGORY_ENTITY, /&[\da-z]+;|&#\d+;/i]],
       cdata: [[CATEGORY_CDATA, /<!\[CDATA\[[\s\S]*\]\]>/i]],
       script: [['#tag', /^<script[\s\S]*?>/], ['#cdata'], ['@javascript', /[\s\S]+(?=<\/script>)/], ['#tag', /<\/script>/]],
       style: [['#tag', /^<style[\s\S]*?>/], ['@css', /[\s\S]+(?=<\/style>)/], ['#tag', /<\/style>/]],
@@ -1000,7 +1000,7 @@ function json() {
     id: 'json',
     name: 'JSON',
     grammar: {
-      main: [[CATEGORY_PROPERTY, /".*?[^\\]"(?=:)/], [CATEGORY_STRING, REGEXP_DOUBLE_QUOTE], [CATEGORY_KEYWORD, /\bnull\b/], [CATEGORY_NUMBER, /[+-]?(\d+\.?\d*)([eE][+-]?\d+)?/], [CATEGORY_BRACKET, /[{}[]]/], [CATEGORY_BOOLEAN, REGEXP_BOOLEAN], [CATEGORY_OPERATOR, /:/], [CATEGORY_DELIMITER, /[,]/], [CATEGORY_SPACE, REGEXP_SPACE]]
+      main: [[CATEGORY_PROPERTY, /".*?[^\\]"(?=:)/], [CATEGORY_STRING, REGEXP_DOUBLE_QUOTE], [CATEGORY_KEYWORD, /\bnull\b/], [CATEGORY_NUMBER, /[+-]?(\d+\.?\d*)([eE][+-]?\d+)?/], [CATEGORY_BRACKET, /[{}[\]]/], [CATEGORY_BOOLEAN, REGEXP_BOOLEAN], [CATEGORY_OPERATOR, /:/], [CATEGORY_DELIMITER, /,/], [CATEGORY_SPACE, REGEXP_SPACE]]
     }
   };
 }
