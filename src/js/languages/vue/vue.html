@@ -83,6 +83,15 @@
 &lt;/script&gt;
   </pre>
 
+  <h2>Mustache</h2>
+  <pre>
+&lt;div&gt;
+  Message: {{ ok ? 'YES' : 'NO' }}
+&lt;/div&gt;
+
+{{ [ 'a', 'b' ].map( word => `${ word }${ word }` ).join( '-' ) }}
+  </pre>
+
   <script src="../../../../dist/js/ryuseilight.min.js"></script>
   <script src="../../../../dist/js/languages/vue.min.js"></script>
   <script>
