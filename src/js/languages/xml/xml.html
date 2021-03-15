@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>XML</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+  <h3>Practical Example</h3>
+  <pre>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;https://thepopp.com/wp-content/themes/thepopp/lib/vendor/stellarpress/xml-sitemap/src/assets/sitemap-index.xsl&quot;?&gt;
+&lt;sitemapindex
+  xmlns=&quot;http://www.sitemaps.org/schemas/sitemap/0.9&quot;
+  xmlns:image=&quot;http://www.google.com/schemas/sitemap-image/1.1&quot;
+  xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+  xsi:schemaLocation=&quot;http://www.sitemaps.org/schemas/sitemap/0.9&quot;
+&gt;
+  &lt;sitemap&gt;
+    &lt;loc&gt;https://thepopp.com/sitemap-misc.xml&lt;/loc&gt;
+    &lt;lastmod&gt;2020-06-04T22:05:11+00:00&lt;/lastmod&gt;
+  &lt;/sitemap&gt;
+  &lt;sitemap&gt;
+    &lt;loc&gt;https://thepopp.com/sitemap-post-2020.xml&lt;/loc&gt;
+    &lt;lastmod&gt;2020-06-01T21:09:09+00:00&lt;/lastmod&gt;
+  &lt;/sitemap&gt;
+  &lt;sitemap&gt;
+    &lt;loc&gt;https://thepopp.com/sitemap-post-2019.xml&lt;/loc&gt;
+    &lt;lastmod&gt;2020-01-23T07:58:59+00:00&lt;/lastmod&gt;
+  &lt;/sitemap&gt;
+  &lt;sitemap&gt;
+    &lt;loc&gt;https://thepopp.com/sitemap-page.xml&lt;/loc&gt;
+    &lt;lastmod&gt;2020-01-21T05:04:47+00:00&lt;/lastmod&gt;
+  &lt;/sitemap&gt;
+  &lt;sitemap&gt;
+    &lt;loc&gt;https://thepopp.com/sitemap-category.xml&lt;/loc&gt;
+    &lt;lastmod&gt;2020-06-04T22:05:11+00:00&lt;/lastmod&gt;
+  &lt;/sitemap&gt;
+&lt;/sitemapindex&gt;
+  </pre>
+
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/js/languages/xml.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight();
+    ryuseilight.apply( 'pre', { language: 'xml' } );
+  </script>
+</body>
+</html>
