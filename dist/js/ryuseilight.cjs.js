@@ -590,6 +590,10 @@ var Lexer = /*#__PURE__*/function () {
     if (category) {
       var _text = match[0];
 
+      if (tokenizer[3] === '@debug') {
+        console.log(_text, tokenizer);
+      }
+
       if (startsWith(category, '@')) {
         var lang = language.use[category.slice(1)];
         assert(lang);
@@ -922,16 +926,21 @@ function css() {
     id: 'css',
     name: 'CSS',
     grammar: {
-      main: [['#common'], ['#findBlock'], ['#findAtrule']],
-      findBlock: [['#block', /(?:(?![\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])[\s\S])(?:(?![;\{\}])[\s\S])*\{[\s\S]*?\}/, '@rest']],
-      findAtrule: [['#atrule', /@[0-9A-Z_a-z][\s\S]+?(;|(?=[\{\}]))/]],
-      findSelector: [['#selector', /(?:(?![\t-\r \/;\{\}\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])[\s\S])[\s\S]*?(?=\{)/]],
+      main: [['#common'], // An atrule without a block
+      ['#findSingleAtrule'], // Blocks including atrules
+      ['#findBlock']],
+      findBlock: [['#block', /(?:(?![\t-\r ;\{\}\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])[\s\S])(?:(?![;\{\}])[\s\S])*\{[\s\S]*?\}/, '@rest']],
+      findSingleAtrule: [['#atrule', /@(?:(?![;\{])[\s\S])+?;/]],
+      // Finds atrules before { and ;
+      findAtrule: [['#atrule', /@(?:(?![;\{])[\s\S])*?(?=[;\{])/]],
+      // May not start with digits
+      findSelector: [['#selector', /(?:(?![\t-\r ;\{\}\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])[\s\S])[\s\S]*?(?=\{)/]],
       common: [[CATEGORY_STRING, /(["'])[\s\S]*?(?:(?!\\)[\s\S])\1/], [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_SPACE, REGEXP_SPACE]],
       block: [['#findAtrule'], ['#findSelector'], ['#inner', /{/, '@rest'], [CATEGORY_BRACKET, /}/, '@break'], [CATEGORY_SPACE, REGEXP_SPACE]],
       inner: [[CATEGORY_BRACKET, /{/], ['#common'], ['#findBlock'], ['#props'], ['#findAtrule'], ['', /}/, '@back']],
       atrule: [['#common'], ['#url', /\burl\(/, '@rest'], [CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_ATRULE, /[^\s();]+/], [CATEGORY_DELIMITER, /[:;,]/], ['#paren', /\(/, '@rest']],
       paren: [[CATEGORY_BRACKET, /^\(/], ['#common'], ['#paren', /\(/, '@rest'], [CATEGORY_BRACKET, /\)/, '@break'], ['#props']],
-      selector: [['#common'], [CATEGORY_OPERATOR, /[>+~]/], [CATEGORY_BRACKET, /[[\]()]/], [CATEGORY_DELIMITER, /=/], [CATEGORY_SELECTOR, /::?\S+/], [CATEGORY_SELECTOR, /[\W\d]\S+/], [CATEGORY_TAG, /\b[a-zA-Z]+|\*/], [CATEGORY_SELECTOR, /\S+/]],
+      selector: [['#common'], [CATEGORY_OPERATOR, /[>+~]/], [CATEGORY_BRACKET, /[[\]()]/], [CATEGORY_DELIMITER, /=/], [CATEGORY_SELECTOR, /::?\S+/], [CATEGORY_SELECTOR, /[\W\d]\S+/], [CATEGORY_TAG, /\b[a-z]+|\*/i], [CATEGORY_SELECTOR, /\S+/]],
       url: [['#common'], [CATEGORY_FUNCTION, /^url/], [CATEGORY_BRACKET, /\(/], [CATEGORY_STRING, /[^)]+/], [CATEGORY_BRACKET, /\)/, '@break']],
       props: [[CATEGORY_PROPERTY, /[a-z0-9-_\xA0-\uFFFF]+(?=:)/i], ['#url', /\burl\(/, '@rest'], [CATEGORY_FUNCTION, /\b[\w-]+(?=\()\b/], [CATEGORY_KEYWORD, /!important|\b(?:initial|inherit|unset)/], [CATEGORY_PROPERTY, /[a-z0-9-]+(?=:)/], [CATEGORY_NUMBER, /#([0-9a-f]{6}|[0-9a-f]{3})/i], [CATEGORY_NUMBER, /\bU\+[0-9a-f?-]+/i], [CATEGORY_NUMBER, /[+-]?(\d+\.?\d*|\d*\.?\d+)/], [CATEGORY_DELIMITER, /[:;,]/], ['#paren', /\(/, '@rest'], [CATEGORY_BRACKET, /[[\])]/], [CATEGORY_SPACE, REGEXP_SPACE]]
     }
@@ -1029,10 +1038,10 @@ function jsx() {
   var main = grammar.main;
   before(main, CATEGORY_CLASS, [['#findPairedTag'], ['#findSelfClosedTag']]);
   assign(grammar, {
-    // This doesn't pick correct paired tags when they are nested, but they are incrementally searched later.
+    // This doesn't pick correct paired tags if nested, but they are incrementally searched later.
     findPairedTag: [['#pairedTag', /<[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*?([0-9A-Z_a-z]+?)[\s\S]*?>[\s\S]*?<\/\1>/, '@rest']],
     findSelfClosedTag: [['#selfClosedTag', /<[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*?([0-9A-Z_a-z]+?)[\s\S]*?\/>/]],
-    pairedTag: [['#openTag', /^</, '@rest'], ['@javascript', /\{[\s\S]*?\}/], ['#findPairedTag'], ['#findSelfClosedTag'], ['#tagName', /<\/[\w][^\s]*?>/, '@break']],
+    pairedTag: [['#openTag', /^</, '@rest'], ['@javascript', /\{[\s\S]*?\}/], ['#findPairedTag'], ['#findSelfClosedTag'], ['#tagName', /<\/[\w][^\s]*?>/, '@break'], [CATEGORY_SPACE, REGEXP_SPACE]],
     selfClosedTag: [['#openTag', /^</, '@rest']],
     openTag: [['#tagName', /<\s*[^\s/>"'=]+/], ['@javascript', /\{[\s\S]*?\}/], [CATEGORY_ATTRIBUTE, /[^\s/>"'=]+/], [CATEGORY_VALUE, /(['"])(\\\1|.)*?\1/], [CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_DELIMITER, /[/=]/], [CATEGORY_BRACKET, />/, '@break']],
     tagName: [[CATEGORY_BRACKET, /[<>]/], [CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_DELIMITER, /\//], [CATEGORY_CLASS, /[A-Z][\w$-]*/], [CATEGORY_TAG, /[^\s/>"'=]+/]]
@@ -1069,17 +1078,24 @@ function scss() {
   });
   var grammar = language.grammar;
   assign(grammar, {
-    findBlock: [['#block', /(#\{(?:(?!;)[\s\S])*?\}|(?:(?![\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])[\s\S]))(#\{(?:(?!;)[\s\S])*?\}|(?:(?![;\{\}])[\s\S]))*(?:(?!#)[\s\S])\{[\s\S]*?\}/, '@rest']],
-    findAtrule: [['#atrule', /@[0-9A-Z_a-z][\s\S]+?(;|(?=(?:(?!#)[\s\S])\{))/]],
-    findSelector: [['#selector', /(?:(?![\t-\r \/;\{\}\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])[\s\S])[\s\S]*?(?:(?!#)[\s\S])(?=\{)/]],
+    /**
+     * Include: div {}, .class {}, #id {}, * {}, #{ $variable } {}, something#{ $variable } {}
+     * Exclude: #{ variable }: value
+     */
+    findBlock: [['#block', /((?:(?![\t-\r ;\{\}\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])[\s\S])(?:(?!;)[\s\S])*?(?:(?!#)[\s\S])\{[\s\S]*?\})|((?:(?![\t-\r #;\{\}\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])[\s\S])\{[\s\S]*?\})/, '@rest']],
+    // May contain #{} interpolation
+    findSingleAtrule: [['#atrule', /@(#\{|(?:(?![;\{])[\s\S]))+?;/]],
+    findAtrule: [['#atrule', /@(#\{|(?:(?![;\{])[\s\S]))*?(?=[;\{])/]],
+    // May contain #{} interpolation
+    findSelector: [['#selector', /[\*a-z](?=\{)|(?:(?![\t-\r ;\{\}\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])[\s\S])((?:(?![;\{\}])[\s\S])|#?\{(?:(?!;)[\s\S])*?\})*?(?:(?!#)[\s\S])(?=\{)/]],
     findInterp: [['#interp', /#{/, '@rest']],
-    common: [['#string'], [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_COMMENT, REGEXP_SLASH_COMMENT], [CATEGORY_SPACE, REGEXP_SPACE]],
+    common: [['#string'], [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_COMMENT, REGEXP_SLASH_COMMENT], [CATEGORY_DELIMITER, /;/], [CATEGORY_SPACE, REGEXP_SPACE]],
     string: [['#singleQuote', /'/, '@rest'], ['#doubleQuote', /"/, '@rest']],
     singleQuote: [[CATEGORY_STRING, /^'/], ['#findInterp'], [CATEGORY_STRING, /(\\'|#[^{]|[^'#])+/], [CATEGORY_STRING, /'/, '@break']],
     doubleQuote: [[CATEGORY_STRING, /^"/], ['#findInterp'], [CATEGORY_STRING, /(\\"|#[^{]|[^"#])+/], [CATEGORY_STRING, /"/, '@break']],
     selector: [['#common'], ['#findInterp'], [CATEGORY_OPERATOR, /[>+~]/], [CATEGORY_BRACKET, /[[\]()]/], [CATEGORY_DELIMITER, /=/], [CATEGORY_SELECTOR, /::?\S+(?=#{)/], [CATEGORY_SELECTOR, /[\W\d]\S+(?=#{)/], [CATEGORY_TAG, /\b[a-zA-Z]+\b|\*/], [CATEGORY_SELECTOR, /\S+/]],
     url: [['#common'], ['#findInterp'], [CATEGORY_FUNCTION, /^url/], [CATEGORY_BRACKET, /\(/], [CATEGORY_STRING, /[^)]+(?=#{)/], [CATEGORY_STRING, /[^)]+/], [CATEGORY_BRACKET, /\)/, '@break']],
-    interp: [[CATEGORY_BRACKET, /#{/], [CATEGORY_BRACKET, /}/, '@break'], ['#common'], ['#props']]
+    interp: [[CATEGORY_DELIMITER, /#{/], [CATEGORY_DELIMITER, /}/, '@break'], ['#common'], ['#props']]
   });
   grammar.inner.unshift(['#findInterp']);
   before(grammar.atrule, '#url', [['#findInterp']]);

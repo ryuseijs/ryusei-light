@@ -13,7 +13,7 @@ export type AnyFunction = ( ...args: any[] ) => any;
  *
  * @since 0.0.1
  */
-export type Tokenizer = [ string, RegExp?, string? ];
+export type Tokenizer = [ string, RegExp?, string?, string? ];
 
 /**
  * The interface for a Grammar object that contains tokenizers.

@@ -24,15 +24,25 @@ export function scss(): Language {
 
   assign( grammar, {
     findBlock: [
-      [ '#block', /(#{[^;]*?}|[^\s])(#{[^;]*?}|[^;{}])*[^#]{.*?}/s, '@rest' ],
+      /**
+       * Include: div {}, .class {}, #id {}, * {}, *{}, #{ $variable } {}, .something__#{ $variable } {}
+       * Exclude: #{ variable }: value
+       */
+      [ '#block', /([a-z*-_]|#{[^;]*?}|((#{[^;]*?}|[^\s{};])(#{[^;]*?}|[^{};#]|#[^{])+?))(?!#){.*?}/si, '@rest' ],
+    ],
+
+    // May contain #{} interpolation
+    findSingleAtrule: [
+      [ '#atrule', /@(#{|[^{;])+?;/s ],
     ],
 
     findAtrule: [
-      [ '#atrule', /@\w.+?(;|(?=[^#]{))/s ],
+      [ '#atrule', /@(#{|[^{;])*?(?=[{;])/s ],
     ],
 
+    // May contain #{} interpolation
     findSelector: [
-      [ '#selector', /[^\s{};/].*?[^#](?={)/s ],
+      [ '#selector', /[^;]*?[^#](?={)/s, '' ],
     ],
 
     findInterp: [
@@ -43,6 +53,7 @@ export function scss(): Language {
       [ '#string' ],
       [ CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT ],
       [ CATEGORY_COMMENT, REGEXP_SLASH_COMMENT ],
+      [ CATEGORY_DELIMITER, /;/ ],
       [ CATEGORY_SPACE, REGEXP_SPACE ],
     ],
 
@@ -74,7 +85,7 @@ export function scss(): Language {
       [ CATEGORY_SELECTOR, /::?\S+(?=#{)/ ],
       [ CATEGORY_SELECTOR, /[\W\d]\S+(?=#{)/ ],
       [ CATEGORY_TAG, /\b[a-zA-Z]+\b|\*/ ],
-      [ CATEGORY_SELECTOR, /\S+/ ],
+      [ CATEGORY_SELECTOR, /([^#\s]|#[^{\s])+/ ],
     ],
 
     url: [
@@ -88,8 +99,8 @@ export function scss(): Language {
     ],
 
     interp: [
-      [ CATEGORY_BRACKET, /#{/ ],
-      [ CATEGORY_BRACKET, /}/, '@break' ],
+      [ CATEGORY_DELIMITER, /#{/ ],
+      [ CATEGORY_DELIMITER, /}/, '@break' ],
       [ '#common' ],
       [ '#props' ],
     ],

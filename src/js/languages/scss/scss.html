@@ -54,10 +54,14 @@ body {
 }
 
 .pulse {
-  @include inline-animation(2s) {
+  @include inline-animation( 2s ) {
     from { background-color: yellow }
     to { background-color: red }
   }
+}
+
+#{ $type } {
+  color: red;
 }
 
 /*
@@ -66,6 +70,10 @@ body {
 .button {
   $root: &;
   $inner: 'inner';
+
+  #{ $type } {
+    color: red;
+  }
 
   /*
     font-family: Roboto, 'Avenir Next Pro', sans-serif;
@@ -136,6 +144,8 @@ quote"
 
 <h3>Bracket Position</h3>
 <pre>
+*{}
+
 body{
   padding: 0 !important;
 }
@@ -145,6 +155,7 @@ body {
 }
 
 body { padding: 0 !important }
+body{ padding: 0 !important }
 
 body
 {
@@ -267,6 +278,37 @@ input[type="submit"] {
 
 .container::after {
   content: counter( container-counter );
+}
+  </pre>
+
+  <h3>Variable</h3>
+  <pre>
+*{ margin: $variable }
+
+*{ $variable: red }
+
+#{ $variable }{ color: red }
+
+#{ $variable } {
+  color: red;
+}
+
+#{ $variable }__something {
+  color: red;
+}
+
+.something__#{ $variable }{ color: red }
+
+.something__#{ $variable }{
+  color: red;
+}
+
+.something__#{ $variable } {
+  color: red;
+}
+
+#{ $variable }__something__#{ $variable } {
+  color: red;
 }
   </pre>
 

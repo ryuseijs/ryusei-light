@@ -30,20 +30,30 @@ export function css(): Language {
     grammar: {
       main: [
         [ '#common' ],
+
+        // An atrule without a block
+        [ '#findSingleAtrule' ],
+
+        // Blocks including atrules
         [ '#findBlock' ],
-        [ '#findAtrule' ],
       ],
 
       findBlock: [
-        [ '#block', /[^\s][^;{}]*{.*?}/s, '@rest' ],
+        [ '#block', /[^\s;{}][^;{}]*{.*?}/s, '@rest' ],
       ],
 
+      findSingleAtrule: [
+        [ '#atrule', /@[^{;]+?;/s ],
+      ],
+
+      // Finds atrules before { and ;
       findAtrule: [
-        [ '#atrule', /@\w.+?(;|(?=[{}]))/s ],
+        [ '#atrule', /@[^{;]*?(?=[{;])/s ],
       ],
 
+      // May not start with digits
       findSelector: [
-        [ '#selector', /[^\s{};/].*?(?={)/s ],
+        [ '#selector', /[^\s{};].*?(?={)/s ],
       ],
 
       common: [
@@ -53,10 +63,10 @@ export function css(): Language {
       ],
 
       block: [
-        [ '#findAtrule' ],
-        [ '#findSelector' ],
         [ '#inner', /{/, '@rest' ],
         [ CATEGORY_BRACKET, /}/, '@break' ],
+        [ '#findAtrule' ],
+        [ '#findSelector' ],
         [ CATEGORY_SPACE, REGEXP_SPACE ],
       ],
 
@@ -93,7 +103,7 @@ export function css(): Language {
         [ CATEGORY_DELIMITER, /=/ ],
         [ CATEGORY_SELECTOR, /::?\S+/ ],
         [ CATEGORY_SELECTOR, /[\W\d]\S+/ ],
-        [ CATEGORY_TAG, /\b[a-zA-Z]+|\*/ ],
+        [ CATEGORY_TAG, /\b[a-z]+|\*/i ],
         [ CATEGORY_SELECTOR, /\S+/ ],
       ],
 

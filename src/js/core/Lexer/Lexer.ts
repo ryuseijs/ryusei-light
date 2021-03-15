@@ -189,6 +189,10 @@ export class Lexer {
     if ( category ) {
       const [ text ] = match;
 
+      if ( tokenizer[ 3 ] === '@debug' ) {
+        console.log( text, tokenizer );
+      }
+
       if ( startsWith( category, '@' ) ) {
         const lang = language.use[ category.slice( 1 ) ];
         assert( lang );
