@@ -24,24 +24,25 @@ export function jsx(): Language {
   const { grammar } = language;
   const { main }    = grammar;
 
-  before( main, CATEGORY_CLASS, [ [ '#pickPairedTag' ], [ '#pickSelfClosedTag' ] ] );
+  before( main, CATEGORY_CLASS, [ [ '#findPairedTag' ], [ '#findSelfClosedTag' ] ] );
 
   assign( grammar, {
-    // This doesn't pick correct paired tags when they are nested, but they are incrementally searched later.
-    pickPairedTag: [
+    // This doesn't pick correct paired tags if nested, but they are incrementally searched later.
+    findPairedTag: [
       [ '#pairedTag', /<\s*?([\w]+?).*?>.*?<\/\1>/s, '@rest' ],
     ],
 
-    pickSelfClosedTag: [
+    findSelfClosedTag: [
       [ '#selfClosedTag', /<\s*?([\w]+?).*?\/>/s ],
     ],
 
     pairedTag: [
       [ '#openTag', /^</, '@rest' ],
       [ '@javascript', /{.*?}/s ],
-      [ '#pickPairedTag' ],
-      [ '#pickSelfClosedTag' ],
+      [ '#findPairedTag' ],
+      [ '#findSelfClosedTag' ],
       [ '#tagName', /<\/[\w][^\s]*?>/, '@break' ],
+      [ CATEGORY_SPACE, REGEXP_SPACE ],
     ],
 
     selfClosedTag: [

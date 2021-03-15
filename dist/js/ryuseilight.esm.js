@@ -977,7 +977,7 @@ function html() {
       css: langCss
     },
     grammar: {
-      main: [[CATEGORY_COMMENT, /<!\x2D\x2D[\s\S]*?\x2D\x2D>/], [CATEGORY_PROLOG, /<!DOCTYPE[\s\S]*?>/i], cdata, ['#script', /<script[\s\S]*?>[\s\S]*?<\/script>/], ['#style', /<style[\s\S]*?>[\s\S]*?<\/style>/], ['#tag', /<[\s\S]*?>/], [CATEGORY_ENTITY, /&[\da-z]+;|&#\d+;/i]],
+      main: [[CATEGORY_COMMENT, /<!\x2D\x2D[\s\S]*?\x2D\x2D>/], [CATEGORY_PROLOG, /<!DOCTYPE[\s\S]*?>/i], cdata, ['#script', /<script[\s\S]*?>[\s\S]*?<\/script>/], ['#style', /<style[\s\S]*?>[\s\S]*?<\/style>/], ['#tag', /<[\s\S]*?>/], [CATEGORY_ENTITY, /&[\da-z]+;|&#\d+;/i], [CATEGORY_SPACE, REGEXP_SPACE]],
       cdata: [[CATEGORY_CDATA, /<!\[CDATA\[[\s\S]*\]\]>/i]],
       script: [['#tag', /^<script[\s\S]*?>/], ['#cdata'], ['@javascript', /[\s\S]+(?=<\/script>)/], ['#tag', /<\/script>/]],
       style: [['#tag', /^<style[\s\S]*?>/], ['@css', /[\s\S]+(?=<\/style>)/], ['#tag', /<\/style>/]],
@@ -1022,12 +1022,12 @@ function jsx() {
   });
   var grammar = language.grammar;
   var main = grammar.main;
-  before(main, CATEGORY_CLASS, [['#pickPairedTag'], ['#pickSelfClosedTag']]);
+  before(main, CATEGORY_CLASS, [['#findPairedTag'], ['#findSelfClosedTag']]);
   assign(grammar, {
     // This doesn't pick correct paired tags when they are nested, but they are incrementally searched later.
-    pickPairedTag: [['#pairedTag', /<[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*?([0-9A-Z_a-z]+?)[\s\S]*?>[\s\S]*?<\/\1>/, '@rest']],
-    pickSelfClosedTag: [['#selfClosedTag', /<[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*?([0-9A-Z_a-z]+?)[\s\S]*?\/>/]],
-    pairedTag: [['#openTag', /^</, '@rest'], ['@javascript', /\{[\s\S]*?\}/], ['#pickPairedTag'], ['#pickSelfClosedTag'], ['#tagName', /<\/[\w][^\s]*?>/, '@break']],
+    findPairedTag: [['#pairedTag', /<[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*?([0-9A-Z_a-z]+?)[\s\S]*?>[\s\S]*?<\/\1>/, '@rest']],
+    findSelfClosedTag: [['#selfClosedTag', /<[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*?([0-9A-Z_a-z]+?)[\s\S]*?\/>/]],
+    pairedTag: [['#openTag', /^</, '@rest'], ['@javascript', /\{[\s\S]*?\}/], ['#findPairedTag'], ['#findSelfClosedTag'], ['#tagName', /<\/[\w][^\s]*?>/, '@break']],
     selfClosedTag: [['#openTag', /^</, '@rest']],
     openTag: [['#tagName', /<\s*[^\s/>"'=]+/], ['@javascript', /\{[\s\S]*?\}/], [CATEGORY_ATTRIBUTE, /[^\s/>"'=]+/], [CATEGORY_VALUE, /(['"])(\\\1|.)*?\1/], [CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_DELIMITER, /[/=]/], [CATEGORY_BRACKET, />/, '@break']],
     tagName: [[CATEGORY_BRACKET, /[<>]/], [CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_DELIMITER, /\//], [CATEGORY_CLASS, /[A-Z][\w$-]*/], [CATEGORY_TAG, /[^\s/>"'=]+/]]

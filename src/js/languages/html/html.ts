@@ -49,6 +49,7 @@ export function html(): Language {
         [ '#style', /<style.*?>.*?<\/style>/s ],
         [ '#tag', /<.*?>/s ],
         [ CATEGORY_ENTITY, /&[\da-z]+;|&#\d+;/i ],
+        [ CATEGORY_SPACE, REGEXP_SPACE ],
       ],
 
       cdata: [
