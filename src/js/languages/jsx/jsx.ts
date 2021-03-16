@@ -14,6 +14,9 @@ import { javascript } from '../javascript/javascript';
  * @since 0.0.12
  */
 interface JsxOptions {
+  /**
+   * The base language. The default value is `javascript()`.
+   */
   base?: () => Language;
 }
 

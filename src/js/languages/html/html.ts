@@ -17,28 +17,43 @@ import { javascript } from '../javascript/javascript';
 
 
 /**
+ * The HTML language options.
+ *
+ * @since 0.0.12
+ */
+export interface HtmlOptions {
+  /**
+   * The language for tokenizing script blocks.
+   */
+  script?: () => Language;
+
+  /**
+   * The language for tokenizing style blocks.
+   */
+  style?: () => Language;
+}
+
+/**
  * Returns the HTML language definition.
+ *
+ * @param options - Optional. Options.
  *
  * @return A Language object.
  */
-export function html(): Language {
-  const langJs  = javascript();
-  const langCss = css();
-  const cdata   = [ CATEGORY_CDATA, /<!\[CDATA\[.*]]>/is ] as Tokenizer;
+export function html( options: HtmlOptions = {} ): Language {
+  const script = ( options.script || javascript )();
+  const style  = ( options.style || css )();
+  const cdata  = [ CATEGORY_CDATA, /<!\[CDATA\[.*]]>/is ] as Tokenizer;
 
   // Embedded scripts or styles may contain CDATA sections.
-  langJs.grammar.main.unshift( cdata );
-  langCss.grammar.main.unshift( cdata );
+  script.grammar.main.unshift( cdata );
+  style.grammar.main.unshift( cdata );
 
   return {
     id   : 'html',
     alias: [ 'markup' ],
     name : 'HTML',
-
-    use: {
-      javascript: langJs,
-      css       : langCss,
-    },
+    use  : { script, style },
 
     grammar: {
       main: [
@@ -59,13 +74,13 @@ export function html(): Language {
       script: [
         [ '#tag', /^<script.*?>/s ],
         [ '#cdata' ],
-        [ '@javascript', /.+(?=<\/script>)/s ],
+        [ '@script', /.+(?=<\/script>)/s ],
         [ '#tag', /<\/script>/ ],
       ],
 
       style: [
         [ '#tag', /^<style.*?>/s ],
-        [ '@css', /.+(?=<\/style>)/s ],
+        [ '@style', /.+(?=<\/style>)/s ],
         [ '#tag', /<\/style>/ ],
       ],
 
