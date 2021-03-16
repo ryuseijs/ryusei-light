@@ -101,6 +101,40 @@ export default class ThumbnailsExample extends React.Component {
 }
   </pre>
 
+  <h3>Embedded Code</h3>
+  <pre>
+function Component( { edges } ) {
+  return (
+    &lt;div className={ `{ trap }` }&gt;
+      &lt;div style={ { color: 'red', marginRight: '2rem' } }&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+  </pre>
+
+  <pre>
+function Component() {
+  return  &lt;Container options={ { position: { x: 100, y: 200 }, rotation: { x: 90, y: 30 } } } />
+}
+
+console.log( 'javascript' );
+  </pre>
+
+  <h3>Fragments</h3>
+  <pre>
+function Component() {
+  return (
+    &lt;>
+      &lt;span>a&lt;/span>
+      &lt;span>b&lt;/span>
+    &lt;/>
+  );
+}
+
+console.log( 'javascript' );
+  </pre>
+
   <script src="../../../../dist/js/ryuseilight.min.js"></script>
   <script src="../../../../dist/js/languages/jsx.min.js"></script>
   <script>

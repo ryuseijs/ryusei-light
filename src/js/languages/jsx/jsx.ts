@@ -9,40 +9,58 @@ import { javascript } from '../javascript/javascript';
 
 
 /**
+ * Options for the JSX language definition.
+ *
+ * @since 0.0.12
+ */
+interface JsxOptions {
+  base?: () => Language;
+}
+
+/**
  * Returns the JSX language definition.
  *
  * @return A Language object.
  */
-export function jsx(): Language {
-  const language = assign( javascript(), {
+export function jsx( options: JsxOptions = {} ): Language {
+  const language = assign( ( options.base || javascript )(), {
     id   : 'jsx',
     name : 'JSX',
     alias: [ 'react' ],
-    use  : { javascript: javascript() },
   } );
 
   const { grammar } = language;
-  const { main }    = grammar;
 
-  before( main, CATEGORY_CLASS, [ [ '#findPairedTag' ], [ '#findSelfClosedTag' ] ] );
+  before( grammar.main, CATEGORY_CLASS, [ [ '#findPairedTag' ], [ '#findSelfClosedTag' ] ] );
 
   assign( grammar, {
     // This doesn't pick correct paired tags if nested, but they are incrementally searched later.
     findPairedTag: [
-      [ '#pairedTag', /<\s*?([\w]+?).*?>.*?<\/\1>/s, '@rest' ],
+      [ '#pairedTag', /(?:<\s*?(\w+).*?>.*?<\/\1>)|<\s*?>.*?<\/>/s, '@rest' ],
     ],
 
     findSelfClosedTag: [
-      [ '#selfClosedTag', /<\s*?([\w]+?).*?\/>/s ],
+      [ '#selfClosedTag', /<\s*?(\w+?).*?\/>/s ],
+    ],
+
+    findBracket: [
+      [ '#code', /{/, '@rest' ],
     ],
 
     pairedTag: [
       [ '#openTag', /^</, '@rest' ],
-      [ '@javascript', /{.*?}/s ],
+      [ '#findBracket' ],
       [ '#findPairedTag' ],
       [ '#findSelfClosedTag' ],
-      [ '#tagName', /<\/[\w][^\s]*?>/, '@break' ],
+      [ '#tagName', /<\/([\w][^\s]*?)?>/, '@break' ], // accept a fragment
       [ CATEGORY_SPACE, REGEXP_SPACE ],
+    ],
+
+    code: [
+      [ CATEGORY_BRACKET, /^{/ ],
+      [ CATEGORY_BRACKET, /}/, '@break' ],
+      [ '#findBracket' ],
+      [ '#main' ],
     ],
 
     selfClosedTag: [
@@ -50,8 +68,8 @@ export function jsx(): Language {
     ],
 
     openTag: [
-      [ '#tagName', /<\s*[^\s/>"'=]+/ ],
-      [ '@javascript', /{.*?}/s ],
+      [ '#tagName', /<\s*[^\s/>"'=]*/ ], // accept a fragment
+      [ '#findBracket' ],
       [ CATEGORY_ATTRIBUTE, /[^\s/>"'=]+/ ],
       [ CATEGORY_VALUE, /(['"])(\\\1|.)*?\1/ ],
       [ CATEGORY_SPACE, REGEXP_SPACE ],

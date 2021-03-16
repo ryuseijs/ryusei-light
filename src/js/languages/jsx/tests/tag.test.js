@@ -1,7 +1,7 @@
 import {
   CATEGORY_ATTRIBUTE,
   CATEGORY_BRACKET, CATEGORY_CLASS, CATEGORY_DELIMITER, CATEGORY_IDENTIFIER, CATEGORY_KEYWORD,
-  CATEGORY_OPERATOR, CATEGORY_TAG, CATEGORY_VALUE,
+  CATEGORY_OPERATOR, CATEGORY_TAG, CATEGORY_TEXT, CATEGORY_VALUE,
 } from '../../../constants/categories';
 
 
@@ -80,6 +80,50 @@ describe( 'jsx', () => {
       [ CATEGORY_VALUE, '"line"' ],
       [ CATEGORY_DELIMITER, '/' ],
       [ CATEGORY_BRACKET, '>' ],
+      [ CATEGORY_DELIMITER, ';' ],
+    ] );
+  } );
+
+  test( 'can tokenize a tag fragment.', () => {
+    const jsx = `
+      return (
+        <>
+          <span>a</span>
+          <span>b</span>
+        </>
+      );
+    `;
+
+    expect( jsx ).toBeTokenized( 'jsx', [
+      [ CATEGORY_KEYWORD, 'return' ],
+      [ CATEGORY_BRACKET, '(' ],
+
+      [ CATEGORY_BRACKET, '<' ],
+      [ CATEGORY_BRACKET, '>' ],
+
+      [ CATEGORY_BRACKET, '<' ],
+      [ CATEGORY_TAG, 'span' ],
+      [ CATEGORY_BRACKET, '>' ],
+      [ CATEGORY_TEXT, 'a' ],
+      [ CATEGORY_BRACKET, '<' ],
+      [ CATEGORY_DELIMITER, '/' ],
+      [ CATEGORY_TAG, 'span' ],
+      [ CATEGORY_BRACKET, '>' ],
+
+      [ CATEGORY_BRACKET, '<' ],
+      [ CATEGORY_TAG, 'span' ],
+      [ CATEGORY_BRACKET, '>' ],
+      [ CATEGORY_TEXT, 'b' ],
+      [ CATEGORY_BRACKET, '<' ],
+      [ CATEGORY_DELIMITER, '/' ],
+      [ CATEGORY_TAG, 'span' ],
+      [ CATEGORY_BRACKET, '>' ],
+
+      [ CATEGORY_BRACKET, '<' ],
+      [ CATEGORY_DELIMITER, '/' ],
+      [ CATEGORY_BRACKET, '>' ],
+
+      [ CATEGORY_BRACKET, ')' ],
       [ CATEGORY_DELIMITER, ';' ],
     ] );
   } );
