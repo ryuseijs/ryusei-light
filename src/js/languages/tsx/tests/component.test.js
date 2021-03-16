@@ -64,7 +64,7 @@ describe( 'tsx', () => {
       [ CATEGORY_TAG, 'span' ],
       [ CATEGORY_BRACKET, '>' ],
 
-      [ CATEGORY_BRACKET, '}' ]
+      [ CATEGORY_BRACKET, '}' ],
     ] );
   } );
 

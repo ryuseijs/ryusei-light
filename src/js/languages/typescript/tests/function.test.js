@@ -68,7 +68,7 @@ describe( 'typescript', () => {
       [ CATEGORY_BRACKET, ')' ],
       [ CATEGORY_BRACKET, '{' ],
       [ CATEGORY_BRACKET, '}' ],
-      [ CATEGORY_BRACKET, '}' ]
+      [ CATEGORY_BRACKET, '}' ],
     ] );
   } );
 } );

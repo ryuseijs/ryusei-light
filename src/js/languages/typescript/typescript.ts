@@ -27,7 +27,7 @@ export function typescript(): Language {
   ] );
 
   before( main, CATEGORY_FUNCTION, [
-    [ '#functions', /([_$a-z\xA0-\uFFFF][_$a-z0-9\xA0-\uFFFF]*)?(?:<[^>]+?>)?\s*?\(/ ]
+    [ '#functions', /([_$a-z\xA0-\uFFFF][_$a-z0-9\xA0-\uFFFF]*)?(?:<[^>]+?>)?\s*?\(/ ],
   ] );
 
   assign( grammar, {
