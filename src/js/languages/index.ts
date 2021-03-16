@@ -7,6 +7,7 @@ export { jsx }        from './jsx/jsx';
 export { none }       from './none/none';
 export { scss }       from './scss/scss';
 export { svg }        from './svg/svg';
+export { tsx }        from './tsx/tsx';
 export { typescript } from './typescript/typescript';
 export { vue }        from './vue/vue';
 export { xml }        from './xml/xml';

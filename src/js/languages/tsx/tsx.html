@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TSX</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+  <h3>Practical Example</h3>
+  <pre>
+import React from &#039;react&#039;;
+import * as styles from &#039;./section.module.css&#039;;
+
+
+type Props = {
+  header: React.ReactNode;
+  footer: React.ReactNode;
+}
+
+class Section extends React.Component&lt;Props, {}&gt; {
+  protected readonly items: string[] = [];
+
+  render() {
+    const { props } = this;
+
+    return (
+      &lt;div className={ styles.section }&gt;
+        { props.header &amp;&amp; &lt;header className={ styles.sectionBody }&gt;{ props.header }&lt;/header&gt; }
+
+        &lt;div className={ styles.sectionBody }&gt;
+          { props.children }
+        &lt;/div&gt;
+
+        { props.footer &amp;&amp; &lt;footer className={ styles.sectionBody }&gt;{ props.header }&lt;/footer&gt; }
+      &lt;/div&gt;
+    );
+  }
+}
+  </pre>
+
+  <h3>Typing</h3>
+  <pre>
+declare var process: any;
+
+type Token = [ string, number, ...RegExp[] ];
+
+interface CustomDivElement extends HTMLDivElement {
+  selectionStart: number,
+  selectionEnd: number,
+  setSelection( number, number ): void;
+}
+
+namespace Lexer {
+  export interface Grammar {
+    main: Tokenizers[];
+    [ key: string ]: Tokenizers[];
+  }
+}
+
+function Component(): React.FC {
+  return &lt;span>a&lt;/span>
+}
+
+function isArray&lt;T>( subject: T[] ): subject is T[] {
+  return Array.isArray( subject );
+}
+  </pre>
+
+
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/js/languages/tsx.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight();
+    ryuseilight.apply( 'pre', { language: 'tsx' } );
+  </script>
+</body>
+</html>
