@@ -23,6 +23,10 @@
         "omitLastInOneLineBlock": true
       }
     ],
+    "space-in-parens": [
+      "error",
+      "always"
+    ],
     "array-bracket-spacing": [
       "error",
       "always"
