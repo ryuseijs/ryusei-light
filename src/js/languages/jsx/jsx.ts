@@ -42,8 +42,9 @@ export function jsx( options: JsxOptions = {} ): Language {
       [ '#pairedTag', /(?:<\s*?(\w+).*?>.*?<\/\1>)|<\s*?>.*?<\/>/s, '@rest' ],
     ],
 
+    // Should not match the closing delimiter inside `{}`, `''` and `""`.
     findSelfClosedTag: [
-      [ '#selfClosedTag', /<\s*?(\w+?).*?\/>/s ],
+      [ '#selfClosedTag', /<(?:{.*?}|(['"]).*?\1|[^>])+?\/>/s ],
     ],
 
     findBracket: [
@@ -55,7 +56,7 @@ export function jsx( options: JsxOptions = {} ): Language {
       [ '#findBracket' ],
       [ '#findPairedTag' ],
       [ '#findSelfClosedTag' ],
-      [ '#tagName', /<\/([\w][^\s]*?)?>/, '@break' ], // accept a fragment
+      [ '#tagName', /<\/([\w][^\s]*?)?>/, '@break' ],
       [ CATEGORY_SPACE, REGEXP_SPACE ],
     ],
 
@@ -71,7 +72,7 @@ export function jsx( options: JsxOptions = {} ): Language {
     ],
 
     openTag: [
-      [ '#tagName', /<\s*[^\s/>"'=]*/ ], // accept a fragment
+      [ '#tagName', /<\s*[^\s/>"'=]*/ ],
       [ '#findBracket' ],
       [ CATEGORY_ATTRIBUTE, /[^\s/>"'=]+/ ],
       [ CATEGORY_VALUE, /(['"])(\\\1|.)*?\1/ ],

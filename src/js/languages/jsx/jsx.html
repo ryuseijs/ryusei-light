@@ -114,11 +114,39 @@ function Component( { edges } ) {
   </pre>
 
   <pre>
+function Component( { edges } ) {
+  return (
+    &lt;div className={ `&lt;div>trap!&lt;/div>` }&gt;
+      &lt;div style={ { color: 'red', marginRight: '2rem' } }&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}
+  </pre>
+
+  <pre>
 function Component() {
   return  &lt;Container options={ { position: { x: 100, y: 200 }, rotation: { x: 90, y: 30 } } } />
 }
 
 console.log( 'javascript' );
+  </pre>
+
+  <h3>Self Closed Tags</h3>
+  <pre>
+const Component = () => (
+  &lt;Button isPrimary /&gt;
+)
+
+&lt;Button className={ &#039;/&gt;&#039; } type=&quot;button&quot; data-temp=&quot;/&gt;&quot; data-temp=&#039;/&gt;&#039; /&gt;
+
+const Component = () => (
+  &lt;Button className={ &#039;/&gt;&#039; }
+    type=&quot;button&quot;
+    data-temp=&quot;/&gt;&quot;
+    data-temp=&#039;/&gt;&#039;
+  /&gt;
+)
   </pre>
 
   <h3>Fragments</h3>

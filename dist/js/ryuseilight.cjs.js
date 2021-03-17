@@ -1047,7 +1047,8 @@ function jsx(options) {
   assign(grammar, {
     // This doesn't pick correct paired tags if nested, but they are incrementally searched later.
     findPairedTag: [['#pairedTag', /(?:<[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*?([0-9A-Z_a-z]+)[\s\S]*?>[\s\S]*?<\/\1>)|<[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*?>[\s\S]*?<\/>/, '@rest']],
-    findSelfClosedTag: [['#selfClosedTag', /<[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*?([0-9A-Z_a-z]+?)[\s\S]*?\/>/]],
+    // Should not match the closing delimiter inside `{}`, `''` and `""`.
+    findSelfClosedTag: [['#selfClosedTag', /<(?:\{[\s\S]*?\}|(["'])[\s\S]*?\1|(?:(?!>)[\s\S]))+?\/>/]],
     findBracket: [['#code', /{/, '@rest']],
     pairedTag: [['#openTag', /^</, '@rest'], ['#findBracket'], ['#findPairedTag'], ['#findSelfClosedTag'], ['#tagName', /<\/([\w][^\s]*?)?>/, '@break'], [CATEGORY_SPACE, REGEXP_SPACE]],
     code: [[CATEGORY_BRACKET, /^{/], [CATEGORY_BRACKET, /}/, '@break'], ['#findBracket'], ['#main']],
