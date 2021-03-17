@@ -1,4 +1,4 @@
-@use '../../template/ryusei' with (
+@forward '../../template/ryusei' with (
   $background: #fafcff,
   $color: #4e5560,
   $font-size: 14px,
