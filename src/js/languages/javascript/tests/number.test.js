@@ -1,7 +1,7 @@
 import { CATEGORY_NUMBER } from '../../../constants/categories';
 
 
-describe( 'common', () => {
+describe( 'javascript', () => {
   test( 'can tokenize numbers.', () => {
     [
       '0',
@@ -23,7 +23,7 @@ describe( 'common', () => {
       '1.2E+10',
       '1.2E-10',
     ].forEach( number => {
-      expect( number ).toBeTokenized( 'common', [ [ CATEGORY_NUMBER, number ] ] );
+      expect( number ).toBeTokenized( 'javascript', [ [ CATEGORY_NUMBER, number ] ] );
     } );
   } );
 } );

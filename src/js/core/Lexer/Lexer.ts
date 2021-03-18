@@ -1,7 +1,7 @@
 import { Language, Token, Tokenizer } from '../../types';
 import { LINE_BREAK } from '../../constants/characters';
 import { CATEGORY_TEXT } from '../../constants/categories';
-import { assert, forOwn, isUndefined, startsWith, getFlags } from '../../utils';
+import { assert, forOwn, isUndefined, startsWith } from '../../utils';
 
 
 /**
@@ -50,7 +50,6 @@ export class Lexer {
       language.grammar[ key ] = this.merge( language, tokenizers );
     } );
 
-    language.use = language.use || {};
     forOwn( language.use, this.init.bind( this ) );
   }
 
@@ -71,14 +70,14 @@ export class Lexer {
         assert( include );
         merged.push( ...this.merge( language, include ) );
       } else {
-        const flags = getFlags( regexp ).replace( /[gy]/g, '' );
+        const flags = regexp.toString().match( /[gimsy]*$/ )[ 0 ].replace( /[gy]/g, '' );
+        let source = regexp.source + ( isStickySupported ? '' : '|()' );
 
-        if ( isStickySupported ) {
-          tokenizer[ 1 ] = new RegExp( regexp.source, 'y' + flags );
-        } else {
-          tokenizer[ 1 ] = new RegExp( regexp.source + '|()', 'g' + flags );
-        }
+        forOwn( language.source, ( replacement, key ) => {
+          source = source.replace( new RegExp( `%${ key }`, 'g' ), replacement.source );
+        } );
 
+        tokenizer[ 1 ] = new RegExp( source, ( isStickySupported ? 'y' : 'g' ) + flags );
         merged.push( tokenizer );
       }
 
@@ -190,10 +189,13 @@ export class Lexer {
       const [ text ] = match;
 
       if ( tokenizer[ 3 ] === '@debug' ) {
+        // eslint-disable-next-line
         console.log( text, tokenizer );
       }
 
       if ( startsWith( category, '@' ) ) {
+        assert( language.use );
+
         const lang = language.use[ category.slice( 1 ) ];
         assert( lang );
 

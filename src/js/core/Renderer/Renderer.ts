@@ -24,9 +24,7 @@ export class Renderer {
    */
   static compose( components: Record<string, Component> ): void {
     forOwn( components, ( Component, name ) => {
-      if ( ! Components[ name ] ) {
-        Components[ name ] = Component;
-      }
+      Components[ name ] = Component;
     } );
   }
 
@@ -87,8 +85,11 @@ export class Renderer {
       }
     }
 
-    forOwn( Components, Component => { Component( this ) } );
-    this.event.emit( 'mounted', this );
+    forOwn( Components, Component => {
+      Component( this );
+    } );
+
+    this.event.emit( 'mounted' );
   }
 
   /**
@@ -134,7 +135,7 @@ export class Renderer {
    *
    * @return An HTML string.
    */
-  html( pre = true ): string {
+  html( pre: boolean ): string {
     const event = this.event;
     let html  = '';
 

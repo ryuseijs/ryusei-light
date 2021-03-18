@@ -59,6 +59,11 @@ export interface Language {
   use?: { [ key: string ]: Language };
 
   /**
+   * Sources which tokenizers will be replaced by.
+   */
+  source?: { [ key: string ]: RegExp };
+
+  /**
    * An object containing arrays with tokenizers.
    */
   grammar: Grammar;

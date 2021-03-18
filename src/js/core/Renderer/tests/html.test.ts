@@ -39,7 +39,7 @@ describe( 'Renderer#html()', () => {
       '</div>'
     );
 
-    expect( renderer.html() ).toBe( result.join( '' ) );
+    expect( renderer.html( true ) ).toBe( result.join( '' ) );
 
     result.pop();
     result.shift();
@@ -58,7 +58,7 @@ describe( 'Renderer#html()', () => {
     result[ 1 ] = `<div class="${ CLASSES.container } additional-class">`;
     result.splice( 1, 0, '<br>' );
 
-    expect( renderer.html() ).toBe( result.join( '' ) );
+    expect( renderer.html( true ) ).toBe( result.join( '' ) );
   } );
 
   test( 'should emit `opened` event.', () => {
@@ -71,7 +71,7 @@ describe( 'Renderer#html()', () => {
 
     result.splice( 2, 0, '<br>' );
 
-    expect( renderer.html() ).toBe( result.join( '' ) );
+    expect( renderer.html( true ) ).toBe( result.join( '' ) );
   } );
 
   test( 'should emit `body:opened` event.', () => {
@@ -84,7 +84,7 @@ describe( 'Renderer#html()', () => {
 
     result.splice( 3, 0, '<br>' );
 
-    expect( renderer.html() ).toBe( result.join( '' ) );
+    expect( renderer.html( true ) ).toBe( result.join( '' ) );
   } );
 
   test( 'should emit `body:close` event.', () => {
@@ -97,7 +97,7 @@ describe( 'Renderer#html()', () => {
 
     result.splice( 5, 0, '<br>' );
 
-    expect( renderer.html() ).toBe( result.join( '' ) );
+    expect( renderer.html( true ) ).toBe( result.join( '' ) );
   } );
 
   test( 'should emit `close` event.', () => {
@@ -110,7 +110,7 @@ describe( 'Renderer#html()', () => {
 
     result.splice( 6, 0, '<br>' );
 
-    expect( renderer.html() ).toBe( result.join( '' ) );
+    expect( renderer.html( true ) ).toBe( result.join( '' ) );
   } );
 
   test( 'should emit `line:open` and `line:closed` event.', () => {
@@ -145,7 +145,7 @@ describe( 'Renderer#html()', () => {
       '<hr>'
     );
 
-    expect( renderer.html() ).toBe( result.join( '' ) );
+    expect( renderer.html( true ) ).toBe( result.join( '' ) );
   } );
 
   test( 'should emit `token` event.', () => {
@@ -171,7 +171,7 @@ describe( 'Renderer#html()', () => {
       '</div>'
     );
 
-    expect( renderer.html() ).toBe( result.join( '' ) );
+    expect( renderer.html( true ) ).toBe( result.join( '' ) );
   } );
 
   test( 'should use `span` instead of `code` if required.', () => {
@@ -197,13 +197,13 @@ describe( 'Renderer#html()', () => {
       '</div>'
     );
 
-    expect( renderer.html() ).toBe( result.join( '' ) );
+    expect( renderer.html( true ) ).toBe( result.join( '' ) );
   } );
 
   test( 'should add `--wrap` modifier to a body element if the `wrap` option is `true`.', () => {
     const renderer  = new Renderer( [], info, null, { wrap: true } );
 
     result[ 2 ] = `<div class="${ CLASSES.body } ${ CLASSES.body }--wrap">`;
-    expect( renderer.html() ).toBe( result.join( '' ) );
+    expect( renderer.html( true ) ).toBe( result.join( '' ) );
   } );
 } );

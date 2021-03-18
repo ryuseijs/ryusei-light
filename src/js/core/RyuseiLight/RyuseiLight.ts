@@ -28,10 +28,8 @@ export class RyuseiLight {
       const { id } = language;
 
       if ( id && ! lexers[ id ] ) {
-        const lexer = new Lexer( language );
-
         ( language.alias || [] ).concat( id ).forEach( id => {
-          lexers[ id ] = lexer;
+          lexers[ id ] = new Lexer( language );
         } );
       }
     } );
@@ -94,7 +92,7 @@ export class RyuseiLight {
    *
    * @param options  - Optional. Options.
    */
-  constructor( options: Options = {} ) {
+  constructor( options?: Options ) {
     this.options = assign( {}, options );
   }
 
@@ -105,7 +103,7 @@ export class RyuseiLight {
    * @param elm     - Optional. An element to highlight.
    * @param options - Optional. Options.
    */
-  protected getRenderer( code: string, elm?: HTMLElement, options: Options = {} ) {
+  protected getRenderer( code: string, elm?: HTMLElement, options?: Options ) {
     options = assign( {}, this.options, options );
 
     const language     = options.language;
@@ -119,7 +117,7 @@ export class RyuseiLight {
    * @param target  - A selector or an element.
    * @param options - Optional. Options.
    */
-  apply( target: string | Element, options: Options = {} ): void {
+  apply( target: string | Element, options?: Options ): void {
     const elms = isString( target ) ? document.querySelectorAll( target ) : [ target ];
 
     for ( let i = 0; i < elms.length; i++ ) {
@@ -150,9 +148,9 @@ export class RyuseiLight {
    *
    * @return Highlighted HTML string.
    */
-  html( code: string, options: Options = {} ): string {
+  html( code: string, options?: Options ): string {
     assert( isString( code ), 'Invalid code.' );
-    return this.getRenderer( code, null, options ).html();
+    return this.getRenderer( code, null, options ).html( true );
   }
 
   /**

@@ -1,14 +1,14 @@
 import { CATEGORY_DELIMITER } from '../../../constants/categories';
 
 
-describe( 'common', () => {
+describe( 'javascript', () => {
   test( 'can tokenize delimiters.', () => {
     [
       ';',
       '.',
       ',',
     ].forEach( operator => {
-      expect( operator ).toBeTokenized( 'common', [ [ CATEGORY_DELIMITER, operator ] ] );
+      expect( operator ).toBeTokenized( 'javascript', [ [ CATEGORY_DELIMITER, operator ] ] );
     } );
   } );
 } );

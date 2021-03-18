@@ -1,4 +1,4 @@
-import { isUndefined } from '../../type/type';
+import { isObject, isUndefined } from '../../type/type';
 import { forOwn } from '../forOwn/forOwn';
 
 
@@ -36,11 +36,13 @@ export function assign<T extends object, U1 extends object, U2 extends object, U
  */
 export function assign<T extends object, U extends object>( object: T, ...sources: U[] ): any {
   sources.forEach( source => {
-    forOwn( source, ( value, key ) => {
-      if ( ! isUndefined( source[ key ] ) ) {
-        object[ key ] = source[ key ];
-      }
-    } );
+    if ( isObject( source ) ) {
+      forOwn( source, ( value, key ) => {
+        if ( ! isUndefined( source[ key ] ) ) {
+          object[ key ] = source[ key ];
+        }
+      } );
+    }
   } );
 
   return object;

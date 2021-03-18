@@ -1,10 +1,10 @@
 import { CATEGORY_COMMENT } from '../../../constants/categories';
 
 
-describe( 'common', () => {
+describe( 'javascript', () => {
   test( 'can tokenize multiline comments.', () => {
     const comment1 = `/* comment */`;
-    expect( comment1 ).toBeTokenized( 'common', [ [ CATEGORY_COMMENT, comment1 ] ] );
+    expect( comment1 ).toBeTokenized( 'javascript', [ [ CATEGORY_COMMENT, comment1 ] ] );
 
     const comment2 = `
       /*
@@ -12,7 +12,7 @@ describe( 'common', () => {
        */
     `;
 
-    expect( comment2 ).toBeTokenized( 'common', [
+    expect( comment2 ).toBeTokenized( 'javascript', [
       [ CATEGORY_COMMENT, '/*' ],
       [ CATEGORY_COMMENT, '         comment' ],
       [ CATEGORY_COMMENT, '       */' ],
@@ -25,7 +25,7 @@ describe( 'common', () => {
        */
     `;
 
-    expect( comment3 ).toBeTokenized( 'common', [
+    expect( comment3 ).toBeTokenized( 'javascript', [
       [ CATEGORY_COMMENT, '/**' ],
       [ CATEGORY_COMMENT, '       * comment' ],
       [ CATEGORY_COMMENT, '       * comment' ],
@@ -35,7 +35,7 @@ describe( 'common', () => {
 
   test( 'can tokenize comments with escaped representation.', () => {
     const comment1 = `/* comment \\/ *\\/ */`;
-    expect( comment1 ).toBeTokenized( 'common', [ [ CATEGORY_COMMENT, comment1 ] ] );
+    expect( comment1 ).toBeTokenized( 'javascript', [ [ CATEGORY_COMMENT, comment1 ] ] );
 
     const comment2 = `
       /**
@@ -44,7 +44,7 @@ describe( 'common', () => {
        */
     `;
 
-    expect( comment2 ).toBeTokenized( 'common', [
+    expect( comment2 ).toBeTokenized( 'javascript', [
       [ CATEGORY_COMMENT, '/**' ],
       [ CATEGORY_COMMENT, '       * comment' ],
       [ CATEGORY_COMMENT, '       * \\/ *\\/' ],
@@ -54,9 +54,9 @@ describe( 'common', () => {
 
   test( 'should not tokenize a comment inside a string.', () => {
     const string1 = `'/* comment */'`;
-    expect( string1 ).toBeTokenized( 'common', [ [ 'string', string1 ] ] );
+    expect( string1 ).toBeTokenized( 'javascript', [ [ 'string', string1 ] ] );
 
     const string2 = `"/* comment */"`;
-    expect( string2 ).toBeTokenized( 'common', [ [ 'string', string2 ] ] );
+    expect( string2 ).toBeTokenized( 'javascript', [ [ 'string', string2 ] ] );
   } );
 } );

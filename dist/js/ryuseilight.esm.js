@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 0.0.14
+ * Version  : 0.0.15
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -149,10 +149,12 @@ function append(parent, children) {
 
 
 function forOwn(object, iteratee) {
-  var keys = Object.keys(object);
+  if (object) {
+    var keys = Object.keys(object);
 
-  for (var i = 0; i < keys.length; i++) {
-    iteratee(object[keys[i]], keys[i]);
+    for (var i = 0; i < keys.length; i++) {
+      iteratee(object[keys[i]], keys[i]);
+    }
   }
 }
 /**
@@ -172,11 +174,13 @@ function assign(object) {
   }
 
   sources.forEach(function (source) {
-    forOwn(source, function (value, key) {
-      if (!isUndefined(source[key])) {
-        object[key] = source[key];
-      }
-    });
+    if (isObject(source)) {
+      forOwn(source, function (value, key) {
+        if (!isUndefined(source[key])) {
+          object[key] = source[key];
+        }
+      });
+    }
   });
   return object;
 }
@@ -370,19 +374,6 @@ function before(map, ref, entries) {
   }
 }
 /**
- * Returns flags of the provided regexp object.
- * IE doesn't support RegExp#flags.
- *
- * @param regexp - A RegExp object.
- *
- * @return Flags as a string.
- */
-
-
-function getFlags(regexp) {
-  return regexp.toString().match(/[gimsy]*$/)[0];
-}
-/**
  * Converts essential HTML special characters to HTML entities.
  *
  * @param string - A string to escape.
@@ -444,7 +435,6 @@ var Lexer = /*#__PURE__*/function () {
     forOwn(language.grammar, function (tokenizers, key) {
       language.grammar[key] = _this.merge(language, tokenizers);
     });
-    language.use = language.use || {};
     forOwn(language.use, this.init.bind(this));
   }
   /**
@@ -469,14 +459,12 @@ var Lexer = /*#__PURE__*/function () {
         assert(include);
         merged.push.apply(merged, _this2.merge(language, include));
       } else {
-        var flags = getFlags(regexp).replace(/[gy]/g, '');
-
-        if (isStickySupported) {
-          tokenizer[1] = new RegExp(regexp.source, 'y' + flags);
-        } else {
-          tokenizer[1] = new RegExp(regexp.source + '|()', 'g' + flags);
-        }
-
+        var flags = regexp.toString().match(/[gimsy]*$/)[0].replace(/[gy]/g, '');
+        var source = regexp.source + (isStickySupported ? '' : '|()');
+        forOwn(language.source, function (replacement, key) {
+          source = source.replace(new RegExp("%" + key, 'g'), replacement.source);
+        });
+        tokenizer[1] = new RegExp(source, (isStickySupported ? 'y' : 'g') + flags);
         merged.push(tokenizer);
       }
 
@@ -586,10 +574,12 @@ var Lexer = /*#__PURE__*/function () {
       var _text = match[0];
 
       if (tokenizer[3] === '@debug') {
+        // eslint-disable-next-line
         console.log(_text, tokenizer);
       }
 
       if (startsWith(category, '@')) {
+        assert(language.use);
         var lang = language.use[category.slice(1)];
         assert(lang);
         return this.tokenizeBy(_text, lang, lang.grammar.main);
@@ -750,9 +740,7 @@ var Renderer = /*#__PURE__*/function () {
 
   Renderer.compose = function compose(components) {
     forOwn(components, function (Component, name) {
-      if (!Components[name]) {
-        Components[name] = Component;
-      }
+      Components[name] = Component;
     });
   }
   /**
@@ -779,7 +767,7 @@ var Renderer = /*#__PURE__*/function () {
     forOwn(Components, function (Component) {
       Component(_this3);
     });
-    this.event.emit('mounted', this);
+    this.event.emit('mounted');
   }
   /**
    * Renders lines as HTML.
@@ -825,10 +813,6 @@ var Renderer = /*#__PURE__*/function () {
   ;
 
   _proto3.html = function html(pre) {
-    if (pre === void 0) {
-      pre = true;
-    }
-
     var event = this.event;
     var html = '';
 
@@ -894,27 +878,12 @@ var REGEXP_QUOTE = /'(?:\\'|.)*?'/;
 var REGEXP_DOUBLE_QUOTE = /"(?:\\"|.)*?"/;
 var REGEXP_MULTILINE_COMMENT = /\/\*[\s\S]*?\*\//;
 var REGEXP_SLASH_COMMENT = /\/\/.*/;
-/**
- * Returns a common language definition.
- *
- * @return A Language object.
- */
-
-function common() {
-  return {
-    id: 'common',
-    name: '',
-    grammar: {
-      main: [[CATEGORY_STRING, REGEXP_QUOTE], [CATEGORY_STRING, REGEXP_DOUBLE_QUOTE], [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_COMMENT, REGEXP_SLASH_COMMENT], [CATEGORY_KEYWORD, /\b(?:break|catch|class|continue|do|else|extends|finally|for|function|if|implements|in|instanceof|interface|new|null|return|throw|trait|try|while)\b/], [CATEGORY_CLASS, /\b[A-Z][\w$]*\b/], [CATEGORY_FUNCTION, /[_$a-z\xA0-\uFFFF][_$a-z0-9\xA0-\uFFFF]*(?=\s*\()/i], [CATEGORY_BOOLEAN, REGEXP_BOOLEAN], [CATEGORY_IDENTIFIER, /\b[a-z_$][\w$]*\b/], [CATEGORY_NUMBER, REGEXP_NUMBER], [CATEGORY_OPERATOR, /\+[+=]?|-[-=]?|\*\*?=?|[/%^]=?|&&?=?|\|\|?=?|\?\??=?|<<?=?|>>>=?|>>?=?|[!=]=?=?|[~:^]/], [CATEGORY_BRACKET, REGEXP_BRACKET], [CATEGORY_DELIMITER, /[;.,]+/], [CATEGORY_SPACE, REGEXP_SPACE]]
-    }
-  };
-}
+var REGEXP_GENERAL_KEYWORDS = /\b(?:break|catch|class|continue|do|else|extends|finally|for|function|if|implements|in|instanceof|interface|new|null|return|throw|try|while)\b/;
 /**
  * Returns the CSS language definition.
  *
  * @return A Language object.
  */
-
 
 function css() {
   return {
@@ -949,20 +918,19 @@ function css() {
 
 
 function javascript() {
-  var language = assign(common(), {
+  return {
     id: 'javascript',
     name: 'JavaScript',
-    alias: ['js']
-  });
-  var grammar = language.grammar;
-  var main = grammar.main;
-  before(main, CATEGORY_KEYWORD, [[CATEGORY_REGEXP, /\/(\[.*[^\\]?]|\\\/|.)+?\/[gimsuy]*/], [CATEGORY_KEYWORD, /\b(?:as|async|await|case|catch|const|debugger|default|delete|enum|export|from|import|let|package|private|protected|public|super|switch|static|this|typeof|undefined|var|void|with|yield)\b/], [CATEGORY_KEYWORD, /\b((get|set)(?= *\S+\(\)))/], ['#backtick', /`/, '@rest'], [CATEGORY_DECORATOR, /@[^\s(@]+/]]);
-  before(main, CATEGORY_OPERATOR, [[CATEGORY_OPERATOR, /=>/]]);
-  assign(grammar, {
-    backtick: [[CATEGORY_STRING, /^`/], [CATEGORY_STRING, /(\$[^{]|\\[$`]|[^`$])+/], ['#expression', /\${/, '@rest'], [CATEGORY_STRING, /`/, '@break']],
-    expression: [[CATEGORY_DELIMITER, /^\${/], [CATEGORY_DELIMITER, /}/, '@break'], ['#main']]
-  });
-  return language;
+    alias: ['js'],
+    source: {
+      func: /[_$a-z\xA0-\uFFFF][_$a-z0-9\xA0-\uFFFF]*/
+    },
+    grammar: {
+      main: [[CATEGORY_STRING, REGEXP_QUOTE], [CATEGORY_STRING, REGEXP_DOUBLE_QUOTE], ['#backtick', /`/, '@rest'], [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_COMMENT, REGEXP_SLASH_COMMENT], [CATEGORY_REGEXP, /\/(\[.*[^\\]?]|\\\/|.)+?\/[gimsuy]*/], [CATEGORY_KEYWORD, REGEXP_GENERAL_KEYWORDS], [CATEGORY_KEYWORD, /\b(?:as|async|await|case|catch|const|debugger|default|delete|enum|export|from|import|let|package|private|protected|public|super|switch|static|this|typeof|undefined|var|void|with|yield)\b/], [CATEGORY_KEYWORD, /\b((get|set)(?=\s+%func))/i], [CATEGORY_CLASS, /\b[A-Z][\w$]*\b/], [CATEGORY_FUNCTION, /%func(?=\s*\()/i], [CATEGORY_BOOLEAN, REGEXP_BOOLEAN], [CATEGORY_DECORATOR, /@[^\s(@]+/], [CATEGORY_IDENTIFIER, /\b[a-z_$][\w$]*\b/], [CATEGORY_NUMBER, REGEXP_NUMBER], [CATEGORY_OPERATOR, /=>/], [CATEGORY_OPERATOR, /\+[+=]?|-[-=]?|\*\*?=?|[/%^]=?|&&?=?|\|\|?=?|\?\??=?|<<?=?|>>>=?|>>?=?|[!=]=?=?|[~:^]/], [CATEGORY_BRACKET, REGEXP_BRACKET], [CATEGORY_DELIMITER, /[;.,]+/], [CATEGORY_SPACE, REGEXP_SPACE]],
+      backtick: [[CATEGORY_STRING, /^`/], [CATEGORY_STRING, /(\$[^{]|\\[$`]|[^`$])+/], ['#expression', /\${/, '@rest'], [CATEGORY_STRING, /`/, '@break']],
+      expression: [[CATEGORY_DELIMITER, /^\${/], [CATEGORY_DELIMITER, /}/, '@break'], ['#main']]
+    }
+  };
 }
 /**
  * Returns the HTML language definition.
@@ -1197,11 +1165,11 @@ function vue(options) {
 
   language.grammar.main.push(['@script', /{{[\s\S]*?}}/]);
   return language;
-}
+} // export { common }     from './common/common';
+
 
 var index = /*#__PURE__*/Object.freeze({
   __proto__: null,
-  common: common,
   css: css,
   html: html,
   javascript: javascript,
@@ -1233,10 +1201,6 @@ var RyuseiLight = /*#__PURE__*/function () {
    * @param options  - Optional. Options.
    */
   function RyuseiLight(options) {
-    if (options === void 0) {
-      options = {};
-    }
-
     /**
      * Holds all renderers.
      */
@@ -1255,9 +1219,8 @@ var RyuseiLight = /*#__PURE__*/function () {
       var id = language.id;
 
       if (id && !lexers[id]) {
-        var lexer = new Lexer(language);
         (language.alias || []).concat(id).forEach(function (id) {
-          lexers[id] = lexer;
+          lexers[id] = new Lexer(language);
         });
       }
     });
@@ -1312,10 +1275,6 @@ var RyuseiLight = /*#__PURE__*/function () {
   var _proto4 = RyuseiLight.prototype;
 
   _proto4.getRenderer = function getRenderer(code, elm, options) {
-    if (options === void 0) {
-      options = {};
-    }
-
     options = assign({}, this.options, options);
     var language = options.language;
     var _RyuseiLight$getLexer = RyuseiLight.getLexer(language).language,
@@ -1335,10 +1294,6 @@ var RyuseiLight = /*#__PURE__*/function () {
   ;
 
   _proto4.apply = function apply(target, options) {
-    if (options === void 0) {
-      options = {};
-    }
-
     var elms = isString(target) ? document.querySelectorAll(target) : [target];
 
     for (var i = 0; i < elms.length; i++) {
@@ -1372,12 +1327,8 @@ var RyuseiLight = /*#__PURE__*/function () {
   ;
 
   _proto4.html = function html(code, options) {
-    if (options === void 0) {
-      options = {};
-    }
-
     assert(isString(code), 'Invalid code.');
-    return this.getRenderer(code, null, options).html();
+    return this.getRenderer(code, null, options).html(true);
   }
   /**
    * Destroys the instance.
@@ -1839,4 +1790,4 @@ var index$1 = /*#__PURE__*/Object.freeze({
   Title: Title
 });
 export default RyuseiLight;
-export { ActiveLines, Copy, Gutter, LanguageName, LineNumbers, Overlay, RyuseiLight, Title, common, index$1 as components, css, html, javascript, json, jsx, index as languages, none, scss, svg, tsx, typescript, vue, xml };
+export { ActiveLines, Copy, Gutter, LanguageName, LineNumbers, Overlay, RyuseiLight, Title, index$1 as components, css, html, javascript, json, jsx, index as languages, none, scss, svg, tsx, typescript, vue, xml };

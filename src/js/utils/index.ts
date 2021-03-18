@@ -4,6 +4,5 @@ export * from './error';
 export * from './function';
 export * from './map';
 export * from './object';
-export * from './regexp';
 export * from './string';
 export * from './type/type';

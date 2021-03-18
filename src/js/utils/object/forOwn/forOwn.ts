@@ -7,9 +7,11 @@
  * @return A provided object itself.
  */
 export function forOwn<T extends object>( object: T, iteratee: ( value: T[ keyof T ], key: string ) => void ) {
-  const keys = Object.keys( object );
+  if ( object ) {
+    const keys = Object.keys( object );
 
-  for ( let i = 0; i < keys.length; i++ ) {
-    iteratee( object[ keys[ i ] ], keys[ i ] );
+    for ( let i = 0; i < keys.length; i++ ) {
+      iteratee( object[ keys[ i ] ], keys[ i ] );
+    }
   }
 }
