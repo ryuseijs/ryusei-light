@@ -1,6 +1,6 @@
 import { PROJECT_CODE_SHORT } from '../../constants/project';
 import { Renderer } from '../../core/Renderer/Renderer';
-import { CLASSES } from '../../constants/classes';
+import { ACTIVE } from '../../constants/classes';
 import { attr, error, isArray } from '../../utils';
 
 
@@ -75,7 +75,7 @@ function normalize( lines: Array<number | [ number, number ]> ): string[] {
     const end   = ( +range[ 1 ] || 1 ) - 1;
 
     for ( let i = start; i <= end; i++ ) {
-      numbers[ i ] = CLASSES.active;
+      numbers[ i ] = ACTIVE;
     }
   } );
 

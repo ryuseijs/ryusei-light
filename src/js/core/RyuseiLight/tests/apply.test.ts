@@ -1,4 +1,4 @@
-import { CLASSES } from '../../../constants/classes';
+import { CONTAINER, BODY, CODE, LINE, TOKEN } from '../../../constants/classes';
 import { PROJECT_CODE_SHORT } from '../../../constants/project';
 import { Language } from '../../../types';
 import { RyuseiLight } from '../RyuseiLight';
@@ -25,12 +25,12 @@ describe( 'RyuseiLight#apply()', () => {
 
   function getResult( id: string, tag = 'code' ): string[] {
     return [
-      `<div class="${ CLASSES.container }">`,
-      `<div class="${ CLASSES.body }">`,
-      `<div class="${ CLASSES.code }">`,
+      `<div class="${ CONTAINER }">`,
+      `<div class="${ BODY }">`,
+      `<div class="${ CODE }">`,
 
-      `<div class="${ CLASSES.line }">`,
-      `<${ tag } class="${ CLASSES.token } ${ PROJECT_CODE_SHORT }__${ id }-a">aaa</${ tag }>`,
+      `<div class="${ LINE }">`,
+      `<${ tag } class="${ TOKEN } ${ PROJECT_CODE_SHORT }__${ id }-a">aaa</${ tag }>`,
       '</div>',
 
       '</div>',

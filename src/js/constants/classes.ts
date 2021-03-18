@@ -1,17 +1,10 @@
 import { PROJECT_CODE, PROJECT_CODE_SHORT } from './project';
 
 
-/**
- * The collection of class names.
- *
- * @since 0.0.1
- */
-export const CLASSES = {
-  root     : PROJECT_CODE,
-  container: `${ PROJECT_CODE_SHORT }__container`,
-  body     : `${ PROJECT_CODE_SHORT }__body`,
-  code     : `${ PROJECT_CODE_SHORT }__code`,
-  line     : `${ PROJECT_CODE_SHORT }__line`,
-  token    : `${ PROJECT_CODE_SHORT }__token`,
-  active   : 'is-active',
-};
+export const ROOT      = PROJECT_CODE;
+export const CONTAINER = `${ PROJECT_CODE_SHORT }__container`;
+export const BODY      = `${ PROJECT_CODE_SHORT }__body`;
+export const CODE      = `${ PROJECT_CODE_SHORT }__code`;
+export const LINE      = `${ PROJECT_CODE_SHORT }__line`;
+export const TOKEN     = `${ PROJECT_CODE_SHORT }__token`;
+export const ACTIVE    = 'is-active';

@@ -2,7 +2,7 @@ import { LINE_BREAK } from '../../constants/characters';
 import { Options, LanguageInfo, Token, Component } from '../../types';
 import { EventBus } from '../../event/EventBus';
 import { PROJECT_CODE_SHORT } from '../../constants/project';
-import { CLASSES } from '../../constants/classes';
+import { BODY, CODE, CONTAINER, LINE, ROOT, TOKEN } from '../../constants/classes';
 import { forOwn, escapeHtml } from '../../utils';
 
 
@@ -105,7 +105,7 @@ export class Renderer {
 
     for ( let i = 0; i < this.lines.length; i++ ) {
       const tokens  = this.lines[ i ];
-      const classes = [ CLASSES.line ];
+      const classes = [ LINE ];
 
       event.emit( 'line:open', append, classes, i );
       append( `<div class="${ classes.join( ' ' ) }">` );
@@ -113,7 +113,7 @@ export class Renderer {
       if ( tokens.length ) {
         for ( let j = 0; j < tokens.length; j++ ) {
           const token   = tokens[ j ];
-          const classes = [ `${ CLASSES.token } ${ PROJECT_CODE_SHORT }__${ token[ 0 ] }` ];
+          const classes = [ `${ TOKEN } ${ PROJECT_CODE_SHORT }__${ token[ 0 ] }` ];
 
           event.emit( 'token', token, classes );
 
@@ -142,22 +142,22 @@ export class Renderer {
     const append = ( fragment: string ) => { html += fragment };
 
     if ( pre ) {
-      html += `<pre class="${ CLASSES.root } ${ CLASSES.root }--${ this.info.id }">`;
+      html += `<pre class="${ ROOT } ${ ROOT }--${ this.info.id }">`;
     }
 
-    const containerClasses = [ CLASSES.container ];
+    const containerClasses = [ CONTAINER ];
     event.emit( 'open', append, containerClasses );
 
     html += `<div class="${ containerClasses.join( ' ' ) }">`;
     event.emit( 'opened', append );
 
-    const bodyClasses = [ `${ CLASSES.body }${ this.options.wrap ? ` ${ CLASSES.body }--wrap` : '' }` ];
+    const bodyClasses = [ `${ BODY }${ this.options.wrap ? ` ${ BODY }--wrap` : '' }` ];
     event.emit( 'body:open', append, bodyClasses );
 
     html += `<div class="${ bodyClasses.join( ' ' ) }">`;
     event.emit( 'body:opened', append );
 
-    html += `<div class="${ CLASSES.code }">`;
+    html += `<div class="${ CODE }">`;
     this.renderLines( append );
     html += `</div>`; // code
 

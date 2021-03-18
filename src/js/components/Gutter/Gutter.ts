@@ -1,6 +1,6 @@
 import { Renderer } from '../../core/Renderer/Renderer';
 import { PROJECT_CODE_SHORT } from '../../constants/project';
-import { CLASSES } from '../../constants/classes';
+import { CODE } from '../../constants/classes';
 import { styles, throttle, isHTMLElement, query } from '../../utils';
 
 
@@ -73,7 +73,7 @@ export function Gutter( { lines, event, root, options }: Renderer ): void {
      */
     function resize() {
       const gutter = query( `.${ GUTTER_CLASS_NAME }`, root );
-      const code   = query( `.${ CLASSES.code }`, root );
+      const code   = query( `.${ CODE }`, root );
 
       if ( gutter && code ) {
         for ( let i = 0; i < code.children.length; i++ ) {

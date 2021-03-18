@@ -1,6 +1,6 @@
 import { Renderer } from '../../core/Renderer/Renderer';
 import { LINE_BREAK } from '../../constants/characters';
-import { CLASSES } from '../../constants/classes';
+import { ACTIVE } from '../../constants/classes';
 import { PROJECT_CODE_SHORT } from '../../constants/project';
 import { addClass, append, assign, create, isObject, query, styles } from '../../utils';
 
@@ -116,7 +116,7 @@ function execCopy( code: string, onSuccess: () => void ): void {
  * @param duration - Duration for the button activation.
  */
 function toggleClass( button: HTMLButtonElement, duration: number ): void {
-  addClass( button, CLASSES.active );
+  addClass( button, ACTIVE );
 
   const prop = '_rlTimer';
 
@@ -125,6 +125,6 @@ function toggleClass( button: HTMLButtonElement, duration: number ): void {
   }
 
   button[ prop ] = setTimeout( () => {
-    button.classList.remove( CLASSES.active );
+    button.classList.remove( ACTIVE );
   }, duration );
 }

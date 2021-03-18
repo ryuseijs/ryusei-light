@@ -1,4 +1,4 @@
-import { CLASSES } from '../../../constants/classes';
+import { ROOT, CONTAINER, BODY, CODE, LINE, TOKEN } from '../../../constants/classes';
 import { PROJECT_CODE_SHORT } from '../../../constants/project';
 import { Token } from '../../../types';
 import { Renderer } from '../Renderer';
@@ -10,10 +10,10 @@ describe( 'Renderer#html()', () => {
 
   beforeEach( () => {
     result = [
-      `<pre class="${ CLASSES.root } ${ CLASSES.root }--test">`,
-      `<div class="${ CLASSES.container }">`,
-      `<div class="${ CLASSES.body }">`,
-      `<div class="${ CLASSES.code }">`,
+      `<pre class="${ ROOT } ${ ROOT }--test">`,
+      `<div class="${ CONTAINER }">`,
+      `<div class="${ BODY }">`,
+      `<div class="${ CODE }">`,
 
       '</div>', // code
       '</div>', // body
@@ -31,11 +31,11 @@ describe( 'Renderer#html()', () => {
     const renderer = new Renderer( tokens, info );
 
     result.splice( 4, 0,
-      `<div class="${ CLASSES.line }">`,
-      `<code class="${ CLASSES.token } ${ PROJECT_CODE_SHORT }__string">string1</code>`,
+      `<div class="${ LINE }">`,
+      `<code class="${ TOKEN } ${ PROJECT_CODE_SHORT }__string">string1</code>`,
       '</div>',
-      `<div class="${ CLASSES.line }">`,
-      `<code class="${ CLASSES.token } ${ PROJECT_CODE_SHORT }__string">string2</code>`,
+      `<div class="${ LINE }">`,
+      `<code class="${ TOKEN } ${ PROJECT_CODE_SHORT }__string">string2</code>`,
       '</div>'
     );
 
@@ -55,7 +55,7 @@ describe( 'Renderer#html()', () => {
       classes.push( 'additional-class' );
     } );
 
-    result[ 1 ] = `<div class="${ CLASSES.container } additional-class">`;
+    result[ 1 ] = `<div class="${ CONTAINER } additional-class">`;
     result.splice( 1, 0, '<br>' );
 
     expect( renderer.html( true ) ).toBe( result.join( '' ) );
@@ -133,14 +133,14 @@ describe( 'Renderer#html()', () => {
 
     result.splice( 4, 0,
       '<br>',
-      `<div class="${ CLASSES.line } line-1">`,
-      `<code class="${ CLASSES.token } ${ PROJECT_CODE_SHORT }__string">string1</code>`,
+      `<div class="${ LINE } line-1">`,
+      `<code class="${ TOKEN } ${ PROJECT_CODE_SHORT }__string">string1</code>`,
       '</div>',
       '<hr>',
 
       '<br>',
-      `<div class="${ CLASSES.line } line-2">`,
-      `<code class="${ CLASSES.token } ${ PROJECT_CODE_SHORT }__string">string2</code>`,
+      `<div class="${ LINE } line-2">`,
+      `<code class="${ TOKEN } ${ PROJECT_CODE_SHORT }__string">string2</code>`,
       '</div>',
       '<hr>'
     );
@@ -162,12 +162,12 @@ describe( 'Renderer#html()', () => {
     } );
 
     result.splice( 4, 0,
-      `<div class="${ CLASSES.line }">`,
-      `<code class="${ CLASSES.token } ${ PROJECT_CODE_SHORT }__string content-string1">string1</code>`,
+      `<div class="${ LINE }">`,
+      `<code class="${ TOKEN } ${ PROJECT_CODE_SHORT }__string content-string1">string1</code>`,
       '</div>',
 
-      `<div class="${ CLASSES.line }">`,
-      `<code class="${ CLASSES.token } ${ PROJECT_CODE_SHORT }__string content-string2">string2</code>`,
+      `<div class="${ LINE }">`,
+      `<code class="${ TOKEN } ${ PROJECT_CODE_SHORT }__string content-string2">string2</code>`,
       '</div>'
     );
 
@@ -188,12 +188,12 @@ describe( 'Renderer#html()', () => {
     } );
 
     result.splice( 4, 0,
-      `<div class="${ CLASSES.line }">`,
-      `<span class="${ CLASSES.token } ${ PROJECT_CODE_SHORT }__string content-string1">string1</span>`,
+      `<div class="${ LINE }">`,
+      `<span class="${ TOKEN } ${ PROJECT_CODE_SHORT }__string content-string1">string1</span>`,
       '</div>',
 
-      `<div class="${ CLASSES.line }">`,
-      `<span class="${ CLASSES.token } ${ PROJECT_CODE_SHORT }__string content-string2">string2</span>`,
+      `<div class="${ LINE }">`,
+      `<span class="${ TOKEN } ${ PROJECT_CODE_SHORT }__string content-string2">string2</span>`,
       '</div>'
     );
 
@@ -203,7 +203,7 @@ describe( 'Renderer#html()', () => {
   test( 'should add `--wrap` modifier to a body element if the `wrap` option is `true`.', () => {
     const renderer  = new Renderer( [], info, null, { wrap: true } );
 
-    result[ 2 ] = `<div class="${ CLASSES.body } ${ CLASSES.body }--wrap">`;
+    result[ 2 ] = `<div class="${ BODY } ${ BODY }--wrap">`;
     expect( renderer.html( true ) ).toBe( result.join( '' ) );
   } );
 } );

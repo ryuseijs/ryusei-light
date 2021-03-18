@@ -1,7 +1,7 @@
 import { Language, Options, Token } from '../../types';
 import { Lexer } from '../Lexer/Lexer';
 import { Renderer } from '../Renderer/Renderer';
-import { CLASSES } from '../../constants/classes';
+import { ROOT } from '../../constants/classes';
 import { ATTRIBUTE_LANGUAGE } from '../../constants/attributes';
 import { attr, isHTMLElement, text, assert, isString, assign, addClass, toArray } from '../../utils';
 import { none } from '../../languages';
@@ -129,7 +129,7 @@ export class RyuseiLight {
         const isPre      = elm instanceof HTMLPreElement;
 
         if ( isPre ) {
-          addClass( elm, [ CLASSES.root, `${ CLASSES.root }--${ renderer.info.id }` ] );
+          addClass( elm, [ ROOT, `${ ROOT }--${ renderer.info.id }` ] );
         }
 
         elm.innerHTML = renderer.html( ! isPre );

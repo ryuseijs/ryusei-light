@@ -680,22 +680,14 @@ var EventBus = /*#__PURE__*/function () {
 
   return EventBus;
 }();
-/**
- * The collection of class names.
- *
- * @since 0.0.1
- */
 
-
-var CLASSES = {
-  root: PROJECT_CODE,
-  container: PROJECT_CODE_SHORT + "__container",
-  body: PROJECT_CODE_SHORT + "__body",
-  code: PROJECT_CODE_SHORT + "__code",
-  line: PROJECT_CODE_SHORT + "__line",
-  token: PROJECT_CODE_SHORT + "__token",
-  active: 'is-active'
-};
+var ROOT = PROJECT_CODE;
+var CONTAINER = PROJECT_CODE_SHORT + "__container";
+var BODY = PROJECT_CODE_SHORT + "__body";
+var CODE = PROJECT_CODE_SHORT + "__code";
+var LINE = PROJECT_CODE_SHORT + "__line";
+var TOKEN = PROJECT_CODE_SHORT + "__token";
+var ACTIVE = 'is-active';
 /**
  * Stores all Component functions.
  */
@@ -789,14 +781,14 @@ var Renderer = /*#__PURE__*/function () {
 
     for (var i = 0; i < this.lines.length; i++) {
       var tokens = this.lines[i];
-      var classes = [CLASSES.line];
+      var classes = [LINE];
       event.emit('line:open', append, classes, i);
       append("<div class=\"" + classes.join(' ') + "\">");
 
       if (tokens.length) {
         for (var j = 0; j < tokens.length; j++) {
           var token = tokens[j];
-          var _classes = [CLASSES.token + " " + PROJECT_CODE_SHORT + "__" + token[0]];
+          var _classes = [TOKEN + " " + PROJECT_CODE_SHORT + "__" + token[0]];
           event.emit('token', token, _classes);
           append("<" + tag + " class=\"" + _classes.join(' ') + "\">" + escapeHtml(token[1]) + "</" + tag + ">");
         }
@@ -826,18 +818,18 @@ var Renderer = /*#__PURE__*/function () {
     };
 
     if (pre) {
-      html += "<pre class=\"" + CLASSES.root + " " + CLASSES.root + "--" + this.info.id + "\">";
+      html += "<pre class=\"" + ROOT + " " + ROOT + "--" + this.info.id + "\">";
     }
 
-    var containerClasses = [CLASSES.container];
+    var containerClasses = [CONTAINER];
     event.emit('open', append, containerClasses);
     html += "<div class=\"" + containerClasses.join(' ') + "\">";
     event.emit('opened', append);
-    var bodyClasses = ["" + CLASSES.body + (this.options.wrap ? " " + CLASSES.body + "--wrap" : '')];
+    var bodyClasses = ["" + BODY + (this.options.wrap ? " " + BODY + "--wrap" : '')];
     event.emit('body:open', append, bodyClasses);
     html += "<div class=\"" + bodyClasses.join(' ') + "\">";
     event.emit('body:opened', append);
-    html += "<div class=\"" + CLASSES.code + "\">";
+    html += "<div class=\"" + CODE + "\">";
     this.renderLines(append);
     html += "</div>"; // code
 
@@ -1312,7 +1304,7 @@ var RyuseiLight = /*#__PURE__*/function () {
         var isPre = elm instanceof HTMLPreElement;
 
         if (isPre) {
-          addClass(elm, [CLASSES.root, CLASSES.root + "--" + renderer.info.id]);
+          addClass(elm, [ROOT, ROOT + "--" + renderer.info.id]);
         }
 
         elm.innerHTML = renderer.html(!isPre);
@@ -1430,7 +1422,7 @@ function normalize(lines) {
     var end = (+range[1] || 1) - 1;
 
     for (var i = start; i <= end; i++) {
-      numbers[i] = CLASSES.active;
+      numbers[i] = ACTIVE;
     }
   });
   return numbers;
@@ -1558,7 +1550,7 @@ function execCopy(code, onSuccess) {
 
 
 function toggleClass(button, duration) {
-  addClass(button, CLASSES.active);
+  addClass(button, ACTIVE);
   var prop = '_rlTimer';
 
   if (button[prop]) {
@@ -1566,7 +1558,7 @@ function toggleClass(button, duration) {
   }
 
   button[prop] = setTimeout(function () {
-    button.classList.remove(CLASSES.active);
+    button.classList.remove(ACTIVE);
   }, duration);
 }
 /**
@@ -1641,7 +1633,7 @@ function Gutter(_ref3) {
 
     function resize() {
       var gutter = query("." + GUTTER_CLASS_NAME, root);
-      var code = query("." + CLASSES.code, root);
+      var code = query("." + CODE, root);
 
       if (gutter && code) {
         for (var i = 0; i < code.children.length; i++) {
