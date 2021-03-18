@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 0.0.15
+ * Version  : 0.0.16
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
