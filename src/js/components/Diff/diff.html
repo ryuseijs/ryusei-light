@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Diff</title>
+  <link href="../../../../dist/css/themes/ryuseilight-ryusei.min.css" rel="stylesheet">
+</head>
+<body>
+  <h3>Convert Symbols to Spaces</h3>
+  <pre class="space">
++  console.log( 'Hello!' );
++  console.log( 'Hello!' );
++  console.log( 'Hello!' );
++  console.log( 'Hello!' );
+-  console.log( 'Hello!' );
+-  console.log( 'Hello!' );
+-  console.log( 'Hello!' );
+
++
++
+-
+-
+
+   console.log( 'Hello!' );
+   console.log( 'Hello!' );
+   console.log( 'Hello!' );
++  console.log( 'Hello!' );
++  console.log( 'Hello!' );
+-  console.log( 'Hello!' );
+-  console.log( 'Hello!' );
+-  console.log( 'Hello!' );
+   console.log( 'Hello!' );
+   console.log( 'Hello!' );
+   console.log( 'Hello!' );
+  </pre>
+
+  <h3>Remove Symbols</h3>
+  <pre class="remove">
++  console.log( 'Hello!' );
++  console.log( 'Hello!' );
++  console.log( 'Hello!' );
++  console.log( 'Hello!' );
+-  console.log( 'Hello!' );
+-  console.log( 'Hello!' );
+-  console.log( 'Hello!' );
+
++
++
+-
+-
+
+   console.log( 'Hello!' );
+   console.log( 'Hello!' );
+   console.log( 'Hello!' );
++  console.log( 'Hello!' );
++  console.log( 'Hello!' );
+-  console.log( 'Hello!' );
+-  console.log( 'Hello!' );
+-  console.log( 'Hello!' );
+   console.log( 'Hello!' );
+   console.log( 'Hello!' );
+   console.log( 'Hello!' );
+  </pre>
+
+  <h3>Remove Symbols</h3>
+  <pre class="arrows">
+   console.log( 'Hello!' );
+>  console.log( 'Hello!' );
+>  console.log( 'Hello!' );
+<  console.log( 'Hello!' );
+<  console.log( 'Hello!' );
+
+>
+<
+   console.log( 'Hello!' );
+   console.log( 'Hello!' );
+  </pre>
+
+  <script src="../../../../dist/js/ryuseilight.min.js"></script>
+  <script src="../../../../dist/js/components/gutter.min.js"></script>
+  <script src="../../../../dist/js/components/line-numbers.min.js"></script>
+  <script src="../../../../dist/js/components/diff.min.js"></script>
+  <script>
+    const ryuseilight = new RyuseiLight();
+    ryuseilight.apply( '.space', { language: 'js', lineNumbers: true, diff: true } );
+    ryuseilight.apply( '.remove', { language: 'js', lineNumbers: true, diff: { removeSymbols: true } } );
+
+    ryuseilight.apply( '.arrows', {
+      language   : 'js',
+      lineNumbers: true,
+      diff: {
+        addedSymbol  : '>',
+        deletedSymbol: '<',
+      },
+    } );
+  </script>
+</body>
+</html>

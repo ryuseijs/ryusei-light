@@ -169,13 +169,53 @@ export interface Options {
   languageName?: boolean | 'topLeft' | 'topRight';
 
   /**
-   * Options for a copy button.
+   * Options for the Copy component.
    */
   copy?: boolean | {
+    /**
+     * A position where to display the button.
+     */
     position?: 'topLeft' | 'topRight';
+
+    /**
+     * An HTML string for the button content.
+     */
     html?: string;
+
+    /**
+     * An HTML string for the button content displayed after the button is clicked.
+     */
     activeHtml?: string;
+
+    /**
+     * Duration in milliseconds for displaying the `activeHTML`.
+     */
     duration?: number;
+
+    /**
+     * The value for `aria-label` of the button.
+     */
     ariaLabel?: string;
-  }
+  };
+
+  /**
+   * Options for the Diff component.
+   */
+  diff?: boolean | {
+    /**
+     * Whether to remove `+/-` symbols or convert it to a space.
+     * By default, the mark will be a space.
+     */
+    removeSymbols?: boolean;
+
+    /**
+     * Determines a symbol for added lines. The default value is `+`.
+     */
+    addedSymbol?: string;
+
+    /**
+     * Determines a symbol for deleted (removed) lines. The default value is `-`.
+     */
+    deletedSymbol?: string;
+  };
 }

@@ -17,7 +17,11 @@
   $gutter-row-color: #4b5a80,
   $gutter-row-padding: 0 .5em,
   $gutter-row-background-active: #2a3247,
+  $gutter-row-background-added: #2a3757,
+  $gutter-row-background-deleted: #46303b,
   $gutter-row-color-active: #9faccc,
+  $gutter-row-color-added: #527adf,
+  $gutter-row-color-deleted: #df5952,
 
   $header-background: #333d57,
   $header-color: #9faccc,
@@ -27,7 +31,11 @@
   $line-side-padding-gutter: 1em,
   $line-border-left-width: 2px,
   $line-background-active: #2a3247,
+  $line-background-added: #252f46,
+  $line-background-deleted: #332b38,
   $line-border-left-color-active: #df5952,
+  $line-border-left-color-added: #344879,
+  $line-border-left-color-deleted: #5a353e,
 
   $name-background: #333d57,
   $name-border-radius: 0 0 4px 4px,

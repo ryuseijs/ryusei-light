@@ -48,8 +48,8 @@ function buildLanguage( dir, lang ) {
 }
 
 function buildComponents( done ) {
-  const dir      = './src/js/components';
-  const options  = minimist( process.argv.slice( 2 ) );
+  const dir           = './src/js/components';
+  const options       = minimist( process.argv.slice( 2 ) );
   const { component } = options;
 
   // Build a single component file if specified through a command line.

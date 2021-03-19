@@ -18,10 +18,12 @@ export class EventBus {
    *
    * @param event    - An event name.
    * @param callback - A callback function to register.
+   * @param priority - Optional. A priority number for the order in which the callbacks are invoked.
    */
-  on( event: string, callback: AnyFunction ): void {
+  on( event: string, callback: AnyFunction, priority = 10 ): void {
     const handlers = ( this.handlers[ event ] = this.handlers[ event ] || [] );
-    handlers.push( { callback } );
+    handlers.push( { callback, priority } );
+    handlers.sort( ( handler1, handler2 ) => handler1.priority - handler2.priority );
   }
 
   /**

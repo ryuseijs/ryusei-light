@@ -1,11 +1,15 @@
 .rl {
   &__gutter {
+    display: table;
     flex: 0 0 auto;
     user-select: none;
 
     &__row {
-      display: flex;
-      justify-content: flex-end;
+      display: table-row;
+
+      span {
+        display: table-cell;
+      }
     }
   }
 }

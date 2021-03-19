@@ -1,3 +1,4 @@
+import { LINE_BREAK } from '../../constants/characters';
 import { Renderer } from '../../core/Renderer/Renderer';
 import { PROJECT_CODE_SHORT } from '../../constants/project';
 import { attr } from '../../utils';
@@ -22,10 +23,20 @@ export function LineNumbers( { root, event, options }: Renderer ): void {
 
   if ( number || number === 0 ) {
     options.gutter = true;
-    const start = Math.floor( number ) - 1;
+    let offset = Math.floor( number ) - 1;
 
     event.on( 'gutter:row:opened', ( append, i ) => {
-      append( `<span class="${ PROJECT_CODE_SHORT }__line-number">${ i + 1 + start }</span>` );
+      const classes = [ `${ PROJECT_CODE_SHORT }__line-number` ];
+      const data    = { skip: false, content: i + 1 + offset };
+
+      event.emit( 'lineNumber:open', append, classes, i, data );
+
+      if ( data.skip ) {
+        data.content = LINE_BREAK;
+        offset--;
+      }
+
+      append( `<span class="${ classes.join( ' ' ) }">${ data.content }</span>` );
     } );
   }
 }

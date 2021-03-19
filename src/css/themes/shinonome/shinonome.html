@@ -269,6 +269,36 @@ export default class ThumbnailsExample extends React.Component {
 }
   </pre>
 
+  <h3>Diff</h3>
+  <pre>
+/**
+ * Converts +/- symbols to spaces or removes them.
+ *
+ * @param remove - Whether to remove symbols or not.
+ * @param tokens - Target tokens.
+ */
+function convertSymbols( remove: boolean, tokens: Token[] ): void {
+  const [ category, text ] = tokens[ 0 ];
+
++ if ( remove ) {
++   if ( text.length === 1 ) {
++     tokens.shift();
++   } else {
++     tokens[ 0 ] = [ category, text.slice( 1 ) ];
++   }
++ } else {
+-   const spaceToken: Token = [ CATEGORY_SPACE, ' ' ];
+-
+-   if ( text.length === 1 ) {
+-     tokens[ 0 ] = spaceToken;
+    } else {
+      tokens[ 0 ] = [ category, text.slice( 1 ) ];
+      tokens.unshift( spaceToken );
+    }
+  }
+}
+  </pre>
+
   <script src="../../../../dist/js/ryuseilight-complete.min.js"></script>
   <script>
     const ryuseilight = new RyuseiLight();
@@ -277,6 +307,7 @@ export default class ThumbnailsExample extends React.Component {
       lineNumbers: true,
       languageName: true,
       copy: true,
+      diff: true,
     } );
   </script>
 </body>

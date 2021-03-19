@@ -4,7 +4,12 @@ $gutter-background: #222a33 !default;
 $gutter-row-color: #4a5c6d !default;
 $gutter-row-padding: 0 .5em !default;
 $gutter-row-background-active: #2b3742 !default;
+$gutter-row-background-added: #21444d !default;
+$gutter-row-background-deleted: #4a3a43 !default;
 $gutter-row-color-active: #7a91a6 !default;
+$gutter-row-color-added: #2abac4 !default;
+$gutter-row-color-deleted: #f88792 !default;
+$gutter-cell-padding: 0 .5em !default;
 
 
 .rl {
@@ -16,11 +21,24 @@ $gutter-row-color-active: #7a91a6 !default;
 
     &__row {
       color: $gutter-row-color;
-      padding: $gutter-row-padding;
 
       &.is-active {
         background: $gutter-row-background-active;
         color: $gutter-row-color-active;
+      }
+
+      &.is-added {
+        background: $gutter-row-background-added;
+        color: $gutter-row-color-added;
+      }
+
+      &.is-deleted {
+        background: $gutter-row-background-deleted;
+        color: $gutter-row-color-deleted;
+      }
+
+      span {
+        padding: $gutter-cell-padding;
       }
     }
   }

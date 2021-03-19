@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 0.0.17
+ * Version  : 0.0.18
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -636,15 +636,24 @@ var EventBus = /*#__PURE__*/function () {
    *
    * @param event    - An event name.
    * @param callback - A callback function to register.
+   * @param priority - Optional. A priority number for the order in which the callbacks are invoked.
    */
 
 
   var _proto2 = EventBus.prototype;
 
-  _proto2.on = function on(event, callback) {
+  _proto2.on = function on(event, callback, priority) {
+    if (priority === void 0) {
+      priority = 10;
+    }
+
     var handlers = this.handlers[event] = this.handlers[event] || [];
     handlers.push({
-      callback: callback
+      callback: callback,
+      priority: priority
+    });
+    handlers.sort(function (handler1, handler2) {
+      return handler1.priority - handler2.priority;
     });
   }
   /**
@@ -1557,6 +1566,141 @@ function toggleClass(button, duration) {
   }, duration);
 }
 /**
+ * The class name for added lines.
+ *
+ * @since 0.0.17
+ */
+
+
+var CLASS_ADDED = 'is-added';
+/**
+ * The class name for deleted lines.
+ *
+ * @since 0.0.17
+ */
+
+var CLASS_DELETED = 'is-deleted';
+/**
+ * Default options for the Diff component.
+ *
+ * @since 0.0.17
+ */
+
+var DEFAULT_OPTIONS$1 = {
+  addedSymbol: '+',
+  deletedSymbol: '-'
+};
+/**
+ * The component for highlighting added/deleted lines.
+ *
+ * @since 0.0.17
+ */
+
+function Diff(_ref3) {
+  var event = _ref3.event,
+      lines = _ref3.lines,
+      options = _ref3.options;
+
+  if (!options.diff) {
+    return;
+  }
+
+  options.gutter = true;
+  var diffOptions = assign({}, DEFAULT_OPTIONS$1, isObject(options.diff) ? options.diff : null);
+  var added = [];
+  var deleted = [];
+  lines.forEach(function (tokens, index) {
+    if (tokens.length) {
+      var _text2 = tokens[0][1];
+      var processed;
+
+      if (startsWith(_text2, diffOptions.addedSymbol)) {
+        added.push(index);
+        processed = true;
+      } else if (startsWith(_text2, diffOptions.deletedSymbol)) {
+        deleted.push(index);
+        processed = true;
+      }
+
+      if (processed) {
+        convertSymbols(diffOptions.removeSymbols, tokens);
+      }
+    }
+  });
+
+  if (!added.length && !deleted.length) {
+    return;
+  }
+
+  event.on('line:open', function (append, classes, i) {
+    addClass$1(added, deleted, i, classes);
+  });
+  event.on('gutter:row:open', function (append, classes, i) {
+    addClass$1(added, deleted, i, classes);
+  });
+  event.on('gutter:row:opened', function (append, i) {
+    var content = LINE_BREAK;
+
+    if (added.indexOf(i) > -1) {
+      content = diffOptions.addedSymbol;
+    } else if (deleted.indexOf(i) > -1) {
+      content = diffOptions.deletedSymbol;
+    }
+
+    append("<span class=\"" + PROJECT_CODE_SHORT + "__diff\">" + content + "</span>");
+  }, 20);
+  event.on('lineNumber:open', function (append, classes, i, data) {
+    data.skip = deleted.indexOf(i) > -1;
+  });
+}
+/**
+ * Adds a status class according to the added or deleted lines.
+ *
+ * @param added   - An array with added line indices.
+ * @param deleted - An array with deleted line indices.
+ * @param index   - A line index.
+ * @param classes - An array with line classes.
+ */
+
+
+function addClass$1(added, deleted, index, classes) {
+  if (added.indexOf(index) > -1) {
+    classes.push(CLASS_ADDED);
+  } else if (deleted.indexOf(index) > -1) {
+    classes.push(CLASS_DELETED);
+  }
+}
+/**
+ * Converts +/- symbols to spaces or removes them.
+ *
+ * @param remove - Whether to remove symbols or not.
+ * @param tokens - Target tokens.
+ */
+
+
+function convertSymbols(remove, tokens) {
+  var _tokens$ = tokens[0],
+      category = _tokens$[0],
+      text = _tokens$[1];
+
+  if (remove) {
+    if (text.length === 1) {
+      tokens.shift();
+    } else {
+      tokens[0] = [category, text.slice(1)];
+    }
+  } else {
+    var spaceToken = [CATEGORY_SPACE, ' '];
+
+    if (text.length === 1) {
+      tokens[0] = spaceToken;
+    } else {
+      tokens[0] = [category, text.slice(1)];
+      tokens.unshift(spaceToken);
+    }
+  }
+}
+/**
  * The throttle duration in milliseconds for resizing gutter rows.
  *
  * @since 0.0.1
@@ -1585,11 +1729,11 @@ var GUTTER_ROW_CLASS_NAME = GUTTER_CLASS_NAME + "__row";
  * @since 0.0.1
  */
 
-function Gutter(_ref3) {
-  var lines = _ref3.lines,
-      event = _ref3.event,
-      root = _ref3.root,
-      options = _ref3.options;
+function Gutter(_ref4) {
+  var lines = _ref4.lines,
+      event = _ref4.event,
+      root = _ref4.root,
+      options = _ref4.options;
   // Wait for initialization of other components.
   event.on('mounted', function () {
     if (!options.gutter) {
@@ -1652,10 +1796,10 @@ function Gutter(_ref3) {
  */
 
 
-function LanguageName(_ref4) {
-  var event = _ref4.event,
-      info = _ref4.info,
-      options = _ref4.options;
+function LanguageName(_ref5) {
+  var event = _ref5.event,
+      info = _ref5.info,
+      options = _ref5.options;
   var name = info.name;
 
   if (options.languageName && name) {
@@ -1682,18 +1826,30 @@ var ATTRIBUTE_LINE_NUMBERS = "data-" + PROJECT_CODE_SHORT + "-line-numbers";
  * @since 0.0.1
  */
 
-function LineNumbers(_ref5) {
-  var root = _ref5.root,
-      event = _ref5.event,
-      options = _ref5.options;
+function LineNumbers(_ref6) {
+  var root = _ref6.root,
+      event = _ref6.event,
+      options = _ref6.options;
   var data = root ? attr(root, ATTRIBUTE_LINE_NUMBERS) : '';
   var number = data === '' ? +options.lineNumbers : +data;
 
   if (number || number === 0) {
     options.gutter = true;
-    var start = Math.floor(number) - 1;
+    var offset = Math.floor(number) - 1;
     event.on('gutter:row:opened', function (append, i) {
-      append("<span class=\"" + PROJECT_CODE_SHORT + "__line-number\">" + (i + 1 + start) + "</span>");
+      var classes = [PROJECT_CODE_SHORT + "__line-number"];
+      var data = {
+        skip: false,
+        content: i + 1 + offset
+      };
+      event.emit('lineNumber:open', append, classes, i, data);
+
+      if (data.skip) {
+        data.content = LINE_BREAK;
+        offset--;
+      }
+
+      append("<span class=\"" + classes.join(' ') + "\">" + data.content + "</span>"); // event.emit( 'lineNumber:opened', append, i );
     });
   }
 }
@@ -1704,9 +1860,9 @@ function LineNumbers(_ref5) {
  */
 
 
-function Overlay(_ref6) {
-  var event = _ref6.event,
-      options = _ref6.options;
+function Overlay(_ref7) {
+  var event = _ref7.event,
+      options = _ref7.options;
   event.on('mounted', function () {
     var className = PROJECT_CODE_SHORT + "__overlay";
     var _options$overlay = options.overlay,
@@ -1756,10 +1912,10 @@ var ATTRIBUTE_TITLE = "data-" + PROJECT_CODE_SHORT + "-title";
  * @since 0.0.1
  */
 
-function Title(_ref7) {
-  var event = _ref7.event,
-      root = _ref7.root,
-      options = _ref7.options;
+function Title(_ref8) {
+  var event = _ref8.event,
+      root = _ref8.root,
+      options = _ref8.options;
   var title = root && attr(root, ATTRIBUTE_TITLE) || options.title;
 
   if (title) {
@@ -1775,6 +1931,7 @@ var index$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
   ActiveLines: ActiveLines,
   Copy: Copy,
+  Diff: Diff,
   Gutter: Gutter,
   LanguageName: LanguageName,
   LineNumbers: LineNumbers,
@@ -1782,4 +1939,4 @@ var index$1 = /*#__PURE__*/Object.freeze({
   Title: Title
 });
 export default RyuseiLight;
-export { ActiveLines, Copy, Gutter, LanguageName, LineNumbers, Overlay, RyuseiLight, Title, index$1 as components, css, html, javascript, json, jsx, index as languages, none, scss, svg, tsx, typescript, vue, xml };
+export { ActiveLines, Copy, Diff, Gutter, LanguageName, LineNumbers, Overlay, RyuseiLight, Title, index$1 as components, css, html, javascript, json, jsx, index as languages, none, scss, svg, tsx, typescript, vue, xml };
