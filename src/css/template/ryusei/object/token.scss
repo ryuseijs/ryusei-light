@@ -1,7 +1,7 @@
 $token-keyword: #5fbef5 !default;
 $token-constant: #f88792 !default;
 $token-symbol: #f88792 !default;
-$token-comment: #7a91a6 !default;
+$token-comment: #7b92a8 !default;
 $token-tag: #5fbef5 !default;
 $token-selector: #2abac4 !default;
 $token-atrule: #f88792 !default;
@@ -10,18 +10,18 @@ $token-prop: #5291e5 !default;
 $token-value: #c5d559 !default;
 $token-variable: #5291e5 !default;
 $token-entity: #9a68f5 !default;
-$token-cdata: #7a91a6 !default;
-$token-prolog: #7a91a6 !default;
+$token-cdata: #7b92a8 !default;
+$token-prolog: #7b92a8 !default;
 $token-string: #c5d559 !default;
 $token-number: #f88792 !default;
 $token-boolean: #f88792 !default;
 $token-function: #2abac4 !default;
-$token-class: #29b477 !default;
+$token-class: #2bbd8f !default;
 $token-decorator: #5d639e !default;
 $token-regexp: #c5d559 !default;
 $token-operator: #5291e5 !default;
-$token-bracket: #7a91a6 !default;
-$token-delimiter: #7a91a6 !default;
+$token-bracket: #7b92a8 !default;
+$token-delimiter: #7b92a8 !default;
 
 .rl {
   &__keyword {
