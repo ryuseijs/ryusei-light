@@ -1474,7 +1474,7 @@ function Caption(_ref2) {
     });
     event.on('closed', function (append) {
       if (bottom) {
-        appendCaption(append, caption);
+        appendCaption(append, caption, true);
       }
 
       append('</figure>');

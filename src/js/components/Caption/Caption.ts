@@ -39,7 +39,7 @@ export function Caption( { event, root, options }: Renderer ) {
 
     event.on( 'closed', append => {
       if ( bottom ) {
-        appendCaption( append, caption );
+        appendCaption( append, caption, true );
       }
 
       append( '</figure>' );
