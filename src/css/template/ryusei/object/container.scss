@@ -1,4 +1,9 @@
+$background: #1f272f !default;
+$color: #bdd7f0 !default;
+
 .rl {
   &__container {
+    background: $background;
+    color: $color;
   }
 }

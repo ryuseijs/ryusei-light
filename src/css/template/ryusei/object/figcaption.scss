@@ -1,0 +1,12 @@
+$figcaption-background: #303f4d !default;
+$figcaption-color: #93aec7 !default;
+$figcaption-padding: .5em 1.5em !default;
+
+.rl {
+  &__figcaption {
+    background: $figcaption-background;
+    box-sizing: border-box;
+    color: $figcaption-color;
+    padding: $figcaption-padding;
+  }
+}

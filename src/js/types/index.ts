@@ -139,9 +139,19 @@ export interface Options {
   gutter?: boolean;
 
   /**
-   * A title of the code snippet.
+   * A caption of the code snippet.
    */
-  title?: string;
+  caption?: string | {
+    /**
+     * Determines the position of the caption.
+     */
+    position?: 'top' | 'bottom';
+
+    /**
+     * An HTML string appended to the span element in the figcaption.
+     */
+    html: string;
+  };
 
   /**
    * Determines whether to render an overlay element or not.

@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 0.0.21
+ * Version  : 0.0.22
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -1437,6 +1437,71 @@ function normalize(lines) {
   return numbers;
 }
 /**
+ * The data attribute name for a caption.
+ *
+ * @since 0.0.22
+ */
+
+
+var ATTRIBUTE_CAPTION = "data-" + PROJECT_CODE_SHORT + "-caption";
+/**
+ * The component for wrapping a code snipped by a figure tag and appending a figcaption.
+ *
+ * @since 0.0.22
+ */
+
+function Caption(_ref2) {
+  var event = _ref2.event,
+      root = _ref2.root,
+      options = _ref2.options;
+  var attrCaption = root && attr(root, ATTRIBUTE_CAPTION);
+
+  if (!attrCaption && !options.caption) {
+    return;
+  }
+
+  var captionOptions = options.caption;
+
+  var _assign = assign({}, isObject(captionOptions) ? captionOptions : null),
+      position = _assign.position,
+      html = _assign.html;
+
+  var caption = attrCaption || html || (isString(captionOptions) ? captionOptions : '');
+
+  if (caption) {
+    var bottom = position === 'bottom';
+    event.on('open', function (append) {
+      append("<figure class=\"" + PROJECT_CODE_SHORT + "__figure\">");
+
+      if (!bottom) {
+        appendCaption(append, caption);
+      }
+    });
+    event.on('closed', function (append) {
+      if (bottom) {
+        appendCaption(append, caption);
+      }
+
+      append('</figure>');
+    });
+  }
+}
+/**
+ * Append a figcaption element with a provided caption.
+ *
+ * @param append  - The append function.
+ * @param caption - A caption.
+ * @param bottom  - Optional. Set `true` for a bottom caption.
+ */
+
+
+function appendCaption(append, caption, bottom) {
+  var className = PROJECT_CODE_SHORT + "__figcaption";
+  append("<figcaption class=\"" + className + " " + (className + (bottom ? '--bottom' : '--top')) + "\">");
+  append("<span>" + caption + "</span>");
+  append("</figcaption>");
+}
+/**
  * Default options for the Copy component.
  *
  * @since 0.0.1
@@ -1455,10 +1520,10 @@ var DEFAULT_OPTIONS = {
  * @since 0.0.1
  */
 
-function Copy(_ref2) {
-  var lines = _ref2.lines,
-      event = _ref2.event,
-      options = _ref2.options;
+function Copy(_ref3) {
+  var lines = _ref3.lines,
+      event = _ref3.event,
+      options = _ref3.options;
 
   if (options.copy) {
     var copyOptions = assign({}, DEFAULT_OPTIONS, isObject(options.copy) ? options.copy : {});
@@ -1601,10 +1666,10 @@ var DEFAULT_OPTIONS$1 = {
  * @since 0.0.17
  */
 
-function Diff(_ref3) {
-  var event = _ref3.event,
-      lines = _ref3.lines,
-      options = _ref3.options;
+function Diff(_ref4) {
+  var event = _ref4.event,
+      lines = _ref4.lines,
+      options = _ref4.options;
 
   if (!options.diff) {
     return;
@@ -1734,11 +1799,11 @@ var GUTTER_ROW_CLASS_NAME = GUTTER_CLASS_NAME + "__row";
  * @since 0.0.1
  */
 
-function Gutter(_ref4) {
-  var lines = _ref4.lines,
-      event = _ref4.event,
-      root = _ref4.root,
-      options = _ref4.options;
+function Gutter(_ref5) {
+  var lines = _ref5.lines,
+      event = _ref5.event,
+      root = _ref5.root,
+      options = _ref5.options;
   // Wait for initialization of other components.
   event.on('mounted', function () {
     if (!options.gutter) {
@@ -1801,10 +1866,10 @@ function Gutter(_ref4) {
  */
 
 
-function LanguageName(_ref5) {
-  var event = _ref5.event,
-      info = _ref5.info,
-      options = _ref5.options;
+function LanguageName(_ref6) {
+  var event = _ref6.event,
+      info = _ref6.info,
+      options = _ref6.options;
   var name = info.name;
 
   if (options.languageName && name) {
@@ -1831,10 +1896,10 @@ var ATTRIBUTE_LINE_NUMBERS = "data-" + PROJECT_CODE_SHORT + "-line-numbers";
  * @since 0.0.1
  */
 
-function LineNumbers(_ref6) {
-  var root = _ref6.root,
-      event = _ref6.event,
-      options = _ref6.options;
+function LineNumbers(_ref7) {
+  var root = _ref7.root,
+      event = _ref7.event,
+      options = _ref7.options;
   var data = root ? attr(root, ATTRIBUTE_LINE_NUMBERS) : '';
   var number = data === '' ? +options.lineNumbers : +data;
 
@@ -1865,9 +1930,9 @@ function LineNumbers(_ref6) {
  */
 
 
-function Overlay(_ref7) {
-  var event = _ref7.event,
-      options = _ref7.options;
+function Overlay(_ref8) {
+  var event = _ref8.event,
+      options = _ref8.options;
   event.on('mounted', function () {
     var className = PROJECT_CODE_SHORT + "__overlay";
     var _options$overlay = options.overlay,
@@ -1903,47 +1968,20 @@ function Overlay(_ref7) {
     }
   });
 }
-/**
- * The data attribute name for a title.
- *
- * @since 0.0.1
- */
-
-
-var ATTRIBUTE_TITLE = "data-" + PROJECT_CODE_SHORT + "-title";
-/**
- * The component for rendering a title in a header.
- *
- * @since 0.0.1
- */
-
-function Title(_ref8) {
-  var event = _ref8.event,
-      root = _ref8.root,
-      options = _ref8.options;
-  var title = root && attr(root, ATTRIBUTE_TITLE) || options.title;
-
-  if (title) {
-    event.on('open', function (append) {
-      append("<div class=\"" + PROJECT_CODE_SHORT + "__header\">");
-      append("<span class=\"" + PROJECT_CODE_SHORT + "__title\">" + title + "</span>");
-      append("</div>");
-    });
-  }
-}
 
 var index$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
   ActiveLines: ActiveLines,
+  Caption: Caption,
   Copy: Copy,
   Diff: Diff,
   Gutter: Gutter,
   LanguageName: LanguageName,
   LineNumbers: LineNumbers,
-  Overlay: Overlay,
-  Title: Title
+  Overlay: Overlay
 });
 exports.ActiveLines = ActiveLines;
+exports.Caption = Caption;
 exports.Copy = Copy;
 exports.Diff = Diff;
 exports.Gutter = Gutter;
@@ -1951,7 +1989,6 @@ exports.LanguageName = LanguageName;
 exports.LineNumbers = LineNumbers;
 exports.Overlay = Overlay;
 exports.RyuseiLight = RyuseiLight;
-exports.Title = Title;
 exports.components = index$1;
 exports.css = css;
 exports["default"] = RyuseiLight;
