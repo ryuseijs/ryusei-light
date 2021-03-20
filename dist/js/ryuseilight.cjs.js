@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 0.0.18
+ * Version  : 0.0.19
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -1854,7 +1854,7 @@ function LineNumbers(_ref6) {
         offset--;
       }
 
-      append("<span class=\"" + classes.join(' ') + "\">" + data.content + "</span>"); // event.emit( 'lineNumber:opened', append, i );
+      append("<span class=\"" + classes.join(' ') + "\">" + data.content + "</span>");
     });
   }
 }
