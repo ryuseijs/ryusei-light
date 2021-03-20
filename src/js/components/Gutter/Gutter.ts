@@ -16,14 +16,14 @@ const THROTTLE_DURATION = 100;
  *
  * @since 0.0.1
  */
-const GUTTER_CLASS_NAME = `${ PROJECT_CODE_SHORT }__gutter`;
+export const GUTTER_CLASS_NAME = `${ PROJECT_CODE_SHORT }__gutter`;
 
 /**
  * The class name for row element in a gutter.
  *
  * @since 0.0.1
  */
-const GUTTER_ROW_CLASS_NAME = `${ GUTTER_CLASS_NAME }__row`;
+export const GUTTER_ROW_CLASS_NAME = `${ GUTTER_CLASS_NAME }__row`;
 
 /**
  * The component for creating a gutter and its rows.

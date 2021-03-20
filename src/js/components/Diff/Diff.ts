@@ -9,16 +9,26 @@ import { assign, isObject, startsWith } from '../../utils';
 /**
  * The class name for added lines.
  *
+ * @private
  * @since 0.0.17
  */
-const CLASS_ADDED = 'is-added';
+export const CLASS_ADDED = 'is-added';
 
 /**
  * The class name for deleted lines.
  *
+ * @private
  * @since 0.0.17
  */
-const CLASS_DELETED = 'is-deleted';
+export const CLASS_DELETED = 'is-deleted';
+
+/**
+ * The class name for deleted lines.
+ *
+ * @private
+ * @since 0.0.17
+ */
+export const CLASS_DIFF = `${ PROJECT_CODE_SHORT }__diff`;
 
 /**
  * Default options for the Diff component.
@@ -87,7 +97,7 @@ export function Diff( { event, lines, options }: Renderer ): void {
       content = diffOptions.deletedSymbol;
     }
 
-    append( `<span class="${ PROJECT_CODE_SHORT }__diff">${ content }</span>` );
+    append( `<span class="${ CLASS_DIFF }">${ content }</span>` );
   }, 20 );
 
   event.on( 'lineNumber:open', ( append, classes, i, data ) => {

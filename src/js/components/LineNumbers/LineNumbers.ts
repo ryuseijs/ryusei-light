@@ -8,9 +8,18 @@ import { attr } from '../../utils';
  * The data attribute name for line numbers.
  * This accepts boolean or number as a value.
  *
+ * @private
  * @since 0.0.1
  */
-const ATTRIBUTE_LINE_NUMBERS = `data-${ PROJECT_CODE_SHORT }-line-numbers`;
+export const ATTRIBUTE_LINE_NUMBERS = `data-${ PROJECT_CODE_SHORT }-line-numbers`;
+
+/**
+ * The class name for each line number element.
+ *
+ * @private
+ * @since 0.0.23
+ */
+export const LINE_NUMBER_CLASS_NAME = `${ PROJECT_CODE_SHORT }__line-number`;
 
 /**
  * The component for displaying line numbers in a gutter.
@@ -26,7 +35,7 @@ export function LineNumbers( { root, event, options }: Renderer ): void {
     let offset = Math.floor( number ) - 1;
 
     event.on( 'gutter:row:opened', ( append, i ) => {
-      const classes = [ `${ PROJECT_CODE_SHORT }__line-number` ];
+      const classes = [ LINE_NUMBER_CLASS_NAME ];
       const data    = { skip: false, content: i + 1 + offset };
 
       event.emit( 'lineNumber:open', append, classes, i, data );

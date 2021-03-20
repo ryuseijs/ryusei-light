@@ -23,7 +23,7 @@ export function Overlay( { event, options }: Renderer ) {
           appendTools( event, index === 1 );
         }
 
-        appendOverlay( event, index === 1 )
+        appendOverlay( event, index === 1 );
       }
     } );
 
