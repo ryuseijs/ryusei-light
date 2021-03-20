@@ -8,7 +8,7 @@ import { assign, attr, isObject, isString } from '../../utils';
  *
  * @since 0.0.22
  */
-const ATTRIBUTE_CAPTION = `data-${ PROJECT_CODE_SHORT }-caption`;
+export const ATTRIBUTE_CAPTION = `data-${ PROJECT_CODE_SHORT }-caption`;
 
 /**
  * The component for wrapping a code snipped by a figure tag and appending a figcaption.
@@ -48,7 +48,7 @@ export function Caption( { event, root, options }: Renderer ) {
 }
 
 /**
- * Append a figcaption element with a provided caption.
+ * Appends a figcaption element with a provided caption.
  *
  * @param append  - The append function.
  * @param caption - A caption.

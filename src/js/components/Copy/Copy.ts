@@ -8,13 +8,16 @@ import { addClass, append, assign, create, isObject, query, styles } from '../..
 /**
  * Default options for the Copy component.
  *
+ * @private
+ *
  * @since 0.0.1
  */
-const DEFAULT_OPTIONS = {
+export const DEFAULT_OPTIONS = {
   html      : 'Copy',
   activeHtml: 'Done',
   duration  : 1000,
   ariaLabel : 'Copy code to clipboard',
+  position  : 'topRight',
 };
 
 /**
@@ -28,10 +31,10 @@ export function Copy( { lines, event, options }: Renderer ): void {
     const buttonClass = `${ PROJECT_CODE_SHORT }__copy`;
     const labelClass  = `${ PROJECT_CODE_SHORT }__button__label`;
 
-    options.tools = true;
+    options.tools = copyOptions.position;
 
-    event.on( `overlay:tools`, append => {
-      append( `<button type="button" class="rl__button ${ buttonClass }" aria-label="Copy code to clipboard">` );
+    event.on( `tools:${ copyOptions.position }`, append => {
+      append( `<button type="button" class="rl__button ${ buttonClass }" aria-label="${ copyOptions.ariaLabel }">` );
       append( `<span class="${ labelClass } ${ labelClass }--inactive">${ copyOptions.html }</span>` );
       append( `<span class="${ labelClass } ${ labelClass }--active">${ copyOptions.activeHtml }</span>` );
       append( `</button>` );
