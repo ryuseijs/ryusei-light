@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 0.0.22
+ * Version  : 0.0.23
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -1361,6 +1361,7 @@ RyuseiLight.compose = Renderer.compose;
  * The data attribute name for active lines.
  * The value must be an array in JSON format, such as "[ 2, [ 5, 10 ] ]"
  *
+ * @private
  * @since 0.0.1
  */
 
@@ -1487,7 +1488,7 @@ function Caption(_ref2) {
   }
 }
 /**
- * Append a figcaption element with a provided caption.
+ * Appends a figcaption element with a provided caption.
  *
  * @param append  - The append function.
  * @param caption - A caption.
@@ -1504,6 +1505,8 @@ function appendCaption(append, caption, bottom) {
 /**
  * Default options for the Copy component.
  *
+ * @private
+ *
  * @since 0.0.1
  */
 
@@ -1512,7 +1515,8 @@ var DEFAULT_OPTIONS = {
   html: 'Copy',
   activeHtml: 'Done',
   duration: 1000,
-  ariaLabel: 'Copy code to clipboard'
+  ariaLabel: 'Copy code to clipboard',
+  position: 'topRight'
 };
 /**
  * The component for creating a copy button and handling click.
@@ -1529,9 +1533,9 @@ function Copy(_ref3) {
     var copyOptions = assign({}, DEFAULT_OPTIONS, isObject(options.copy) ? options.copy : {});
     var buttonClass = PROJECT_CODE_SHORT + "__copy";
     var labelClass = PROJECT_CODE_SHORT + "__button__label";
-    options.tools = true;
-    event.on("overlay:tools", function (append) {
-      append("<button type=\"button\" class=\"rl__button " + buttonClass + "\" aria-label=\"Copy code to clipboard\">");
+    options.tools = copyOptions.position;
+    event.on("tools:" + copyOptions.position, function (append) {
+      append("<button type=\"button\" class=\"rl__button " + buttonClass + "\" aria-label=\"" + copyOptions.ariaLabel + "\">");
       append("<span class=\"" + labelClass + " " + labelClass + "--inactive\">" + copyOptions.html + "</span>");
       append("<span class=\"" + labelClass + " " + labelClass + "--active\">" + copyOptions.activeHtml + "</span>");
       append("</button>");
@@ -1638,6 +1642,7 @@ function toggleClass(button, duration) {
 /**
  * The class name for added lines.
  *
+ * @private
  * @since 0.0.17
  */
 
@@ -1646,10 +1651,19 @@ var CLASS_ADDED = 'is-added';
 /**
  * The class name for deleted lines.
  *
+ * @private
  * @since 0.0.17
  */
 
 var CLASS_DELETED = 'is-deleted';
+/**
+ * The class name for deleted lines.
+ *
+ * @private
+ * @since 0.0.17
+ */
+
+var CLASS_DIFF = PROJECT_CODE_SHORT + "__diff";
 /**
  * Default options for the Diff component.
  *
@@ -1717,7 +1731,7 @@ function Diff(_ref4) {
       content = diffOptions.deletedSymbol;
     }
 
-    append("<span class=\"" + PROJECT_CODE_SHORT + "__diff\">" + content + "</span>");
+    append("<span class=\"" + CLASS_DIFF + "\">" + content + "</span>");
   }, 20);
   event.on('lineNumber:open', function (append, classes, i, data) {
     data.skip = deleted.indexOf(i) > -1;
@@ -1885,11 +1899,20 @@ function LanguageName(_ref6) {
  * The data attribute name for line numbers.
  * This accepts boolean or number as a value.
  *
+ * @private
  * @since 0.0.1
  */
 
 
 var ATTRIBUTE_LINE_NUMBERS = "data-" + PROJECT_CODE_SHORT + "-line-numbers";
+/**
+ * The class name for each line number element.
+ *
+ * @private
+ * @since 0.0.23
+ */
+
+var LINE_NUMBER_CLASS_NAME = PROJECT_CODE_SHORT + "__line-number";
 /**
  * The component for displaying line numbers in a gutter.
  *
@@ -1907,7 +1930,7 @@ function LineNumbers(_ref7) {
     options.gutter = true;
     var offset = Math.floor(number) - 1;
     event.on('gutter:row:opened', function (append, i) {
-      var classes = [PROJECT_CODE_SHORT + "__line-number"];
+      var classes = [LINE_NUMBER_CLASS_NAME];
       var data = {
         skip: false,
         content: i + 1 + offset
@@ -1924,7 +1947,7 @@ function LineNumbers(_ref7) {
   }
 }
 /**
- * The component for rendering overlay elements.
+ * The component for rendering overlay and tools elements.
  *
  * @since 0.0.1
  */
@@ -1934,38 +1957,64 @@ function Overlay(_ref8) {
   var event = _ref8.event,
       options = _ref8.options;
   event.on('mounted', function () {
-    var className = PROJECT_CODE_SHORT + "__overlay";
     var _options$overlay = options.overlay,
         overlay = _options$overlay === void 0 ? {} : _options$overlay;
-
-    if (overlay.topRight || options.tools) {
-      event.on('close', function (append) {
-        append("<div class=\"" + className + " " + className + "--top-right\">");
-        event.emit('overlay:topRight', append);
-
-        if (options.tools) {
-          append("<span class=\"" + PROJECT_CODE_SHORT + "__tools\">");
-          event.emit('overlay:tools', append);
-          append("</span>");
+    var tools = options.tools;
+    var topRight = overlay.topRight,
+        topLeft = overlay.topLeft;
+    topRight = topRight || tools === 'topRight';
+    topLeft = topLeft || tools === 'topLeft';
+    [topRight, topLeft].forEach(function (active, index) {
+      if (active) {
+        if (tools) {
+          appendTools(event, index === 1);
         }
 
-        append("</div>");
-      });
-    }
+        appendOverlay(event, index === 1);
+      }
+    });
 
-    if (overlay.topLeft) {
-      event.on('close', function (append) {
-        append("<div class=\"" + className + " " + className + "--top-left\">");
-        event.emit('overlay:topLeft', append);
-        append("</div>");
-      });
-    }
-
-    if (overlay.topRight || overlay.topLeft) {
+    if (topRight || topLeft) {
       event.on('open', function (append, classes) {
         classes.push('has-top-overlay');
       });
     }
+  });
+}
+/**
+ * Appends HTML for the overlay.
+ *
+ * @private
+ *
+ * @param event - The EventBus object.
+ * @param left  - Optional. Set `true` for the left overlay.
+ */
+
+
+function appendOverlay(event, left) {
+  var className = PROJECT_CODE_SHORT + "__overlay";
+  event.on('close', function (append) {
+    append("<div class=\"" + className + " " + className + "--top-" + (left ? 'left' : 'right') + "\">");
+    event.emit("overlay:top" + (left ? 'Left' : 'Right'), append);
+    append("</div>");
+  });
+}
+/**
+ * Appends HTML for tools.
+ *
+ * @private
+ *
+ * @param event - The EventBus object.
+ * @param left  - Optional. Set `true` for the left tools.
+ */
+
+
+function appendTools(event, left) {
+  var position = left ? 'Left' : 'Right';
+  event.on("overlay:top" + position, function (append) {
+    append("<span class=\"" + PROJECT_CODE_SHORT + "__tools\">");
+    event.emit("tools:top" + position, append);
+    append("</span>");
   });
 }
 
