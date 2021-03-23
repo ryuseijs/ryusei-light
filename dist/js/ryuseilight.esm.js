@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 0.0.23
+ * Version  : 0.0.24
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -1795,6 +1795,13 @@ var THROTTLE_DURATION = 100;
 
 var GUTTER_CLASS_NAME = PROJECT_CODE_SHORT + "__gutter";
 /**
+ * The class name for a gutter element.
+ *
+ * @since 0.0.1
+ */
+
+var GUTTER_BODY_CLASS_NAME = GUTTER_CLASS_NAME + "__body";
+/**
  * The class name for row element in a gutter.
  *
  * @since 0.0.1
@@ -1824,6 +1831,7 @@ function Gutter(_ref5) {
     });
     event.on('body:opened', function (append) {
       append("<div class=\"" + GUTTER_CLASS_NAME + "\" aria-hidden=\"true\">");
+      append("<div class=\"" + GUTTER_BODY_CLASS_NAME + "\">");
 
       for (var i = 0; i < lines.length; i++) {
         var classes = [GUTTER_ROW_CLASS_NAME];
@@ -1833,6 +1841,7 @@ function Gutter(_ref5) {
         append("</div>");
       }
 
+      append("</div>");
       append("</div>");
     });
 

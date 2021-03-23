@@ -19,6 +19,13 @@ const THROTTLE_DURATION = 100;
 export const GUTTER_CLASS_NAME = `${ PROJECT_CODE_SHORT }__gutter`;
 
 /**
+ * The class name for a gutter element.
+ *
+ * @since 0.0.1
+ */
+export const GUTTER_BODY_CLASS_NAME = `${ GUTTER_CLASS_NAME }__body`;
+
+/**
  * The class name for row element in a gutter.
  *
  * @since 0.0.1
@@ -44,6 +51,7 @@ export function Gutter( { lines, event, root, options }: Renderer ): void {
 
     event.on( 'body:opened', append => {
       append( `<div class="${ GUTTER_CLASS_NAME }" aria-hidden="true">` );
+      append( `<div class="${ GUTTER_BODY_CLASS_NAME }">` );
 
       for ( let i = 0; i < lines.length; i++ ) {
         const classes = [ GUTTER_ROW_CLASS_NAME ];
@@ -54,6 +62,7 @@ export function Gutter( { lines, event, root, options }: Renderer ): void {
         append( `</div>` );
       }
 
+      append( `</div>` );
       append( `</div>` );
     } );
 
@@ -72,12 +81,12 @@ export function Gutter( { lines, event, root, options }: Renderer ): void {
      * Resizes rows according to line height.
      */
     function resize() {
-      const gutter = query( `.${ GUTTER_CLASS_NAME }`, root );
-      const code   = query( `.${ CODE }`, root );
+      const rows = root.getElementsByClassName( GUTTER_ROW_CLASS_NAME );
+      const code = query( `.${ CODE }`, root );
 
-      if ( gutter && code ) {
+      if ( rows.length && code ) {
         for ( let i = 0; i < code.children.length; i++ ) {
-          const row  = gutter.children[ i ];
+          const row  = rows[ i ];
           const line = code.children[ i ];
 
           if ( isHTMLElement( row ) && row.clientHeight !== line.clientHeight ) {

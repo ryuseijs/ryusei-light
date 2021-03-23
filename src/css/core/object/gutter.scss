@@ -1,8 +1,11 @@
 .rl {
   &__gutter {
-    display: table;
     flex: 0 0 auto;
     user-select: none;
+
+    &__body {
+      display: table;
+    }
 
     &__row {
       display: table-row;
