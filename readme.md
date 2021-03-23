@@ -33,7 +33,7 @@ RyuseiLight is a beautiful, lightweight and extensible syntax highlighter, writt
 ## Features
 
 - Only 10kB (4kB gzipped), including JavaScript, HTML, CSS and XML
-- [11 languages](https://light.ryuseijs.com/languages/) are supported
+- [11 languages](https://light.ryuseijs.com/guides/languages/) are supported
 - Beautiful themes, easy to customize by SASS (SCSS)
 - Completely modular for minimal bundle size
 - Easy to add new languages and components
