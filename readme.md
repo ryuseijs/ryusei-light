@@ -6,7 +6,7 @@
 <h1>RyuseiLight</h1>
 
 <p>
-RyuseiLight is a beautiful, lightweight and extensible syntax highlighter.
+RyuseiLight is a beautiful, lightweight and extensible syntax highlighter, written in TypeScript.
 </p>
 
 <p>
@@ -47,4 +47,4 @@ RyuseiLight is a beautiful, lightweight and extensible syntax highlighter.
 
 ## License
 
-RyuseiLight is released under MIT license.
+RyuseiLight is released under MIT license. © 2020 Naotoshi Fujita
