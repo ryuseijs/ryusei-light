@@ -1,5 +1,5 @@
 import { RyuseiLight } from '../../../core/RyuseiLight/RyuseiLight';
-import { Gutter, GUTTER_CLASS_NAME, GUTTER_BODY_CLASS_NAME } from '../Gutter';
+import { Gutter, GUTTER_CLASS_NAME } from '../Gutter';
 
 
 describe( 'Gutter', () => {
@@ -26,8 +26,6 @@ describe( 'Gutter', () => {
     ryuseilight.apply( 'pre' );
 
     const gutter = document.querySelector( `.${ GUTTER_CLASS_NAME }` );
-    const body   = document.querySelector( `.${ GUTTER_BODY_CLASS_NAME }` );
-    expect( gutter.firstElementChild ).toBe( body );
-    expect( body.children.length ).toBe( 3 );
+    expect( gutter.children.length ).toBe( 3 );
   } );
 } );
