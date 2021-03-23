@@ -1,6 +1,6 @@
 <div align="center">
 <a href="https://light.ryuseijs.com">
-  <img alt="RyuseiLight" src="images/logo.svg" width="70">
+  <img alt="RyuseiLight" src="https://light.ryuseijs.com/images/svg/logo.svg" width="70">
 </a>
 
 <h1>RyuseiLight</h1>
@@ -11,7 +11,7 @@ RyuseiLight is a beautiful, lightweight and extensible syntax highlighter, writt
 
 <p>
   <a href="https://light.ryuseijs.com">
-    <img src="images/code.png" alt="Visual Sample" style="max-width: 100%;" width="600">
+    <img src="https://light.ryuseijs.com/images/readme/sample.png" alt="Visual Sample" style="max-width: 100%;" width="600">
   </a>
 </p>
 
