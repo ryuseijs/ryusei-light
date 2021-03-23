@@ -1,10 +1,25 @@
 {
   "name": "@ryusei/light",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Naotoshi Fujita",
   "license": "MIT",
   "main": "dist/js/ryuseilight.cjs.js",
   "module": "dist/js/ryuseilight.esm.js",
+  "keywords": [
+    "ryusei",
+    "ryuseijs",
+    "highlight",
+    "syntax highlighter",
+    "lightweight",
+    "modular"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryuseijs/ryusei-light"
+  },
+  "bugs": {
+    "url": "https://github.com/ryuseijs/ryusei-light/issues"
+  },
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
