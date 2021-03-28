@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 1.0.3
+ * Version  : 1.0.4
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -917,7 +917,7 @@ var REGEXP_BRACKET = /[[\]{}()]/;
 var REGEXP_SPACE = /[ \t]+/;
 var REGEXP_QUOTE = /'(?:\\'|.)*?'/;
 var REGEXP_DOUBLE_QUOTE = /"(?:\\"|.)*?"/;
-var REGEXP_MULTILINE_COMMENT = /\/\*[\s\S]*?\*\//;
+var REGEXP_MULTILINE_COMMENT = /\/\*[\s\S]*?(\*\/|$)/;
 var REGEXP_SLASH_COMMENT = /\/\/.*/;
 var REGEXP_GENERAL_KEYWORDS = /\b(?:break|catch|class|continue|do|else|extends|finally|for|function|if|implements|in|instanceof|interface|new|null|return|throw|try|while)\b/;
 /**

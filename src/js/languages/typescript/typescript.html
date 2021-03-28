@@ -8,55 +8,76 @@
 <body>
   <h3>Practical Example</h3>
   <pre class="ryuseilight">
-/**
- * The interface for elements.
- */
-export interface Elements {
-  /**
-   * A root element.
-   */
-  root: HTMLElement;
 
-  /**
-   * A container element that contains code.
-   */
-  code: HTMLElement;
-}
+import { LINE_BREAK } from &#039;../../constants/characters&#039;;
+import { Options, LanguageInfo, Token, Component } from &#039;../../types&#039;;
+import { EventBus } from &#039;../../event/EventBus&#039;;
+import { PROJECT_CODE_SHORT } from &#039;../../constants/project&#039;;
+import { BODY, CODE, CONTAINER, LINE, ROOT, TOKEN } from &#039;../../constants/classes&#039;;
+import { forOwn, escapeHtml } from &#039;../../utils&#039;;
+
+
+/**
+ * Stores all Component functions.
+ */
+const Components: Record&lt;string, Component&gt; = {};
 
 /**
  * The class for highlighting code via provided tokens.
  *
  * @since 0.0.1
  */
-export class Highlighter {
+export class Renderer {
   /**
-   * Holds elements.
+   * Adds components.
+   *
+   * @param components - An object literal with Component functions.
    */
-  protected elements: Elements;
+  static compose( components: Record&lt;string, Component&gt; ): void {
+    forOwn( components, ( Component, name ) =&gt; {
+      Components[ name ] = Component;
+    } );
+  }
+
+  /**
+   * Holds lines with tokens.
+   */
+  readonly lines = [];
+
+  /**
+   * Holds the language info.
+   */
+  readonly info: LanguageInfo;
+
+  /**
+   * Holds the root element if provided.
+   */
+  readonly root: HTMLElement | undefined;
 
   /**
    * Holds options.
    */
-  protected readonly options: Options;
+  readonly options: Options;
 
   /**
    * Holds the EventBus instance.
    */
-  protected readonly event: EventBus = new EventBus();
+  readonly event: EventBus = new EventBus();
 
   /**
-   * The Highlighter constructor.
+   * The Renderer constructor.
    *
-   * @param elm     - An element to highlight.
-   * @param options - Optional. Options.
+   * @param lines   - Lines with tokens to render.
+   * @param info    - The language info object.
+   * @param root    - Optional. A root element to highlight.
+   * @param options - Options.
    */
-  constructor( elm: HTMLElement, options: Options ) {
-    this.elements = {
-      root: elm,
-      code: create( 'div', { class: `${ PROJECT_CODE }__code` } ),
-    }
-
+  constructor( lines: Token[][], info: LanguageInfo, root?: HTMLElement, options: Options = {} ) {
+    this.lines   = lines;
+    this.info    = info;
+    this.root    = root;
     this.options = options;
+
     this.init();
   }
 
@@ -64,81 +85,114 @@ export class Highlighter {
    * Initializes the instance.
    */
   protected init(): void {
-    forOwn( Components, Component => {
-      Component( this.elements, this.event, this.options );
-    } );
+    const { lines } = this;
 
-    this.event.emit( 'mounted', this );
-  }
+    if ( lines.length ) {
+      const tokens = lines[ lines.length - 1 ];
 
-  /**
-   * Creates a div element for each line.
-   *
-   * @return A created div element.
-   */
-  protected createLine(): HTMLDivElement {
-    return create( 'div', { class: `${ PROJECT_CODE }__line` } );
-  }
-
-  /**
-   * Creates a span element for each token.
-   *
-   * @param category - A category name.
-   * @param value    - A text value.
-   *
-   * @return A created span element.
-   */
-  protected createSpan( category: string, value: string ): HTMLSpanElement {
-    const className = `${ PROJECT_CODE_SHORT }__token ${ PROJECT_CODE_SHORT }__${ category }`;
-    const span      = create( 'span', { class: className } );
-    text( span, value );
-    return span;
-  }
-
-  /**
-   * Append tokens to the provided element with creating div elements for each line.
-   *
-   * @param elm    - An element to append tokens to.
-   * @param tokens - An array with tokens.
-   */
-  protected append( elm: HTMLElement, tokens: Token[] ): void {
-    let line = this.createLine();
-    const lines = [ line ];
-
-    tokens.forEach( ( token ) => {
-      if ( token[ 0 ] === 'eol' ) {
-        line = this.createLine();
-        lines.push( line );
-      } else {
-        append( line, this.createSpan( token[ 0 ], token[ 1 ] ) );
+      if ( ! tokens.length || ( tokens.length === 1 &amp;&amp; ! tokens[ 0 ][ 1 ].trim() ) ) {
+        // Removes the last empty line.
+        lines.pop();
       }
+    }
+
+    forOwn( Components, Component =&gt; {
+      Component( this );
     } );
 
-    append( elm, ...lines );
+    this.event.emit( &#039;mounted&#039; );
   }
 
   /**
-   * Render tokens as HTML elements.
+   * Renders lines as HTML.
    *
-   * @param tokens - Tokens to render.
+   * @param append - A function to add fragments to the HTML string.
+   *
+   * @return A rendered HTML string.
    */
-  render( tokens: Token[] ): void {
-    const { root, code } = this.elements;
-    this.append( code, tokens );
+  protected renderLines( append: ( fragment: string ) =&gt; void ): void {
+    const event = this.event;
+    const tag   = this.options.span ? &#039;span&#039; : &#039;code&#039;;
 
-    text( root, '' );
-    append( root, code );
-    root.classList.add( PROJECT_CODE );
+    for ( let i = 0; i &lt; this.lines.length; i++ ) {
+      const tokens  = this.lines[ i ];
+      const classes = [ LINE ];
 
-    this.event.emit( 'rendered', this );
+      event.emit( &#039;line:open&#039;, append, classes, i );
+      append( `&lt;div class=&quot;${ classes.join( &#039; &#039; ) }&quot;&gt;` );
+
+      if ( tokens.length ) {
+        for ( let j = 0; j &lt; tokens.length; j++ ) {
+          const token   = tokens[ j ];
+          const classes = [ `${ TOKEN } ${ PROJECT_CODE_SHORT }__${ token[ 0 ] }` ];
+
+          event.emit( &#039;token&#039;, token, classes );
+
+          append( `&lt;${ tag } class=&quot;${ classes.join( &#039; &#039; ) }&quot;&gt;${ escapeHtml( token[ 1 ] ) }&lt;/${ tag }&gt;` );
+        }
+      } else {
+        append( LINE_BREAK );
+      }
+
+      append( &#039;&lt;/div&gt;&#039; );
+      event.emit( &#039;line:closed&#039;, append, i );
+    }
+  }
+
+  /**
+   * Returns all lines and wrapper elements.
+   *
+   * @param pre - Whether to wrap elements by `pre` or not.
+   *
+   * @return An HTML string.
+   */
+  html( pre: boolean ): string {
+    const event = this.event;
+    let html  = &#039;&#039;;
+
+    const append = ( fragment: string ) =&gt; { html += fragment };
+
+    if ( pre ) {
+      html += `&lt;pre class=&quot;${ ROOT } ${ ROOT }--${ this.info.id }&quot;&gt;`;
+    }
+
+    const containerClasses = [ CONTAINER ];
+    event.emit( &#039;open&#039;, append, containerClasses );
+
+    html += `&lt;div class=&quot;${ containerClasses.join( &#039; &#039; ) }&quot;&gt;`;
+    event.emit( &#039;opened&#039;, append );
+
+    const bodyClasses = [ `${ BODY }${ this.options.wrap ? ` ${ BODY }--wrap` : &#039;&#039; }` ];
+    event.emit( &#039;body:open&#039;, append, bodyClasses );
+
+    html += `&lt;div class=&quot;${ bodyClasses.join( &#039; &#039; ) }&quot;&gt;`;
+    event.emit( &#039;body:opened&#039;, append );
+
+    html += `&lt;div class=&quot;${ CODE }&quot;&gt;`;
+    this.renderLines( append );
+    html += `&lt;/div&gt;`; // code
+
+    event.emit( &#039;body:close&#039;, append );
+    html += `&lt;/div&gt;`; // body
+
+    event.emit( &#039;close&#039;, append );
+    html += `&lt;/div&gt;`; // container
+
+    event.emit( &#039;closed&#039;, append );
+
+    if ( pre ) {
+      html += `&lt;/pre&gt;`;
+    }
+
+    return html;
   }
 
   /**
    * Destroys the instance.
    */
   destroy(): void {
-    this.event.emit( 'destroy' );
-    this.elements = null;
+    this.event.emit( &#039;destroy&#039; );
+    this.event.destroy();
   }
 }
   </pre>

@@ -12,7 +12,7 @@ export const REGEXP_QUOTE = /'(?:\\'|.)*?'/;
 
 export const REGEXP_DOUBLE_QUOTE = /"(?:\\"|.)*?"/;
 
-export const REGEXP_MULTILINE_COMMENT = /\/\*[\s\S]*?\*\//;
+export const REGEXP_MULTILINE_COMMENT = /\/\*[\s\S]*?(\*\/|$)/;
 
 export const REGEXP_SLASH_COMMENT = /\/\/.*/;
 
