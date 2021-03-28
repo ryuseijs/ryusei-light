@@ -563,7 +563,7 @@ var Lexer = /*#__PURE__*/function () {
     var index = 0;
     var from = 0;
 
-    while (index > -1) {
+    while (index > -1 && !this.aborted) {
       index = text.indexOf(LINE_BREAK, from);
       var sliced = text.slice(from, index < 0 ? undefined : index);
 
@@ -572,9 +572,13 @@ var Lexer = /*#__PURE__*/function () {
       }
 
       if (index > -1) {
-        from = index + 1;
-        this.lines[++this.index] = [];
-        this.aborted = this.limit && !this.depth && this.index >= this.limit - 1;
+        this.index++;
+        this.aborted = this.limit && !this.depth && this.index >= this.limit;
+
+        if (!this.aborted) {
+          from = index + 1;
+          this.lines[this.index] = [];
+        }
       }
     }
   }
@@ -1262,13 +1266,14 @@ var RyuseiLight = /*#__PURE__*/function () {
    *
    * @param code     - A string to tokenize.
    * @param language - A language ID.
+   * @param limit    - Optional. Limits the (ideal) number of lines.
    *
    * @return An array of arrays with tokens as [ string, string ].
    */
   ;
 
-  RyuseiLight.tokenize = function tokenize(code, language) {
-    return RyuseiLight.getLexer(language).tokenize(code);
+  RyuseiLight.tokenize = function tokenize(code, language, limit) {
+    return RyuseiLight.getLexer(language).tokenize(code, limit);
   }
   /**
    * Checks if the given language has been already registered or not.

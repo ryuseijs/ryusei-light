@@ -47,11 +47,12 @@ export class RyuseiLight {
    *
    * @param code     - A string to tokenize.
    * @param language - A language ID.
+   * @param limit    - Optional. Limits the (ideal) number of lines.
    *
    * @return An array of arrays with tokens as [ string, string ].
    */
-  static tokenize( code: string, language: string ): Token[][] {
-    return RyuseiLight.getLexer( language ).tokenize( code );
+  static tokenize( code: string, language: string, limit?: number ): Token[][] {
+    return RyuseiLight.getLexer( language ).tokenize( code, limit );
   }
 
   /**
