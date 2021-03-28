@@ -42,7 +42,7 @@ export function Gutter( { lines, event, root, options }: Renderer ): void {
       classes.push( 'has-gutter' );
     } );
 
-    event.on( 'body:opened', append => {
+    event.on( 'code:open', append => {
       append( `<div class="${ GUTTER_CLASS_NAME }" aria-hidden="true">` );
 
       for ( let i = 0; i < lines.length; i++ ) {

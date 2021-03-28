@@ -31,6 +31,11 @@ export class Lexer {
   protected index: number;
 
   /**
+   * The depth of the state.
+   */
+  protected depth = 0;
+
+  /**
    * The Lexer constructor.
    *
    * @param language - A Language object.
@@ -122,12 +127,12 @@ export class Lexer {
           break main;
         }
 
-        const offset = this.handle( match, language, tokenizers[ i ] );
-
+        const offset = this.handle( match, language, tokenizer );
         index += offset || 1;
         position = index;
 
         if ( command === '@break' ) {
+          this.depth--;
           break main;
         }
 
@@ -150,6 +155,8 @@ export class Lexer {
    * @param token - A token to push.
    */
   protected push( token: Token ): void {
+    assert( this.depth >= 0 );
+
     const [ category ] = token;
 
     let index;
@@ -158,7 +165,7 @@ export class Lexer {
 
     while ( ( index = text.indexOf( LINE_BREAK, from ) ) > -1 ) {
       if ( from < index ) {
-        this.lines[ this.index ].push( [ category, text.slice( from, index ) ] );
+        this.lines[ this.index ].push( [ category, text.slice( from, index ), this.depth ] );
       }
 
       from = index + 1;
@@ -168,7 +175,7 @@ export class Lexer {
     text = text.slice( from );
 
     if ( text ) {
-      this.lines[ this.index ].push( [ category, text ] );
+      this.lines[ this.index ].push( [ category, text, this.depth ] );
     }
   }
 
@@ -186,7 +193,7 @@ export class Lexer {
     let offset = 0;
 
     if ( category ) {
-      const [ text ] = match;
+      let [ text ] = match;
 
       if ( tokenizer[ 3 ] === '@debug' ) {
         // eslint-disable-next-line
@@ -206,8 +213,12 @@ export class Lexer {
         const tokenizers = language.grammar[ category.slice( 1 ) ];
         assert( tokenizers );
 
-        const value = tokenizer[ 2 ] === '@rest' ? match.input.slice( match.index ) : text;
-        return this.tokenizeBy( value, language, tokenizers );
+        if ( tokenizer[ 2 ] === '@rest' ) {
+          text = match.input.slice( match.index );
+          this.depth++;
+        }
+
+        return this.tokenizeBy( text, language, tokenizers );
       }
 
       offset = text.length;

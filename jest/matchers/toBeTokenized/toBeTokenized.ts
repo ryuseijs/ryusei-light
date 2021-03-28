@@ -1,4 +1,6 @@
 import { RyuseiLight } from '../../../src/js';
+import { CATEGORY_SPACE } from '../../../src/js/constants/categories';
+import { Token } from '../../../src/js/types';
 
 
 /**
@@ -9,13 +11,15 @@ import { RyuseiLight } from '../../../src/js';
  * @param received       - A received string.
  * @param lang           - A language name.
  * @param expectedTokens - Expected tokens by an array.
- * @param ignoreSpaces   - Options. Whether to ignore whitespaces or not. The default value is true.
+ * @param ignoreSpaces   - Optional. Whether to ignore whitespaces or not. The default value is true.
+ * @param ignoreDepth    - Optional. Whether to ignore depth or not. The default value is true.
  */
 export function toBeTokenized(
   received: string,
   lang: string,
-  expectedTokens: [ string, string ][],
-  ignoreSpaces = true
+  expectedTokens: Token[],
+  ignoreSpaces = true,
+  ignoreDepth = true
 ): jest.CustomMatcherResult {
   if ( ! RyuseiLight.has( lang ) ) {
     throw new Error( `Language ${ lang } has not been registered.` );
@@ -27,11 +31,17 @@ export function toBeTokenized(
     }, [] );
 
   if ( ignoreSpaces ) {
-    tokens = tokens.filter( token => token[ 0 ] !== 'space' );
+    tokens = tokens.filter( token => token[ 0 ] !== CATEGORY_SPACE );
   }
 
   const pass = expectedTokens.length === tokens.length && expectedTokens.every( ( token, index ) => {
-    return token[ 0 ] === tokens[ index ][ 0 ] && token[ 1 ] === tokens[ index ][ 1 ];
+    const match = token[ 0 ] === tokens[ index ][ 0 ] && token[ 1 ] === tokens[ index ][ 1 ];
+
+    if ( ignoreDepth ) {
+      return match;
+    }
+
+    return match && token[ 2 ] === tokens[ index ][ 2 ];
   } );
 
   const message = pass

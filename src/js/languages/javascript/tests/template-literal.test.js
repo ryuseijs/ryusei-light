@@ -35,34 +35,34 @@ describe( 'javascript', () => {
   } );
 
   test( 'can tokenize template literals with expressions.', () => {
-    expect( '`template${ Array.isArray( expression ) }`' ).toBeTokenized( 'javascript', [
-      [ CATEGORY_STRING, '`' ],
-      [ CATEGORY_STRING, 'template' ],
-      [ CATEGORY_DELIMITER, '${' ],
-      [ CATEGORY_CLASS, 'Array' ],
-      [ CATEGORY_DELIMITER, '.' ],
-      [ CATEGORY_FUNCTION, 'isArray' ],
-      [ CATEGORY_BRACKET, '(' ],
-      [ CATEGORY_IDENTIFIER, 'expression' ],
-      [ CATEGORY_BRACKET, ')' ],
-      [ CATEGORY_DELIMITER, '}' ],
-      [ CATEGORY_STRING, '`' ],
+    expect( '`template${ Array.isArray( expression ) }`' ).toBeTokenizedWithDepth( 'javascript', [
+      [ CATEGORY_STRING, '`', 1 ],
+      [ CATEGORY_STRING, 'template', 1 ],
+      [ CATEGORY_DELIMITER, '${', 2 ],
+      [ CATEGORY_CLASS, 'Array', 2 ],
+      [ CATEGORY_DELIMITER, '.', 2 ],
+      [ CATEGORY_FUNCTION, 'isArray', 2 ],
+      [ CATEGORY_BRACKET, '(', 2 ],
+      [ CATEGORY_IDENTIFIER, 'expression', 2 ],
+      [ CATEGORY_BRACKET, ')', 2 ],
+      [ CATEGORY_DELIMITER, '}', 2 ],
+      [ CATEGORY_STRING, '`', 1 ],
     ] );
   } );
 
   test( 'can tokenize nested template literals.', () => {
-    expect( '`template${ `nested${ expression }` }`' ).toBeTokenized( 'javascript', [
-      [ CATEGORY_STRING, '`' ],
-      [ CATEGORY_STRING, 'template' ],
-      [ CATEGORY_DELIMITER, '${' ],
-      [ CATEGORY_STRING, '`' ],
-      [ CATEGORY_STRING, 'nested' ],
-      [ CATEGORY_DELIMITER, '${' ],
-      [ CATEGORY_IDENTIFIER, 'expression' ],
-      [ CATEGORY_DELIMITER, '}' ],
-      [ CATEGORY_STRING, '`' ],
-      [ CATEGORY_DELIMITER, '}' ],
-      [ CATEGORY_STRING, '`' ],
+    expect( '`template${ `nested${ expression }` }`' ).toBeTokenizedWithDepth( 'javascript', [
+      [ CATEGORY_STRING, '`', 1 ],
+      [ CATEGORY_STRING, 'template', 1 ],
+      [ CATEGORY_DELIMITER, '${', 2 ],
+      [ CATEGORY_STRING, '`', 3 ],
+      [ CATEGORY_STRING, 'nested', 3 ],
+      [ CATEGORY_DELIMITER, '${', 4 ],
+      [ CATEGORY_IDENTIFIER, 'expression',4  ],
+      [ CATEGORY_DELIMITER, '}', 4 ],
+      [ CATEGORY_STRING, '`', 3 ],
+      [ CATEGORY_DELIMITER, '}', 2 ],
+      [ CATEGORY_STRING, '`', 1 ],
     ] );
   } );
 } );

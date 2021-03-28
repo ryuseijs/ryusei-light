@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 1.0.0
+ * Version  : 1.0.2
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -262,6 +262,17 @@ function styles(elm, styles) {
   });
 }
 /**
+ * Returns an open tag with provided classes.
+ *
+ * @param classes - Classes.
+ * @param tag     - Optional. A tag name.
+ */
+
+
+function tag(classes, tag) {
+  return "<" + (tag || 'div') + " class=\"" + classes.join(' ') + "\">";
+}
+/**
  * Sets or gets a text content of the provided node.
  *
  * @param node - A node to get or set a text.
@@ -422,6 +433,10 @@ var Lexer = /*#__PURE__*/function () {
    * @param language - A Language object.
    */
   function Lexer(language) {
+    /**
+     * The depth of the state.
+     */
+    this.depth = 0;
     this.language = language;
     this.init(language);
   }
@@ -512,11 +527,12 @@ var Lexer = /*#__PURE__*/function () {
           break main;
         }
 
-        var offset = this.handle(match, language, tokenizers[i]);
+        var offset = this.handle(match, language, tokenizer);
         index += offset || 1;
         position = index;
 
         if (command === '@break') {
+          this.depth--;
           break main;
         }
 
@@ -540,6 +556,7 @@ var Lexer = /*#__PURE__*/function () {
   ;
 
   _proto.push = function push(token) {
+    assert(this.depth >= 0);
     var category = token[0];
     var index;
     var from = 0;
@@ -547,7 +564,7 @@ var Lexer = /*#__PURE__*/function () {
 
     while ((index = text.indexOf(LINE_BREAK, from)) > -1) {
       if (from < index) {
-        this.lines[this.index].push([category, text.slice(from, index)]);
+        this.lines[this.index].push([category, text.slice(from, index), this.depth]);
       }
 
       from = index + 1;
@@ -557,7 +574,7 @@ var Lexer = /*#__PURE__*/function () {
     text = text.slice(from);
 
     if (text) {
-      this.lines[this.index].push([category, text]);
+      this.lines[this.index].push([category, text, this.depth]);
     }
   }
   /**
@@ -593,8 +610,13 @@ var Lexer = /*#__PURE__*/function () {
       if (startsWith(category, '#')) {
         var tokenizers = language.grammar[category.slice(1)];
         assert(tokenizers);
-        var value = tokenizer[2] === '@rest' ? match.input.slice(match.index) : _text;
-        return this.tokenizeBy(value, language, tokenizers);
+
+        if (tokenizer[2] === '@rest') {
+          _text = match.input.slice(match.index);
+          this.depth++;
+        }
+
+        return this.tokenizeBy(_text, language, tokenizers);
       }
 
       offset = _text.length;
@@ -786,20 +808,21 @@ var Renderer = /*#__PURE__*/function () {
 
   _proto3.renderLines = function renderLines(append) {
     var event = this.event;
-    var tag = this.options.span ? 'span' : 'code';
+    var tagName = this.options.span ? 'span' : 'code';
 
     for (var i = 0; i < this.lines.length; i++) {
       var tokens = this.lines[i];
       var classes = [LINE];
       event.emit('line:open', append, classes, i);
-      append("<div class=\"" + classes.join(' ') + "\">");
+      append(tag(classes));
 
       if (tokens.length) {
         for (var j = 0; j < tokens.length; j++) {
           var token = tokens[j];
           var _classes = [TOKEN + " " + PROJECT_CODE_SHORT + "__" + token[0]];
           event.emit('token', token, _classes);
-          append("<" + tag + " class=\"" + _classes.join(' ') + "\">" + escapeHtml(token[1]) + "</" + tag + ">");
+          append(tag(_classes, tagName));
+          append(escapeHtml(token[1]) + "</" + tagName + ">");
         }
       } else {
         append(LINE_BREAK);
@@ -820,6 +843,7 @@ var Renderer = /*#__PURE__*/function () {
 
   _proto3.html = function html(pre) {
     var event = this.event;
+    var closeTag = '</div>';
     var html = '';
 
     var append = function append(fragment) {
@@ -827,26 +851,25 @@ var Renderer = /*#__PURE__*/function () {
     };
 
     if (pre) {
-      html += "<pre class=\"" + ROOT + " " + ROOT + "--" + this.info.id + "\">";
+      html += tag([ROOT + " " + ROOT + "--" + this.info.id], 'pre');
     }
 
     var containerClasses = [CONTAINER];
     event.emit('open', append, containerClasses);
-    html += "<div class=\"" + containerClasses.join(' ') + "\">";
-    event.emit('opened', append);
+    html += tag(containerClasses);
     var bodyClasses = ["" + BODY + (this.options.wrap ? " " + BODY + "--wrap" : '')];
     event.emit('body:open', append, bodyClasses);
-    html += "<div class=\"" + bodyClasses.join(' ') + "\">";
-    event.emit('body:opened', append);
-    html += "<div class=\"" + CODE + "\">";
+    html += tag(bodyClasses);
+    event.emit('code:open', append);
+    html += tag([CODE]);
     this.renderLines(append);
-    html += "</div>"; // code
+    html += closeTag; // code
 
     event.emit('body:close', append);
-    html += "</div>"; // body
+    html += closeTag; // body
 
     event.emit('close', append);
-    html += "</div>"; // container
+    html += closeTag; // container
 
     event.emit('closed', append);
 
@@ -1827,7 +1850,7 @@ function Gutter(_ref5) {
     event.on('open', function (append, classes) {
       classes.push('has-gutter');
     });
-    event.on('body:opened', function (append) {
+    event.on('code:open', function (append) {
       append("<div class=\"" + GUTTER_CLASS_NAME + "\" aria-hidden=\"true\">");
 
       for (var i = 0; i < lines.length; i++) {

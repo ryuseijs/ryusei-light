@@ -20,15 +20,15 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( 'abcaabbcc' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'a', 'a' ],
-      [ 'b', 'b' ],
-      [ 'c', 'c' ],
-      [ 'a', 'a' ],
-      [ 'a', 'a' ],
-      [ 'b', 'b' ],
-      [ 'b', 'b' ],
-      [ 'c', 'c' ],
-      [ 'c', 'c' ],
+      [ 'a', 'a', 0 ],
+      [ 'b', 'b', 0 ],
+      [ 'c', 'c', 0 ],
+      [ 'a', 'a', 0 ],
+      [ 'a', 'a', 0 ],
+      [ 'b', 'b', 0 ],
+      [ 'b', 'b', 0 ],
+      [ 'c', 'c', 0 ],
+      [ 'c', 'c', 0 ],
     ] );
   } );
 
@@ -41,10 +41,10 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( 'aaa\naaa\naaa\naaa' );
 
     expect( tokenized ).toStrictEqual( [
-      [ [ 'a', 'aaa' ] ],
-      [ [ 'a', 'aaa' ] ],
-      [ [ 'a', 'aaa' ] ],
-      [ [ 'a', 'aaa' ] ],
+      [ [ 'a', 'aaa', 0 ] ],
+      [ [ 'a', 'aaa', 0 ] ],
+      [ [ 'a', 'aaa', 0 ] ],
+      [ [ 'a', 'aaa', 0 ] ],
     ] );
   } );
 
@@ -58,7 +58,7 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( 'aaa' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'a', 'aaa' ],
+      [ 'a', 'aaa', 0 ],
     ] );
   } );
 
@@ -71,10 +71,10 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( 'aaabbbaaaccc' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'a', 'aaa' ],
-      [ 'text', 'bbb' ],
-      [ 'a', 'aaa' ],
-      [ 'text', 'ccc' ],
+      [ 'a', 'aaa', 0 ],
+      [ 'text', 'bbb', 0 ],
+      [ 'a', 'aaa', 0 ],
+      [ 'text', 'ccc', 0 ],
     ] );
   } );
 
@@ -87,7 +87,7 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( 'aaaAAAaaaAAA' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'a', 'aaaAAAaaaAAA' ],
+      [ 'a', 'aaaAAAaaaAAA', 0 ],
     ] );
   } );
 
@@ -99,9 +99,9 @@ describe( 'Lexer#tokenize()', () => {
     const lexer     = new Lexer( lang );
     const tokenized = lexer.tokenize( '[aaa\naaa\naaa]' );
 
-    expect( tokenized[ 0 ][ 0 ] ).toStrictEqual( [ 'dotAll', '[aaa' ] );
-    expect( tokenized[ 1 ][ 0 ] ).toStrictEqual( [ 'dotAll', 'aaa' ] );
-    expect( tokenized[ 2 ][ 0 ] ).toStrictEqual( [ 'dotAll', 'aaa]' ] );
+    expect( tokenized[ 0 ][ 0 ] ).toStrictEqual( [ 'dotAll', '[aaa', 0 ] );
+    expect( tokenized[ 1 ][ 0 ] ).toStrictEqual( [ 'dotAll', 'aaa', 0 ] );
+    expect( tokenized[ 2 ][ 0 ] ).toStrictEqual( [ 'dotAll', 'aaa]', 0 ] );
   } );
 
   test( 'should tokenize a matched string by sub tokenizers if required.', () => {
@@ -121,12 +121,12 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( '(aaabbb)aaabbb' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'paren', '(' ],
-      [ 'parenA', 'aaa' ],
-      [ 'parenB', 'bbb' ],
-      [ 'paren', ')' ],
-      [ 'a', 'aaa' ],
-      [ 'b', 'bbb' ],
+      [ 'paren', '(', 0 ],
+      [ 'parenA', 'aaa', 0 ],
+      [ 'parenB', 'bbb', 0 ],
+      [ 'paren', ')', 0 ],
+      [ 'a', 'aaa', 0 ],
+      [ 'b', 'bbb', 0 ],
     ] );
   } );
 
@@ -155,20 +155,20 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( '{(aaabbb)aaabbb}(aaabbb)aaabbb' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'bracket', '{' ],
-      [ 'paren', '(' ],
-      [ 'parenA', 'aaa' ],
-      [ 'parenB', 'bbb' ],
-      [ 'paren', ')' ],
-      [ 'bracketA', 'aaa' ],
-      [ 'bracketB', 'bbb' ],
-      [ 'bracket', '}' ],
-      [ 'paren', '(' ],
-      [ 'parenA', 'aaa' ],
-      [ 'parenB', 'bbb' ],
-      [ 'paren', ')' ],
-      [ 'a', 'aaa' ],
-      [ 'b', 'bbb' ],
+      [ 'bracket', '{', 0 ],
+      [ 'paren', '(', 0 ],
+      [ 'parenA', 'aaa', 0 ],
+      [ 'parenB', 'bbb', 0 ],
+      [ 'paren', ')', 0 ],
+      [ 'bracketA', 'aaa', 0 ],
+      [ 'bracketB', 'bbb', 0 ],
+      [ 'bracket', '}', 0 ],
+      [ 'paren', '(', 0 ],
+      [ 'parenA', 'aaa', 0 ],
+      [ 'parenB', 'bbb', 0 ],
+      [ 'paren', ')', 0 ],
+      [ 'a', 'aaa', 0 ],
+      [ 'b', 'bbb', 0 ],
     ] );
   } );
 
@@ -192,12 +192,12 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( '(aaabbb)aaabbb' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'paren', '(' ],
-      [ 'a', 'aaa' ],
-      [ 'b', 'bbb' ],
-      [ 'paren', ')' ],
-      [ 'a', 'aaa' ],
-      [ 'b', 'bbb' ],
+      [ 'paren', '(', 0 ],
+      [ 'a', 'aaa', 0 ],
+      [ 'b', 'bbb', 0 ],
+      [ 'paren', ')', 0 ],
+      [ 'a', 'aaa', 0 ],
+      [ 'b', 'bbb', 0 ],
     ] );
   } );
 } );

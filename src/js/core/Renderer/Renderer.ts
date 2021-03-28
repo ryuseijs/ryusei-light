@@ -3,7 +3,7 @@ import { Options, LanguageInfo, Token, Component } from '../../types';
 import { EventBus } from '../../event/EventBus';
 import { PROJECT_CODE_SHORT } from '../../constants/project';
 import { BODY, CODE, CONTAINER, LINE, ROOT, TOKEN } from '../../constants/classes';
-import { forOwn, escapeHtml } from '../../utils';
+import { forOwn, escapeHtml, tag } from '../../utils';
 
 
 /**
@@ -100,15 +100,15 @@ export class Renderer {
    * @return A rendered HTML string.
    */
   protected renderLines( append: ( fragment: string ) => void ): void {
-    const event = this.event;
-    const tag   = this.options.span ? 'span' : 'code';
+    const event   = this.event;
+    const tagName = this.options.span ? 'span' : 'code';
 
     for ( let i = 0; i < this.lines.length; i++ ) {
       const tokens  = this.lines[ i ];
       const classes = [ LINE ];
 
       event.emit( 'line:open', append, classes, i );
-      append( `<div class="${ classes.join( ' ' ) }">` );
+      append( tag( classes ) );
 
       if ( tokens.length ) {
         for ( let j = 0; j < tokens.length; j++ ) {
@@ -116,8 +116,8 @@ export class Renderer {
           const classes = [ `${ TOKEN } ${ PROJECT_CODE_SHORT }__${ token[ 0 ] }` ];
 
           event.emit( 'token', token, classes );
-
-          append( `<${ tag } class="${ classes.join( ' ' ) }">${ escapeHtml( token[ 1 ] ) }</${ tag }>` );
+          append( tag( classes, tagName ) );
+          append( `${ escapeHtml( token[ 1 ] ) }</${ tagName }>` );
         }
       } else {
         append( LINE_BREAK );
@@ -136,36 +136,34 @@ export class Renderer {
    * @return An HTML string.
    */
   html( pre: boolean ): string {
-    const event = this.event;
+    const { event } = this;
+    const closeTag  = '</div>';
     let html  = '';
 
     const append = ( fragment: string ) => { html += fragment };
 
     if ( pre ) {
-      html += `<pre class="${ ROOT } ${ ROOT }--${ this.info.id }">`;
+      html += tag( [ `${ ROOT } ${ ROOT }--${ this.info.id }` ], 'pre' );
     }
 
     const containerClasses = [ CONTAINER ];
     event.emit( 'open', append, containerClasses );
-
-    html += `<div class="${ containerClasses.join( ' ' ) }">`;
-    event.emit( 'opened', append );
+    html += tag( containerClasses );
 
     const bodyClasses = [ `${ BODY }${ this.options.wrap ? ` ${ BODY }--wrap` : '' }` ];
     event.emit( 'body:open', append, bodyClasses );
+    html += tag( bodyClasses );
 
-    html += `<div class="${ bodyClasses.join( ' ' ) }">`;
-    event.emit( 'body:opened', append );
-
-    html += `<div class="${ CODE }">`;
+    event.emit( 'code:open', append );
+    html += tag( [ CODE ] );
     this.renderLines( append );
-    html += `</div>`; // code
+    html += closeTag; // code
 
     event.emit( 'body:close', append );
-    html += `</div>`; // body
+    html += closeTag; // body
 
     event.emit( 'close', append );
-    html += `</div>`; // container
+    html += closeTag; // container
 
     event.emit( 'closed', append );
 

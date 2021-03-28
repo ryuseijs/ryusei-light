@@ -13,7 +13,7 @@ describe( 'RyuseiLight.register()', () => {
     RyuseiLight.register( lang );
 
     const tokenized = RyuseiLight.tokenize( 'aaa', 'lang' );
-    expect( tokenized[ 0 ] ).toStrictEqual( [ [ 'lang-a', 'aaa' ] ] );
+    expect( tokenized[ 0 ] ).toStrictEqual( [ [ 'lang-a', 'aaa', 0 ] ] );
   } );
 
   test( 'can register languages.', () => {
@@ -32,10 +32,10 @@ describe( 'RyuseiLight.register()', () => {
     RyuseiLight.register( [ lang1, lang2 ] );
 
     const tokenized1 = RyuseiLight.tokenize( 'aaa', 'lang1' );
-    expect( tokenized1[ 0 ] ).toStrictEqual( [ [ 'lang1-a', 'aaa' ] ] );
+    expect( tokenized1[ 0 ] ).toStrictEqual( [ [ 'lang1-a', 'aaa', 0 ] ] );
 
     const tokenized2 = RyuseiLight.tokenize( 'aaa', 'lang2' );
-    expect( tokenized2[ 0 ] ).toStrictEqual( [ [ 'lang2-a', 'aaa' ] ] );
+    expect( tokenized2[ 0 ] ).toStrictEqual( [ [ 'lang2-a', 'aaa', 0 ] ] );
   } );
 
   test( 'can register aliases.', () => {
@@ -49,9 +49,9 @@ describe( 'RyuseiLight.register()', () => {
     RyuseiLight.register( lang );
 
     const tokenized1 = RyuseiLight.tokenize( 'aaa', 'arias1' );
-    expect( tokenized1[ 0 ] ).toStrictEqual( [ [ 'lang3-a', 'aaa' ] ] );
+    expect( tokenized1[ 0 ] ).toStrictEqual( [ [ 'lang3-a', 'aaa', 0 ] ] );
 
     const tokenized2 = RyuseiLight.tokenize( 'aaa', 'arias2' );
-    expect( tokenized2[ 0 ] ).toStrictEqual( [ [ 'lang3-a', 'aaa' ] ] );
+    expect( tokenized2[ 0 ] ).toStrictEqual( [ [ 'lang3-a', 'aaa', 0 ] ] );
   } );
 } );

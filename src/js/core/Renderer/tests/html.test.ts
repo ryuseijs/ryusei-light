@@ -61,11 +61,11 @@ describe( 'Renderer#html()', () => {
     expect( renderer.html( true ) ).toBe( result.join( '' ) );
   } );
 
-  test( 'should emit `opened` event.', () => {
+  test( 'should emit `body:open` event.', () => {
     const renderer  = new Renderer( [], info );
     const { event } = renderer;
 
-    event.on( 'opened', append => {
+    event.on( 'body:open', append => {
       append( '<br>' );
     } );
 
@@ -74,11 +74,11 @@ describe( 'Renderer#html()', () => {
     expect( renderer.html( true ) ).toBe( result.join( '' ) );
   } );
 
-  test( 'should emit `body:opened` event.', () => {
+  test( 'should emit `code:open` event.', () => {
     const renderer  = new Renderer( [], info );
     const { event } = renderer;
 
-    event.on( 'body:opened', append => {
+    event.on( 'code:open', append => {
       append( '<br>' );
     } );
 

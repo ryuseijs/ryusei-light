@@ -70,18 +70,11 @@ export interface Language {
 }
 
 /**
- * The type for a token.
+ * The type for a token as [ category, text, depth ].
  *
  * @since 0.0.1
  */
-export type Token = [ string, string ];
-
-/**
- * The type for a return value of tokenize functions.
- *
- * @since 0.0.1
- */
-export type TokenizeResult = { offset: number, tokens: Token[] };
+export type Token = [ string, string, number? ];
 
 /**
  * The interface for a language info object.

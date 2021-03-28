@@ -26,9 +26,9 @@ describe( 'Lexer', () => {
     const tokenized = lexer.tokenize( 'aaabbbbbbaaa' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'ab', 'aaabbb' ],
-      [ 'b', 'bbb' ],
-      [ 'a', 'aaa' ],
+      [ 'ab', 'aaabbb', 0 ],
+      [ 'b', 'bbb', 0 ],
+      [ 'a', 'aaa', 0 ],
     ] );
   } );
 } );
