@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 1.0.5
+ * Version  : 1.0.6
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -41,7 +41,9 @@ var CATEGORY_OPERATOR = 'operator';
 var CATEGORY_BRACKET = 'bracket';
 var CATEGORY_DELIMITER = 'delimiter';
 var CATEGORY_SPACE = 'space';
-var CATEGORY_TEXT = 'text';
+var CATEGORY_TEXT = 'text'; // Internal use only
+
+var CATEGORY_LINEBREAK = 'lb';
 /**
  * Checks if the given subject is an object or not.
  *
@@ -555,6 +557,7 @@ var Lexer = /*#__PURE__*/function () {
   ;
 
   _proto.push = function push(token) {
+    var depth = this.depth;
     var category = token[0],
         text = token[1];
     var index = 0;
@@ -562,15 +565,20 @@ var Lexer = /*#__PURE__*/function () {
 
     while (index > -1 && !this.aborted) {
       index = text.indexOf(LINE_BREAK, from);
+      var line = this.lines[this.index];
       var sliced = text.slice(from, index < 0 ? undefined : index);
 
       if (sliced) {
-        this.lines[this.index].push([category, sliced, this.depth]);
+        line.push([category, sliced, depth]);
       }
 
       if (index > -1) {
+        if (!line.length) {
+          line.push([CATEGORY_LINEBREAK, LINE_BREAK, depth]);
+        }
+
         this.index++;
-        this.aborted = this.limit && !this.depth && this.index >= this.limit;
+        this.aborted = this.limit && !depth && this.index >= this.limit;
 
         if (!this.aborted) {
           from = index + 1;
@@ -820,16 +828,11 @@ var Renderer = /*#__PURE__*/function () {
       event.emit('line:open', append, classes, i);
       append(tag(classes));
 
-      if (tokens.length) {
-        for (var j = 0; j < tokens.length; j++) {
-          var token = tokens[j];
-          var _classes = [TOKEN + " " + PROJECT_CODE_SHORT + "__" + token[0]];
-          event.emit('token', token, _classes);
-          append(tag(_classes, tagName));
-          append(escapeHtml(token[1]) + "</" + tagName + ">");
-        }
-      } else {
-        append(LINE_BREAK);
+      for (var j = 0; j < tokens.length; j++) {
+        var token = tokens[j];
+        var _classes = [TOKEN + " " + PROJECT_CODE_SHORT + "__" + token[0]];
+        event.emit('token', token, _classes);
+        append("" + tag(_classes, tagName) + escapeHtml(token[1]) + "</" + tagName + ">");
       }
 
       append('</div>');

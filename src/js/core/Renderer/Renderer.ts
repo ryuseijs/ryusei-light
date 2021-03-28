@@ -110,17 +110,12 @@ export class Renderer {
       event.emit( 'line:open', append, classes, i );
       append( tag( classes ) );
 
-      if ( tokens.length ) {
-        for ( let j = 0; j < tokens.length; j++ ) {
-          const token   = tokens[ j ];
-          const classes = [ `${ TOKEN } ${ PROJECT_CODE_SHORT }__${ token[ 0 ] }` ];
+      for ( let j = 0; j < tokens.length; j++ ) {
+        const token   = tokens[ j ];
+        const classes = [ `${ TOKEN } ${ PROJECT_CODE_SHORT }__${ token[ 0 ] }` ];
 
-          event.emit( 'token', token, classes );
-          append( tag( classes, tagName ) );
-          append( `${ escapeHtml( token[ 1 ] ) }</${ tagName }>` );
-        }
-      } else {
-        append( LINE_BREAK );
+        event.emit( 'token', token, classes );
+        append( `${ tag( classes, tagName ) }${ escapeHtml( token[ 1 ] ) }</${ tagName }>` );
       }
 
       append( '</div>' );

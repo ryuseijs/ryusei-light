@@ -25,3 +25,6 @@ export const CATEGORY_DELIMITER  = 'delimiter';
 export const CATEGORY_SYMBOL     = 'symbol';
 export const CATEGORY_SPACE      = 'space';
 export const CATEGORY_TEXT       = 'text';
+
+// Internal use only
+export const CATEGORY_LINEBREAK  = 'lb';

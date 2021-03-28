@@ -1,13 +1,14 @@
 import {
   CATEGORY_ATRULE,
   CATEGORY_BRACKET,
-  CATEGORY_DELIMITER, CATEGORY_FUNCTION,
+  CATEGORY_DELIMITER, CATEGORY_FUNCTION, CATEGORY_LINEBREAK,
   CATEGORY_NUMBER,
   CATEGORY_PROPERTY,
   CATEGORY_SELECTOR,
   CATEGORY_TAG,
   CATEGORY_TEXT, CATEGORY_VARIABLE,
 } from '../../../constants/categories';
+import { LINE_BREAK } from '../../../constants/characters';
 
 
 describe( 'scss', () => {
@@ -40,6 +41,8 @@ describe( 'scss', () => {
       [ CATEGORY_BRACKET, '}' ],
       [ CATEGORY_BRACKET, '}' ],
 
+      [ CATEGORY_LINEBREAK, LINE_BREAK ],
+
       [ CATEGORY_SELECTOR, '.container' ],
       [ CATEGORY_BRACKET, '{' ],
       [ CATEGORY_PROPERTY, 'padding' ],
@@ -47,6 +50,8 @@ describe( 'scss', () => {
       [ CATEGORY_NUMBER, '1' ],
       [ CATEGORY_TEXT, 'rem' ],
       [ CATEGORY_DELIMITER, ';' ],
+
+      [ CATEGORY_LINEBREAK, LINE_BREAK ],
 
       [ CATEGORY_SELECTOR, '.inner' ],
       [ CATEGORY_BRACKET, '{' ],
@@ -95,6 +100,8 @@ describe( 'scss', () => {
       [ CATEGORY_DELIMITER, '}' ],
       [ CATEGORY_DELIMITER, ';' ],
 
+      [ CATEGORY_LINEBREAK, LINE_BREAK ],
+
       [ CATEGORY_ATRULE, '@keyframes' ],
       [ CATEGORY_DELIMITER, '#{' ],
       [ CATEGORY_VARIABLE, '$name' ],
@@ -103,6 +110,8 @@ describe( 'scss', () => {
       [ CATEGORY_ATRULE, '@content' ],
       [ CATEGORY_DELIMITER, ';' ],
       [ CATEGORY_BRACKET, '}' ],
+
+      [ CATEGORY_LINEBREAK, LINE_BREAK ],
 
       [ CATEGORY_PROPERTY, 'animation-name' ],
       [ CATEGORY_DELIMITER, ':' ],

@@ -1,6 +1,6 @@
 import { Language, Token, Tokenizer } from '../../types';
 import { LINE_BREAK } from '../../constants/characters';
-import { CATEGORY_TEXT } from '../../constants/categories';
+import { CATEGORY_LINEBREAK, CATEGORY_TEXT } from '../../constants/categories';
 import { assert, forOwn, isUndefined, startsWith } from '../../utils';
 
 
@@ -168,6 +168,7 @@ export class Lexer {
    * @param token - A token to push.
    */
   protected push( token: Token ): void {
+    const { depth } = this;
     const [ category, text ] = token;
 
     let index = 0;
@@ -176,15 +177,20 @@ export class Lexer {
     while ( index > -1 && ! this.aborted ) {
       index = text.indexOf( LINE_BREAK, from );
 
+      const line   = this.lines[ this.index ];
       const sliced = text.slice( from, index < 0 ? undefined : index );
 
       if ( sliced ) {
-        this.lines[ this.index ].push( [ category, sliced, this.depth ] );
+        line.push( [ category, sliced, depth ] );
       }
 
       if ( index > -1 ) {
+        if ( ! line.length ) {
+          line.push( [ CATEGORY_LINEBREAK, LINE_BREAK, depth ] );
+        }
+
         this.index++;
-        this.aborted = this.limit && ! this.depth && this.index >= this.limit;
+        this.aborted = this.limit && ! depth && this.index >= this.limit;
 
         if ( ! this.aborted ) {
           from = index + 1;

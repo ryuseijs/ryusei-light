@@ -1,7 +1,8 @@
 import {
   CATEGORY_ATTRIBUTE, CATEGORY_BRACKET, CATEGORY_CLASS, CATEGORY_DELIMITER, CATEGORY_FUNCTION, CATEGORY_IDENTIFIER,
-  CATEGORY_KEYWORD, CATEGORY_OPERATOR, CATEGORY_STRING, CATEGORY_TAG,
+  CATEGORY_KEYWORD, CATEGORY_LINEBREAK, CATEGORY_OPERATOR, CATEGORY_STRING, CATEGORY_TAG,
 } from '../../../constants/categories';
+import { LINE_BREAK } from '../../../constants/characters';
 
 
 describe( 'tsx', () => {
@@ -26,6 +27,8 @@ describe( 'tsx', () => {
       [ CATEGORY_KEYWORD, 'string' ],
       [ CATEGORY_DELIMITER, ';' ],
       [ CATEGORY_BRACKET, '}' ],
+
+      [ CATEGORY_LINEBREAK, LINE_BREAK ],
 
       [ CATEGORY_KEYWORD, 'const' ],
       [ CATEGORY_CLASS, 'Message' ],
@@ -114,6 +117,8 @@ describe( 'tsx', () => {
       [ CATEGORY_BRACKET, '[' ],
       [ CATEGORY_BRACKET, ']' ],
       [ CATEGORY_DELIMITER, ';' ],
+
+      [ CATEGORY_LINEBREAK, LINE_BREAK ],
 
       [ CATEGORY_FUNCTION, 'render' ],
       [ CATEGORY_BRACKET, '(' ],
