@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 1.0.2
+ * Version  : 1.0.3
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -437,6 +437,11 @@ var Lexer = /*#__PURE__*/function () {
      * The depth of the state.
      */
     this.depth = 0;
+    /**
+     * Limits the (ideal) number of lines.
+     */
+
+    this.limit = 0;
     this.language = language;
     this.init(language);
   }
@@ -468,31 +473,33 @@ var Lexer = /*#__PURE__*/function () {
   ;
 
   _proto.merge = function merge(language, tokenizers) {
-    var _this2 = this;
+    var merged = [];
 
-    return tokenizers.reduce(function (merged, tokenizer) {
-      var category = tokenizer[0],
-          regexp = tokenizer[1];
+    for (var i = 0; i < tokenizers.length; i++) {
+      var tokenizer = tokenizers[i];
+      var _tokenizers$i = tokenizers[i],
+          category = _tokenizers$i[0],
+          regexp = _tokenizers$i[1];
 
       if (startsWith(category, '#') && !regexp) {
-        var include = language.grammar[category.slice(1)];
-        assert(include);
-        merged.push.apply(merged, _this2.merge(language, include));
+        merged.push.apply(merged, this.merge(language, language.grammar[category.slice(1)]));
       } else {
-        var flags = regexp.toString().match(/[gimsy]*$/)[0].replace(/[gy]/g, '');
-        var source = regexp.source + (isStickySupported ? '' : '|()');
-        forOwn(language.source, function (replacement, key) {
-          source = source.replace(new RegExp("%" + key, 'g'), replacement.source);
-        });
-        tokenizer[1] = new RegExp(source, (isStickySupported ? 'y' : 'g') + flags);
-        merged.push(tokenizer);
+        (function () {
+          var flags = regexp.toString().match(/[gimsy]*$/)[0].replace(/[gy]/g, '');
+          var source = regexp.source + (isStickySupported ? '' : '|()');
+          forOwn(language.source, function (replacement, key) {
+            source = source.replace(new RegExp("%" + key, 'g'), replacement.source);
+          });
+          tokenizer[1] = new RegExp(source, (isStickySupported ? 'y' : 'g') + flags);
+          merged.push(tokenizer);
+        })();
       }
+    }
 
-      return merged;
-    }, []);
+    return merged;
   }
   /**
-   * Tokenizes the text by the provided language and tokenizers.
+   * Parses the text by the provided language and tokenizers.
    *
    * @param text       - A text to tokenize.
    * @param language   - A Grammar object.
@@ -502,15 +509,15 @@ var Lexer = /*#__PURE__*/function () {
    */
   ;
 
-  _proto.tokenizeBy = function tokenizeBy(text, language, tokenizers) {
+  _proto.parse = function parse(text, language, tokenizers) {
     var index = 0;
     var position = 0;
 
-    main: while (index < text.length) {
+    main: while (index < text.length && !this.aborted) {
       for (var i = 0; i < tokenizers.length; i++) {
         var tokenizer = tokenizers[i];
-        var regexp = tokenizer[1];
-        var command = tokenizer[2];
+        var regexp = tokenizer[1],
+            action = tokenizer[2];
         regexp.lastIndex = index;
         var match = regexp.exec(text);
 
@@ -522,7 +529,7 @@ var Lexer = /*#__PURE__*/function () {
           this.push([CATEGORY_TEXT, text.slice(position, index)]);
         }
 
-        if (command === '@back') {
+        if (action === '@back') {
           position = index;
           break main;
         }
@@ -531,7 +538,7 @@ var Lexer = /*#__PURE__*/function () {
         index += offset || 1;
         position = index;
 
-        if (command === '@break') {
+        if (action === '@break') {
           this.depth--;
           break main;
         }
@@ -556,25 +563,24 @@ var Lexer = /*#__PURE__*/function () {
   ;
 
   _proto.push = function push(token) {
-    assert(this.depth >= 0);
-    var category = token[0];
-    var index;
+    var category = token[0],
+        text = token[1];
+    var index = 0;
     var from = 0;
-    var text = token[1];
 
-    while ((index = text.indexOf(LINE_BREAK, from)) > -1) {
-      if (from < index) {
-        this.lines[this.index].push([category, text.slice(from, index), this.depth]);
+    while (index > -1) {
+      index = text.indexOf(LINE_BREAK, from);
+      var sliced = text.slice(from, index < 0 ? undefined : index);
+
+      if (sliced) {
+        this.lines[this.index].push([category, sliced, this.depth]);
       }
 
-      from = index + 1;
-      this.lines[++this.index] = [];
-    }
-
-    text = text.slice(from);
-
-    if (text) {
-      this.lines[this.index].push([category, text, this.depth]);
+      if (index > -1) {
+        from = index + 1;
+        this.lines[++this.index] = [];
+        this.aborted = this.limit && !this.depth && this.index >= this.limit - 1;
+      }
     }
   }
   /**
@@ -590,54 +596,56 @@ var Lexer = /*#__PURE__*/function () {
 
   _proto.handle = function handle(match, language, tokenizer) {
     var category = tokenizer[0];
-    var offset = 0;
 
-    if (category) {
-      var _text = match[0];
-
-      if (tokenizer[3] === '@debug') {
-        // eslint-disable-next-line
-        console.log(_text, tokenizer);
-      }
-
-      if (startsWith(category, '@')) {
-        assert(language.use);
-        var lang = language.use[category.slice(1)];
-        assert(lang);
-        return this.tokenizeBy(_text, lang, lang.grammar.main);
-      }
-
-      if (startsWith(category, '#')) {
-        var tokenizers = language.grammar[category.slice(1)];
-        assert(tokenizers);
-
-        if (tokenizer[2] === '@rest') {
-          _text = match.input.slice(match.index);
-          this.depth++;
-        }
-
-        return this.tokenizeBy(_text, language, tokenizers);
-      }
-
-      offset = _text.length;
-      this.push([category, _text]);
+    if (!category) {
+      return 0;
     }
 
-    return offset;
+    var text = match[0];
+
+    if (tokenizer[3] === '@debug') {
+      // eslint-disable-next-line
+      console.log(text, tokenizer);
+    }
+
+    if (startsWith(category, '@')) {
+      assert(language.use);
+      var lang = language.use[category.slice(1)];
+      assert(lang);
+      return this.parse(text, lang, lang.grammar.main);
+    }
+
+    if (startsWith(category, '#')) {
+      var tokenizers = language.grammar[category.slice(1)];
+      assert(tokenizers);
+
+      if (tokenizer[2] === '@rest') {
+        text = match.input.slice(match.index);
+        this.depth++;
+      }
+
+      return this.parse(text, language, tokenizers);
+    }
+
+    this.push([category, text]);
+    return text.length;
   }
   /**
    * Tokenizes the text by the current language.
    *
    * @param text  - A text to tokenize.
+   * @param limit - Optional. Limits the ideal number of lines.
    *
    * @return An array with tokens.
    */
   ;
 
-  _proto.tokenize = function tokenize(text) {
+  _proto.tokenize = function tokenize(text, limit) {
     this.lines = [[]];
     this.index = 0;
-    this.tokenizeBy(text, this.language, this.language.grammar.main);
+    this.limit = limit || 0;
+    this.aborted = false;
+    this.parse(text, this.language, this.language.grammar.main);
     return this.lines;
   };
 
@@ -779,7 +787,7 @@ var Renderer = /*#__PURE__*/function () {
   var _proto3 = Renderer.prototype;
 
   _proto3.init = function init() {
-    var _this3 = this;
+    var _this2 = this;
 
     var lines = this.lines;
 
@@ -793,7 +801,7 @@ var Renderer = /*#__PURE__*/function () {
     }
 
     forOwn(Components, function (Component) {
-      Component(_this3);
+      Component(_this2);
     });
     this.event.emit('mounted');
   }
@@ -922,12 +930,12 @@ function css() {
       main: [['#common'], // An atrule without a block
       ['#findSingleAtrule'], // Blocks including atrules
       ['#findBlock']],
-      findBlock: [['#block', /(?:(?![\t-\r ;\{\}\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])[\s\S])(?:(?![;\{\}])[\s\S])*\{[\s\S]*?\}/, '@rest']],
+      findBlock: [['#block', /(?:(?![\t\n\r ;\{\}])[\s\S])(?:(?![;\{\}])[\s\S])*\{[\s\S]*?\}/, '@rest']],
       findSingleAtrule: [['#atrule', /@(?:(?![;\{])[\s\S])+?;/]],
       // Finds atrules before { and ;
       findAtrule: [['#atrule', /@(?:(?![;\{])[\s\S])*?(?=[;\{])/]],
       // May not start with digits
-      findSelector: [['#selector', /(?:(?![\t-\r ;\{\}\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])[\s\S])[\s\S]*?(?=\{)/]],
+      findSelector: [['#selector', /(?:(?![\t\n\r ;\{\}])[\s\S])[\s\S]*?(?=\{)/]],
       common: [[CATEGORY_STRING, /(["'])[\s\S]*?(?:(?!\\)[\s\S])\1/], [CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT], [CATEGORY_SPACE, REGEXP_SPACE]],
       block: [['#inner', /{/, '@rest'], [CATEGORY_BRACKET, /}/, '@break'], ['#findAtrule'], ['#findSelector'], [CATEGORY_SPACE, REGEXP_SPACE]],
       inner: [[CATEGORY_BRACKET, /{/], ['#common'], ['#findBlock'], ['#props'], ['#findAtrule'], ['', /}/, '@back']],
@@ -994,7 +1002,7 @@ function html(options) {
       cdata: [[CATEGORY_CDATA, /<!\[CDATA\[[\s\S]*\]\]>/i]],
       script: [['#tag', /^<script[\s\S]*?>/], ['#cdata'], ['@script', /[\s\S]+(?=<\/script>)/], ['#tag', /<\/script>/]],
       style: [['#tag', /^<style[\s\S]*?>/], ['@style', /[\s\S]+(?=<\/style>)/], ['#tag', /<\/style>/]],
-      tag: [['#attr', /[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]+[\s\S]+(?=[\t-\r \/>\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF])/], [CATEGORY_TAG, /[^\s/<>"'=]+/], [CATEGORY_BRACKET, /[<>]/], [CATEGORY_DELIMITER, /[/]/]],
+      tag: [['#attr', /[\t\n\r ]+[\s\S]+(?=[\t\n\r \/>])/], [CATEGORY_TAG, /[^\s/<>"'=]+/], [CATEGORY_BRACKET, /[<>]/], [CATEGORY_DELIMITER, /[/]/]],
       attr: [[CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_VALUE, /(['"])(\\\1|.)*?\1/], [CATEGORY_DELIMITER, /[/=]/], [CATEGORY_ATTRIBUTE, /[^\s/>"'=]+/]]
     }
   };
@@ -1718,13 +1726,13 @@ function Diff(_ref4) {
   var deleted = [];
   lines.forEach(function (tokens, index) {
     if (tokens.length) {
-      var _text2 = tokens[0][1];
+      var _text = tokens[0][1];
       var processed;
 
-      if (startsWith(_text2, diffOptions.addedSymbol)) {
+      if (startsWith(_text, diffOptions.addedSymbol)) {
         added.push(index);
         processed = true;
-      } else if (startsWith(_text2, diffOptions.deletedSymbol)) {
+      } else if (startsWith(_text, diffOptions.deletedSymbol)) {
         deleted.push(index);
         processed = true;
       }

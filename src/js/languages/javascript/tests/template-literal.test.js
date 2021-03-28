@@ -58,7 +58,7 @@ describe( 'javascript', () => {
       [ CATEGORY_STRING, '`', 3 ],
       [ CATEGORY_STRING, 'nested', 3 ],
       [ CATEGORY_DELIMITER, '${', 4 ],
-      [ CATEGORY_IDENTIFIER, 'expression',4  ],
+      [ CATEGORY_IDENTIFIER, 'expression', 4 ],
       [ CATEGORY_DELIMITER, '}', 4 ],
       [ CATEGORY_STRING, '`', 3 ],
       [ CATEGORY_DELIMITER, '}', 2 ],

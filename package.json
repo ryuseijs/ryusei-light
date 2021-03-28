@@ -1,6 +1,6 @@
 {
   "name": "@ryusei/light",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "Naotoshi Fujita",
   "license": "MIT",
   "main": "dist/js/ryuseilight.cjs.js",

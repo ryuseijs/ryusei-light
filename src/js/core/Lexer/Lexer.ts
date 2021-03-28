@@ -36,6 +36,16 @@ export class Lexer {
   protected depth = 0;
 
   /**
+   * Limits the (ideal) number of lines.
+   */
+  protected limit = 0;
+
+  /**
+   * Turned to be `true` if the tokenization is manually aborted.
+   */
+  protected aborted;
+
+  /**
    * The Lexer constructor.
    *
    * @param language - A Language object.
@@ -67,13 +77,14 @@ export class Lexer {
    * @return Merged tokenizers.
    */
   protected merge( language: Language, tokenizers: Tokenizer[] ): Tokenizer[] {
-    return tokenizers.reduce( ( merged, tokenizer ) => {
-      const [ category, regexp ] = tokenizer;
+    const merged = [];
+
+    for ( let i = 0; i < tokenizers.length; i++ ) {
+      const tokenizer = tokenizers[ i ];
+      const [ category, regexp ] = tokenizers[ i ];
 
       if ( startsWith( category, '#' ) && ! regexp ) {
-        const include = language.grammar[ category.slice( 1 ) ];
-        assert( include );
-        merged.push( ...this.merge( language, include ) );
+        merged.push( ...this.merge( language, language.grammar[ category.slice( 1 ) ] ) );
       } else {
         const flags = regexp.toString().match( /[gimsy]*$/ )[ 0 ].replace( /[gy]/g, '' );
         let source = regexp.source + ( isStickySupported ? '' : '|()' );
@@ -85,13 +96,13 @@ export class Lexer {
         tokenizer[ 1 ] = new RegExp( source, ( isStickySupported ? 'y' : 'g' ) + flags );
         merged.push( tokenizer );
       }
+    }
 
-      return merged;
-    }, [] );
+    return merged;
   }
 
   /**
-   * Tokenizes the text by the provided language and tokenizers.
+   * Parses the text by the provided language and tokenizers.
    *
    * @param text       - A text to tokenize.
    * @param language   - A Grammar object.
@@ -99,16 +110,16 @@ export class Lexer {
    *
    * @return An index of the text where the handling ends.
    */
-  protected tokenizeBy( text: string, language: Language, tokenizers: Tokenizer[] ): number {
+  protected parse( text: string, language: Language, tokenizers: Tokenizer[] ): number {
     let index    = 0;
     let position = 0;
 
+
     main:
-    while ( index < text.length ) {
+    while ( index < text.length && ! this.aborted ) {
       for ( let i = 0; i < tokenizers.length; i++ ) {
         const tokenizer = tokenizers[ i ];
-        const regexp    = tokenizer[ 1 ];
-        const command   = tokenizer[ 2 ];
+        const [ , regexp, action ] = tokenizer;
 
         regexp.lastIndex = index;
 
@@ -122,7 +133,7 @@ export class Lexer {
           this.push( [ CATEGORY_TEXT, text.slice( position, index ) ] );
         }
 
-        if ( command === '@back' ) {
+        if ( action === '@back' ) {
           position = index;
           break main;
         }
@@ -131,7 +142,7 @@ export class Lexer {
         index += offset || 1;
         position = index;
 
-        if ( command === '@break' ) {
+        if ( action === '@break' ) {
           this.depth--;
           break main;
         }
@@ -155,27 +166,29 @@ export class Lexer {
    * @param token - A token to push.
    */
   protected push( token: Token ): void {
-    assert( this.depth >= 0 );
+    const [ category, text ] = token;
 
-    const [ category ] = token;
+    let index = 0;
+    let from  = 0;
 
-    let index;
-    let from = 0;
-    let text = token[ 1 ];
+    while ( index > -1 && ! this.aborted ) {
+      index = text.indexOf( LINE_BREAK, from );
 
-    while ( ( index = text.indexOf( LINE_BREAK, from ) ) > -1 ) {
-      if ( from < index ) {
-        this.lines[ this.index ].push( [ category, text.slice( from, index ), this.depth ] );
+      const sliced = text.slice( from, index < 0 ? undefined : index );
+
+      if ( sliced ) {
+        this.lines[ this.index ].push( [ category, sliced, this.depth ] );
       }
 
-      from = index + 1;
-      this.lines[ ++this.index ] = [];
-    }
+      if ( index > -1 ) {
+        this.index++;
+        this.aborted = this.limit && ! this.depth && this.index >= this.limit;
 
-    text = text.slice( from );
-
-    if ( text ) {
-      this.lines[ this.index ].push( [ category, text, this.depth ] );
+        if ( ! this.aborted ) {
+          from = index + 1;
+          this.lines[ this.index ] = [];
+        }
+      }
     }
   }
 
@@ -190,56 +203,58 @@ export class Lexer {
    */
   protected handle( match: RegExpExecArray, language: Language, tokenizer: Tokenizer ): number {
     const [ category ] = tokenizer;
-    let offset = 0;
 
-    if ( category ) {
-      let [ text ] = match;
-
-      if ( tokenizer[ 3 ] === '@debug' ) {
-        // eslint-disable-next-line
-        console.log( text, tokenizer );
-      }
-
-      if ( startsWith( category, '@' ) ) {
-        assert( language.use );
-
-        const lang = language.use[ category.slice( 1 ) ];
-        assert( lang );
-
-        return this.tokenizeBy( text, lang, lang.grammar.main );
-      }
-
-      if ( startsWith( category, '#' ) ) {
-        const tokenizers = language.grammar[ category.slice( 1 ) ];
-        assert( tokenizers );
-
-        if ( tokenizer[ 2 ] === '@rest' ) {
-          text = match.input.slice( match.index );
-          this.depth++;
-        }
-
-        return this.tokenizeBy( text, language, tokenizers );
-      }
-
-      offset = text.length;
-      this.push( [ category, text ] );
+    if ( ! category ) {
+      return 0;
     }
 
-    return offset;
+    let [ text ] = match;
+
+    if ( tokenizer[ 3 ] === '@debug' ) {
+      // eslint-disable-next-line
+      console.log( text, tokenizer );
+    }
+
+    if ( startsWith( category, '@' ) ) {
+      assert( language.use );
+
+      const lang = language.use[ category.slice( 1 ) ];
+      assert( lang );
+
+      return this.parse( text, lang, lang.grammar.main );
+    }
+
+    if ( startsWith( category, '#' ) ) {
+      const tokenizers = language.grammar[ category.slice( 1 ) ];
+      assert( tokenizers );
+
+      if ( tokenizer[ 2 ] === '@rest' ) {
+        text = match.input.slice( match.index );
+        this.depth++;
+      }
+
+      return this.parse( text, language, tokenizers );
+    }
+
+    this.push( [ category, text ] );
+    return text.length;
   }
 
   /**
    * Tokenizes the text by the current language.
    *
    * @param text  - A text to tokenize.
+   * @param limit - Optional. Limits the ideal number of lines.
    *
    * @return An array with tokens.
    */
-  tokenize( text: string ): Token[][] {
-    this.lines = [ [] ];
-    this.index = 0;
+  tokenize( text: string, limit?: number ): Token[][] {
+    this.lines   = [ [] ];
+    this.index   = 0;
+    this.limit   = limit || 0;
+    this.aborted = false;
 
-    this.tokenizeBy( text, this.language, this.language.grammar.main );
+    this.parse( text, this.language, this.language.grammar.main );
 
     return this.lines;
   }

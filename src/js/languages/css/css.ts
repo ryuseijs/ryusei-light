@@ -39,7 +39,7 @@ export function css(): Language {
       ],
 
       findBlock: [
-        [ '#block', /[^\s;{}][^;{}]*{.*?}/s, '@rest' ],
+        [ '#block', /[^ \t\r\n;{}][^;{}]*{.*?}/s, '@rest' ],
       ],
 
       findSingleAtrule: [
@@ -53,7 +53,7 @@ export function css(): Language {
 
       // May not start with digits
       findSelector: [
-        [ '#selector', /[^\s{};].*?(?={)/s ],
+        [ '#selector', /[^ \t\r\n{};].*?(?={)/s ],
       ],
 
       common: [

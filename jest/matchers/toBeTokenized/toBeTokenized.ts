@@ -34,14 +34,12 @@ export function toBeTokenized(
     tokens = tokens.filter( token => token[ 0 ] !== CATEGORY_SPACE );
   }
 
+  if ( ignoreDepth ) {
+    tokens = tokens.map( token => [ token[ 0 ], token[ 1 ] ] );
+  }
+
   const pass = expectedTokens.length === tokens.length && expectedTokens.every( ( token, index ) => {
-    const match = token[ 0 ] === tokens[ index ][ 0 ] && token[ 1 ] === tokens[ index ][ 1 ];
-
-    if ( ignoreDepth ) {
-      return match;
-    }
-
-    return match && token[ 2 ] === tokens[ index ][ 2 ];
+    return token.every( ( param, paramIndex ) => param === tokens[ index ][ paramIndex ] );
   } );
 
   const message = pass

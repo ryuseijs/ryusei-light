@@ -85,7 +85,7 @@ export function html( options: HtmlOptions = {} ): Language {
       ],
 
       tag: [
-        [ '#attr', /\s+.+(?=[\s/>])/s ],
+        [ '#attr', /[ \t\r\n]+.+(?=[ \t\r\n/>])/s ],
         [ CATEGORY_TAG, /[^\s/<>"'=]+/ ],
         [ CATEGORY_BRACKET, /[<>]/ ],
         [ CATEGORY_DELIMITER, /[/]/ ],
