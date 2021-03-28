@@ -57,18 +57,18 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( '{aaabbb}aaabbb(aaabbb)' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'bracket', '{', 0 ],
-      [ 'a1', 'aaa', 0 ],
-      [ 'b1', 'bbb', 0 ],
-      [ 'bracket', '}', 0 ],
+      [ 'bracket', '{', 1 ],
+      [ 'a1', 'aaa', 2 ],
+      [ 'b1', 'bbb', 2 ],
+      [ 'bracket', '}', 1 ],
 
       [ 'a', 'aaa', 0 ],
       [ 'b', 'bbb', 0 ],
 
-      [ 'paren', '(', 0 ],
-      [ 'a2', 'aaa', 0 ],
-      [ 'b2', 'bbb', 0 ],
-      [ 'paren', ')', 0 ],
+      [ 'paren', '(', 1 ],
+      [ 'a2', 'aaa', 2 ],
+      [ 'b2', 'bbb', 2 ],
+      [ 'paren', ')', 1 ],
     ] );
   } );
 } );

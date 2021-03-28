@@ -121,10 +121,10 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( '(aaabbb)aaabbb' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'paren', '(', 0 ],
-      [ 'parenA', 'aaa', 0 ],
-      [ 'parenB', 'bbb', 0 ],
-      [ 'paren', ')', 0 ],
+      [ 'paren', '(', 1 ],
+      [ 'parenA', 'aaa', 1 ],
+      [ 'parenB', 'bbb', 1 ],
+      [ 'paren', ')', 1 ],
       [ 'a', 'aaa', 0 ],
       [ 'b', 'bbb', 0 ],
     ] );
@@ -155,18 +155,18 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( '{(aaabbb)aaabbb}(aaabbb)aaabbb' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'bracket', '{', 0 ],
-      [ 'paren', '(', 0 ],
-      [ 'parenA', 'aaa', 0 ],
-      [ 'parenB', 'bbb', 0 ],
-      [ 'paren', ')', 0 ],
-      [ 'bracketA', 'aaa', 0 ],
-      [ 'bracketB', 'bbb', 0 ],
-      [ 'bracket', '}', 0 ],
-      [ 'paren', '(', 0 ],
-      [ 'parenA', 'aaa', 0 ],
-      [ 'parenB', 'bbb', 0 ],
-      [ 'paren', ')', 0 ],
+      [ 'bracket', '{', 1 ],
+      [ 'paren', '(', 2 ],
+      [ 'parenA', 'aaa', 2 ],
+      [ 'parenB', 'bbb', 2 ],
+      [ 'paren', ')', 2 ],
+      [ 'bracketA', 'aaa', 1 ],
+      [ 'bracketB', 'bbb', 1 ],
+      [ 'bracket', '}', 1 ],
+      [ 'paren', '(', 1 ],
+      [ 'parenA', 'aaa', 1 ],
+      [ 'parenB', 'bbb', 1 ],
+      [ 'paren', ')', 1 ],
       [ 'a', 'aaa', 0 ],
       [ 'b', 'bbb', 0 ],
     ] );
@@ -192,10 +192,10 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( '(aaabbb)aaabbb' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'paren', '(', 0 ],
-      [ 'a', 'aaa', 0 ],
-      [ 'b', 'bbb', 0 ],
-      [ 'paren', ')', 0 ],
+      [ 'paren', '(', 1 ],
+      [ 'a', 'aaa', 1 ],
+      [ 'b', 'bbb', 1 ],
+      [ 'paren', ')', 1 ],
       [ 'a', 'aaa', 0 ],
       [ 'b', 'bbb', 0 ],
     ] );

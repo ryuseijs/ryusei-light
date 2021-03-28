@@ -33,12 +33,12 @@ export class Lexer {
   /**
    * The depth of the state.
    */
-  protected depth = 0;
+  protected depth;
 
   /**
    * Limits the (ideal) number of lines.
    */
-  protected limit = 0;
+  protected limit;
 
   /**
    * Turned to be `true` if the tokenization is manually aborted.
@@ -114,6 +114,7 @@ export class Lexer {
     let index    = 0;
     let position = 0;
 
+    this.depth++;
 
     main:
     while ( index < text.length && ! this.aborted ) {
@@ -143,7 +144,6 @@ export class Lexer {
         position = index;
 
         if ( action === '@break' ) {
-          this.depth--;
           break main;
         }
 
@@ -156,6 +156,8 @@ export class Lexer {
     if ( position < index ) {
       this.push( [ CATEGORY_TEXT, text.slice( position ) ] );
     }
+
+    this.depth--;
 
     return index;
   }
@@ -230,7 +232,6 @@ export class Lexer {
 
       if ( tokenizer[ 2 ] === '@rest' ) {
         text = match.input.slice( match.index );
-        this.depth++;
       }
 
       return this.parse( text, language, tokenizers );
@@ -251,6 +252,7 @@ export class Lexer {
   tokenize( text: string, limit?: number ): Token[][] {
     this.lines   = [ [] ];
     this.index   = 0;
+    this.depth   = -1;
     this.limit   = limit || 0;
     this.aborted = false;
 

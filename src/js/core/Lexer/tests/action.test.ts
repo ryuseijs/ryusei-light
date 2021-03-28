@@ -138,8 +138,8 @@ describe( 'Lexer#tokenize()', () => {
     expect( tokenized[ 0 ] ).toStrictEqual( [
       [ 'paren', '(', 1 ],
       [ 'paren', '(', 2 ],
-      [ 'paren', ')', 2 ],
-      [ 'text', ')', 1 ],
+      [ 'paren', ')', 1 ],
+      [ 'text', ')', 0 ],
     ] );
   } );
 } );

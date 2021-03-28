@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 1.0.4
+ * Version  : 1.0.5
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -428,15 +428,6 @@ var Lexer = /*#__PURE__*/function () {
    * @param language - A Language object.
    */
   function Lexer(language) {
-    /**
-     * The depth of the state.
-     */
-    this.depth = 0;
-    /**
-     * Limits the (ideal) number of lines.
-     */
-
-    this.limit = 0;
     this.language = language;
     this.init(language);
   }
@@ -507,6 +498,7 @@ var Lexer = /*#__PURE__*/function () {
   _proto.parse = function parse(text, language, tokenizers) {
     var index = 0;
     var position = 0;
+    this.depth++;
 
     main: while (index < text.length && !this.aborted) {
       for (var i = 0; i < tokenizers.length; i++) {
@@ -534,7 +526,6 @@ var Lexer = /*#__PURE__*/function () {
         position = index;
 
         if (action === '@break') {
-          this.depth--;
           break main;
         }
 
@@ -548,6 +539,7 @@ var Lexer = /*#__PURE__*/function () {
       this.push([CATEGORY_TEXT, text.slice(position)]);
     }
 
+    this.depth--;
     return index;
   }
   /**
@@ -620,7 +612,6 @@ var Lexer = /*#__PURE__*/function () {
 
       if (tokenizer[2] === '@rest') {
         text = match.input.slice(match.index);
-        this.depth++;
       }
 
       return this.parse(text, language, tokenizers);
@@ -642,6 +633,7 @@ var Lexer = /*#__PURE__*/function () {
   _proto.tokenize = function tokenize(text, limit) {
     this.lines = [[]];
     this.index = 0;
+    this.depth = -1;
     this.limit = limit || 0;
     this.aborted = false;
     this.parse(text, this.language, this.language.grammar.main);
