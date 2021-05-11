@@ -1,9 +1,8 @@
-import { LINE_BREAK } from '../../constants/characters';
-import { Options, LanguageInfo, Token, Component } from '../../types';
-import { EventBus } from '../../event/EventBus';
-import { PROJECT_CODE_SHORT } from '../../constants/project';
 import { BODY, CODE, CONTAINER, LINE, ROOT, TOKEN } from '../../constants/classes';
-import { forOwn, escapeHtml, tag } from '../../utils';
+import { PROJECT_CODE_SHORT } from '../../constants/project';
+import { EventBus } from '../../event/EventBus';
+import { Component, LanguageInfo, Options, Token } from '../../types';
+import { escapeHtml, forOwn, tag } from '../../utils';
 
 
 /**
@@ -111,8 +110,11 @@ export class Renderer {
       append( tag( classes ) );
 
       for ( let j = 0; j < tokens.length; j++ ) {
-        const token   = tokens[ j ];
-        const classes = [ `${ TOKEN } ${ PROJECT_CODE_SHORT }__${ token[ 0 ] }` ];
+        const token      = tokens[ j ];
+        const categories = token[ 0 ].split( '.' );
+        const className  = `${ PROJECT_CODE_SHORT }__${ categories[ 0 ] }`;
+        const modifiers  = categories.slice( 1 ).map( sub => `${ className }--${ sub }` );
+        const classes    = [ TOKEN, className ].concat( modifiers );
 
         event.emit( 'token', token, classes );
         append( `${ tag( classes, tagName ) }${ escapeHtml( token[ 1 ] ) }</${ tagName }>` );

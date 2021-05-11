@@ -1,6 +1,6 @@
 import {
   CATEGORY_BRACKET, CATEGORY_DELIMITER, CATEGORY_IDENTIFIER, CATEGORY_OPERATOR,
-  CATEGORY_STRING, CATEGORY_TAG, CATEGORY_TEXT,
+  CATEGORY_STRING, CATEGORY_TAG, CATEGORY_TAG_CLOSE, CATEGORY_TEXT,
 } from '../../../constants/categories';
 
 
@@ -28,7 +28,7 @@ describe( 'vue', () => {
       [ CATEGORY_BRACKET, '}' ],
       [ CATEGORY_BRACKET, '<' ],
       [ CATEGORY_DELIMITER, '/' ],
-      [ CATEGORY_TAG, 'div' ],
+      [ CATEGORY_TAG_CLOSE, 'div' ],
       [ CATEGORY_BRACKET, '>' ],
     ] );
   } );

@@ -1,6 +1,11 @@
 import {
-  CATEGORY_BRACKET, CATEGORY_DELIMITER, CATEGORY_FUNCTION,
-  CATEGORY_IDENTIFIER, CATEGORY_STRING, CATEGORY_TAG,
+  CATEGORY_BRACKET,
+  CATEGORY_DELIMITER,
+  CATEGORY_FUNCTION,
+  CATEGORY_IDENTIFIER,
+  CATEGORY_STRING,
+  CATEGORY_TAG,
+  CATEGORY_TAG_CLOSE,
 } from '../../../constants/categories';
 
 
@@ -27,7 +32,7 @@ describe( 'html', () => {
 
       [ CATEGORY_BRACKET, '<' ],
       [ CATEGORY_DELIMITER, '/' ],
-      [ CATEGORY_TAG, 'script' ],
+      [ CATEGORY_TAG_CLOSE, 'script' ],
       [ CATEGORY_BRACKET, '>' ],
     ] );
   } );

@@ -3,6 +3,7 @@ import {
   CATEGORY_BRACKET,
   CATEGORY_DELIMITER,
   CATEGORY_TAG,
+  CATEGORY_TAG_CLOSE,
   CATEGORY_VALUE,
 } from '../../../constants/categories';
 
@@ -45,7 +46,7 @@ describe( 'svg', () => {
 
       [ CATEGORY_BRACKET, '<' ],
       [ CATEGORY_DELIMITER, '/' ],
-      [ CATEGORY_TAG, 'svg' ],
+      [ CATEGORY_TAG_CLOSE, 'svg' ],
       [ CATEGORY_BRACKET, '>' ],
     ] );
   } );

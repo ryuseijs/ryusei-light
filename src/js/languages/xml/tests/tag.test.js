@@ -1,6 +1,6 @@
 import {
   CATEGORY_ATTRIBUTE, CATEGORY_BRACKET,
-  CATEGORY_DELIMITER, CATEGORY_TAG, CATEGORY_TEXT, CATEGORY_VALUE,
+  CATEGORY_DELIMITER, CATEGORY_TAG, CATEGORY_TAG_CLOSE, CATEGORY_TEXT, CATEGORY_VALUE,
 } from '../../../constants/categories';
 
 
@@ -34,17 +34,17 @@ describe( 'xml', () => {
 
       [ CATEGORY_BRACKET, '<' ],
       [ CATEGORY_DELIMITER, '/' ],
-      [ CATEGORY_TAG, 'loc' ],
+      [ CATEGORY_TAG_CLOSE, 'loc' ],
       [ CATEGORY_BRACKET, '>' ],
 
       [ CATEGORY_BRACKET, '<' ],
       [ CATEGORY_DELIMITER, '/' ],
-      [ CATEGORY_TAG, 'sitemap' ],
+      [ CATEGORY_TAG_CLOSE, 'sitemap' ],
       [ CATEGORY_BRACKET, '>' ],
 
       [ CATEGORY_BRACKET, '<' ],
       [ CATEGORY_DELIMITER, '/' ],
-      [ CATEGORY_TAG, 'sitemapindex' ],
+      [ CATEGORY_TAG_CLOSE, 'sitemapindex' ],
       [ CATEGORY_BRACKET, '>' ],
     ] );
   } );

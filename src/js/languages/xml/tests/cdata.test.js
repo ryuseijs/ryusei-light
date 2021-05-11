@@ -3,6 +3,7 @@ import {
   CATEGORY_CDATA,
   CATEGORY_DELIMITER,
   CATEGORY_TAG,
+  CATEGORY_TAG_CLOSE,
 } from '../../../constants/categories';
 
 
@@ -27,7 +28,7 @@ describe( 'xml', () => {
 
       [ CATEGORY_BRACKET, '<' ],
       [ CATEGORY_DELIMITER, '/' ],
-      [ CATEGORY_TAG, 'detail' ],
+      [ CATEGORY_TAG_CLOSE, 'detail' ],
       [ CATEGORY_BRACKET, '>' ],
     ] );
   } );

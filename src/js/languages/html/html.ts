@@ -3,11 +3,12 @@ import {
   CATEGORY_BRACKET,
   CATEGORY_CDATA,
   CATEGORY_COMMENT,
+  CATEGORY_DELIMITER,
   CATEGORY_ENTITY,
   CATEGORY_PROLOG,
   CATEGORY_SPACE,
-  CATEGORY_DELIMITER,
   CATEGORY_TAG,
+  CATEGORY_TAG_CLOSE,
   CATEGORY_VALUE,
 } from '../../constants/categories';
 import { REGEXP_SPACE } from '../../constants/regexp';
@@ -67,13 +68,9 @@ export function html( options: HtmlOptions = {} ): Language {
         [ CATEGORY_SPACE, REGEXP_SPACE ],
       ],
 
-      cdata: [
-        [ CATEGORY_CDATA, /<!\[CDATA\[.*]]>/is ],
-      ],
-
       script: [
         [ '#tag', /^<script.*?>/s ],
-        [ '#cdata' ],
+        cdata,
         [ '@script', /.+(?=<\/script>)/s ],
         [ '#tag', /<\/script>/ ],
       ],
@@ -85,6 +82,16 @@ export function html( options: HtmlOptions = {} ): Language {
       ],
 
       tag: [
+        [ '#closeTag', /<\/.+>/ ],
+        [ '#tagContent' ],
+      ],
+
+      closeTag: [
+        [ CATEGORY_TAG_CLOSE, /[^\s/<>"'=]+/ ],
+        [ '#tagContent' ],
+      ],
+
+      tagContent: [
         [ '#attr', /[ \t\r\n]+.+(?=[ \t\r\n/>])/s ],
         [ CATEGORY_TAG, /[^\s/<>"'=]+/ ],
         [ CATEGORY_BRACKET, /[<>]/ ],

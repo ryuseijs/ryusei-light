@@ -2,6 +2,7 @@ export const CATEGORY_KEYWORD    = 'keyword';
 export const CATEGORY_CONSTANT   = 'constant';
 export const CATEGORY_COMMENT    = 'comment';
 export const CATEGORY_TAG        = 'tag';
+export const CATEGORY_TAG_CLOSE  = 'tag.close';
 export const CATEGORY_SELECTOR   = 'selector';
 export const CATEGORY_ATRULE     = 'atrule';
 export const CATEGORY_ATTRIBUTE  = 'attr';

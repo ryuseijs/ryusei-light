@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 1.0.6
+ * Version  : 1.0.7
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -15,6 +15,7 @@ var LINE_BREAK = '\n';
 var CATEGORY_KEYWORD = 'keyword';
 var CATEGORY_COMMENT = 'comment';
 var CATEGORY_TAG = 'tag';
+var CATEGORY_TAG_CLOSE = 'tag.close';
 var CATEGORY_SELECTOR = 'selector';
 var CATEGORY_ATRULE = 'atrule';
 var CATEGORY_ATTRIBUTE = 'attr';
@@ -650,13 +651,20 @@ var Lexer = /*#__PURE__*/function () {
 
   return Lexer;
 }();
+
+var ROOT = PROJECT_CODE;
+var CONTAINER = PROJECT_CODE_SHORT + "__container";
+var BODY = PROJECT_CODE_SHORT + "__body";
+var CODE = PROJECT_CODE_SHORT + "__code";
+var LINE = PROJECT_CODE_SHORT + "__line";
+var TOKEN = PROJECT_CODE_SHORT + "__token";
+var ACTIVE = 'is-active';
 /**
  * The class for providing the very simple event bus.
  *
  * @private
  * @since 0.0.1
  */
-
 
 var EventBus = /*#__PURE__*/function () {
   function EventBus() {
@@ -718,17 +726,10 @@ var EventBus = /*#__PURE__*/function () {
 
   return EventBus;
 }();
-
-var ROOT = PROJECT_CODE;
-var CONTAINER = PROJECT_CODE_SHORT + "__container";
-var BODY = PROJECT_CODE_SHORT + "__body";
-var CODE = PROJECT_CODE_SHORT + "__code";
-var LINE = PROJECT_CODE_SHORT + "__line";
-var TOKEN = PROJECT_CODE_SHORT + "__token";
-var ACTIVE = 'is-active';
 /**
  * Stores all Component functions.
  */
+
 
 var Components = {};
 /**
@@ -823,11 +824,20 @@ var Renderer = /*#__PURE__*/function () {
       event.emit('line:open', append, classes, i);
       append(tag(classes));
 
-      for (var j = 0; j < tokens.length; j++) {
+      var _loop = function _loop(j) {
         var token = tokens[j];
-        var _classes = [TOKEN + " " + PROJECT_CODE_SHORT + "__" + token[0]];
-        event.emit('token', token, _classes);
-        append("" + tag(_classes, tagName) + escapeHtml(token[1]) + "</" + tagName + ">");
+        var categories = token[0].split('.');
+        var className = PROJECT_CODE_SHORT + "__" + categories[0];
+        var modifiers = categories.slice(1).map(function (sub) {
+          return className + "--" + sub;
+        });
+        var classes = [TOKEN, className].concat(modifiers);
+        event.emit('token', token, classes);
+        append("" + tag(classes, tagName) + escapeHtml(token[1]) + "</" + tagName + ">");
+      };
+
+      for (var j = 0; j < tokens.length; j++) {
+        _loop(j);
       }
 
       append('</div>');
@@ -993,10 +1003,11 @@ function html(options) {
     },
     grammar: {
       main: [[CATEGORY_COMMENT, /<!\x2D\x2D[\s\S]*?\x2D\x2D>/], [CATEGORY_PROLOG, /<!DOCTYPE[\s\S]*?>/i], cdata, ['#script', /<script[\s\S]*?>[\s\S]*?<\/script>/], ['#style', /<style[\s\S]*?>[\s\S]*?<\/style>/], ['#tag', /<[\s\S]*?>/], [CATEGORY_ENTITY, /&[\da-z]+;|&#\d+;/i], [CATEGORY_SPACE, REGEXP_SPACE]],
-      cdata: [[CATEGORY_CDATA, /<!\[CDATA\[[\s\S]*\]\]>/i]],
-      script: [['#tag', /^<script[\s\S]*?>/], ['#cdata'], ['@script', /[\s\S]+(?=<\/script>)/], ['#tag', /<\/script>/]],
+      script: [['#tag', /^<script[\s\S]*?>/], cdata, ['@script', /[\s\S]+(?=<\/script>)/], ['#tag', /<\/script>/]],
       style: [['#tag', /^<style[\s\S]*?>/], ['@style', /[\s\S]+(?=<\/style>)/], ['#tag', /<\/style>/]],
-      tag: [['#attr', /[\t\n\r ]+[\s\S]+(?=[\t\n\r \/>])/], [CATEGORY_TAG, /[^\s/<>"'=]+/], [CATEGORY_BRACKET, /[<>]/], [CATEGORY_DELIMITER, /[/]/]],
+      tag: [['#closeTag', /<\/.+>/], ['#tagContent']],
+      closeTag: [[CATEGORY_TAG_CLOSE, /[^\s/<>"'=]+/], ['#tagContent']],
+      tagContent: [['#attr', /[\t\n\r ]+[\s\S]+(?=[\t\n\r \/>])/], [CATEGORY_TAG, /[^\s/<>"'=]+/], [CATEGORY_BRACKET, /[<>]/], [CATEGORY_DELIMITER, /[/]/]],
       attr: [[CATEGORY_SPACE, REGEXP_SPACE], [CATEGORY_VALUE, /(['"])(\\\1|.)*?\1/], [CATEGORY_DELIMITER, /[/=]/], [CATEGORY_ATTRIBUTE, /[^\s/>"'=]+/]]
     }
   };

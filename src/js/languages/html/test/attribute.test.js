@@ -3,6 +3,7 @@ import {
   CATEGORY_BRACKET,
   CATEGORY_DELIMITER,
   CATEGORY_TAG,
+  CATEGORY_TAG_CLOSE,
   CATEGORY_VALUE,
 } from '../../../constants/categories';
 
@@ -22,7 +23,7 @@ describe( 'html', () => {
 
       [ CATEGORY_BRACKET, '<' ],
       [ CATEGORY_DELIMITER, '/' ],
-      [ CATEGORY_TAG, 'div' ],
+      [ CATEGORY_TAG_CLOSE, 'div' ],
       [ CATEGORY_BRACKET, '>' ],
     ] );
   } );
@@ -48,7 +49,7 @@ describe( 'html', () => {
 
       [ CATEGORY_BRACKET, '<' ],
       [ CATEGORY_DELIMITER, '/' ],
-      [ CATEGORY_TAG, 'div' ],
+      [ CATEGORY_TAG_CLOSE, 'div' ],
       [ CATEGORY_BRACKET, '>' ],
     ] );
   } );
