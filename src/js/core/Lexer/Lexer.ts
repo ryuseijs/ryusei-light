@@ -36,7 +36,7 @@ export class Lexer {
   protected depth;
 
   /**
-   * Limits the (ideal) number of lines.
+   * Limits the number of lines.
    */
   protected limit;
 
@@ -105,7 +105,7 @@ export class Lexer {
    * Parses the text by the provided language and tokenizers.
    *
    * @param text       - A text to tokenize.
-   * @param language   - A Grammar object.
+   * @param language   - A Language object.
    * @param tokenizers - An array with tokenizers.
    *
    * @return An index of the text where the handling ends.
@@ -190,7 +190,7 @@ export class Lexer {
         }
 
         this.index++;
-        this.aborted = this.limit && ! depth && this.index >= this.limit;
+        this.aborted = this.limit && this.index >= this.limit;
 
         if ( ! this.aborted ) {
           from = index + 1;
@@ -251,7 +251,7 @@ export class Lexer {
    * Tokenizes the text by the current language.
    *
    * @param text  - A text to tokenize.
-   * @param limit - Optional. Limits the ideal number of lines.
+   * @param limit - Optional. Limits the number of lines.
    *
    * @return An array with tokens.
    */

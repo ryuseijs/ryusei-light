@@ -28,7 +28,7 @@ describe( 'Lexer#tokenize()', () => {
     ] );
   } );
 
-  test( 'should not abort if the depth is not 0.', () => {
+  test( 'should abort tokenization even if the depth is not 0.', () => {
     lang.grammar.main = [
       [ '#paren', /\(/, '@rest' ],
       [ 'a', /a+/ ],
@@ -49,10 +49,6 @@ describe( 'Lexer#tokenize()', () => {
       [
         [ 'paren', '(', 1 ],
         [ 'parenA', 'aaa', 1 ],
-      ],
-      [
-        [ 'parenB', 'bbb', 1 ],
-        [ 'paren', ')', 1 ],
       ],
     ] );
 
@@ -75,10 +71,6 @@ describe( 'Lexer#tokenize()', () => {
       [
         [ 'paren', '(', 1 ],
         [ 'parenA', 'aaa', 1 ],
-      ],
-      [
-        [ 'parenB', 'bbb', 1 ],
-        [ 'paren', ')', 1 ],
       ],
     ] );
   } );

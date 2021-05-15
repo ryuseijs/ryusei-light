@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 1.0.7
+ * Version  : 1.0.8
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -496,7 +496,7 @@ var Lexer = /*#__PURE__*/function () {
    * Parses the text by the provided language and tokenizers.
    *
    * @param text       - A text to tokenize.
-   * @param language   - A Grammar object.
+   * @param language   - A Language object.
    * @param tokenizers - An array with tokenizers.
    *
    * @return An index of the text where the handling ends.
@@ -579,7 +579,7 @@ var Lexer = /*#__PURE__*/function () {
         }
 
         this.index++;
-        this.aborted = this.limit && !depth && this.index >= this.limit;
+        this.aborted = this.limit && this.index >= this.limit;
 
         if (!this.aborted) {
           from = index + 1;
@@ -638,7 +638,7 @@ var Lexer = /*#__PURE__*/function () {
    * Tokenizes the text by the current language.
    *
    * @param text  - A text to tokenize.
-   * @param limit - Optional. Limits the ideal number of lines.
+   * @param limit - Optional. Limits the number of lines.
    *
    * @return An array with tokens.
    */
