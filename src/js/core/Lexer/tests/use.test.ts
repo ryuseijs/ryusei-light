@@ -1,5 +1,6 @@
 import { Language } from '../../../types';
 import { Lexer } from '../Lexer';
+import { getInfo } from './fixtues';
 
 
 describe( 'Lexer#tokenize()', () => {
@@ -57,18 +58,18 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( '{aaabbb}aaabbb(aaabbb)' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'bracket', '{', 1 ],
-      [ 'a1', 'aaa', 2 ],
-      [ 'b1', 'bbb', 2 ],
-      [ 'bracket', '}', 1 ],
+      [ 'bracket', '{', getInfo( '#bracket', 1 ) ],
+      [ 'a1', 'aaa', getInfo( '@lang1', 2, 'lang1' ) ],
+      [ 'b1', 'bbb', getInfo( '@lang1', 2, 'lang1' ) ],
+      [ 'bracket', '}', getInfo( '#bracket', 1 ) ],
 
-      [ 'a', 'aaa', 0 ],
-      [ 'b', 'bbb', 0 ],
+      [ 'a', 'aaa', getInfo( '#main', 0 ) ],
+      [ 'b', 'bbb', getInfo( '#main', 0 ) ],
 
-      [ 'paren', '(', 1 ],
-      [ 'a2', 'aaa', 2 ],
-      [ 'b2', 'bbb', 2 ],
-      [ 'paren', ')', 1 ],
+      [ 'paren', '(', getInfo( '#paren', 1 ) ],
+      [ 'a2', 'aaa', getInfo( '@lang2', 2, 'lang2' ) ],
+      [ 'b2', 'bbb', getInfo( '@lang2', 2, 'lang2' ) ],
+      [ 'paren', ')', getInfo( '#paren', 1 ) ],
     ] );
   } );
 } );

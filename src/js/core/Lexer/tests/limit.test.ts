@@ -1,5 +1,6 @@
 import { Language } from '../../../types';
 import { Lexer } from '../Lexer';
+import { getInfo } from './fixtues';
 
 
 describe( 'Lexer#tokenize()', () => {
@@ -18,13 +19,13 @@ describe( 'Lexer#tokenize()', () => {
 
     const tokenized1 = lexer.tokenize( 'aaa\naaa\naaa\naaa', 1 );
     expect( tokenized1 ).toStrictEqual( [
-      [ [ 'a', 'aaa', 0 ] ],
+      [ [ 'a', 'aaa', getInfo( '#main', 0 ) ] ],
     ] );
 
     const tokenized2 = lexer.tokenize( 'aaa\naaa\naaa\naaa', 2 );
     expect( tokenized2 ).toStrictEqual( [
-      [ [ 'a', 'aaa', 0 ] ],
-      [ [ 'a', 'aaa', 0 ] ],
+      [ [ 'a', 'aaa', getInfo( '#main', 0 ) ] ],
+      [ [ 'a', 'aaa', getInfo( '#main', 0 ) ] ],
     ] );
   } );
 
@@ -47,30 +48,30 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized1 = lexer.tokenize( '(aaa\nbbb)\naaa\nbbb\n(aaa\nbbb)', 1 );
     expect( tokenized1 ).toStrictEqual( [
       [
-        [ 'paren', '(', 1 ],
-        [ 'parenA', 'aaa', 1 ],
+        [ 'paren', '(', getInfo( '#paren', 1 ) ],
+        [ 'parenA', 'aaa', getInfo( '#paren', 1 ) ],
       ],
     ] );
 
     const tokenized2 = lexer.tokenize( '(aaa\nbbb)\naaa\nbbb\n(aaa\nbbb)', 5 );
     expect( tokenized2 ).toStrictEqual( [
       [
-        [ 'paren', '(', 1 ],
-        [ 'parenA', 'aaa', 1 ],
+        [ 'paren', '(', getInfo( '#paren', 1 ) ],
+        [ 'parenA', 'aaa', getInfo( '#paren', 1 ) ],
       ],
       [
-        [ 'parenB', 'bbb', 1 ],
-        [ 'paren', ')', 1 ],
+        [ 'parenB', 'bbb', getInfo( '#paren', 1 ) ],
+        [ 'paren', ')', getInfo( '#paren', 1 ) ],
       ],
       [
-        [ 'a', 'aaa', 0 ],
+        [ 'a', 'aaa', getInfo( '#main', 0 ) ],
       ],
       [
-        [ 'b', 'bbb', 0 ],
+        [ 'b', 'bbb', getInfo( '#main', 0 ) ],
       ],
       [
-        [ 'paren', '(', 1 ],
-        [ 'parenA', 'aaa', 1 ],
+        [ 'paren', '(', getInfo( '#paren', 1 ) ],
+        [ 'parenA', 'aaa', getInfo( '#paren', 1 ) ],
       ],
     ] );
   } );

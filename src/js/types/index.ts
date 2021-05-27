@@ -74,7 +74,49 @@ export interface Language {
  *
  * @since 0.0.1
  */
-export type Token = [ string, string, number? ];
+export type Token = [ string, string, TokenInfo? ];
+
+/**
+ * The interface for information of a token.
+ *
+ * @since 1.1.0
+ */
+export interface TokenInfo {
+  /**
+   * Depth of a tokenizer state.
+   */
+  depth: number;
+
+  /**
+   * A language ID.
+   */
+  language: string;
+
+  /**
+   * A state name.
+   */
+  state: string;
+
+  /**
+   * `true` when the token is split into multilines and it is the first token.
+   */
+  head?: boolean;
+
+  /**
+   * `true` when the token is split into multilines and it is the last token.
+   */
+  tail?: boolean;
+
+  /**
+   * Indicates whether the token is split into multilines or not.
+   */
+  split?: boolean;
+
+  /**
+   * The number of lines from this token to the head token.
+   */
+  distance?: number;
+}
 
 /**
  * The interface for a language info object.

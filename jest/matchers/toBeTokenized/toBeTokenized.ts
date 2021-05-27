@@ -12,14 +12,14 @@ import { Token } from '../../../src/js/types';
  * @param lang           - A language name.
  * @param expectedTokens - Expected tokens by an array.
  * @param ignoreSpaces   - Optional. Whether to ignore whitespaces or not. The default value is true.
- * @param ignoreDepth    - Optional. Whether to ignore depth or not. The default value is true.
+ * @param infoProperty   - Optional. A info property name for the 3rd parameter. The default value is an empty string.
  */
 export function toBeTokenized(
   received: string,
   lang: string,
   expectedTokens: Token[],
   ignoreSpaces = true,
-  ignoreDepth = true
+  infoProperty = ''
 ): jest.CustomMatcherResult {
   if ( ! RyuseiLight.has( lang ) ) {
     throw new Error( `Language ${ lang } has not been registered.` );
@@ -34,7 +34,9 @@ export function toBeTokenized(
     tokens = tokens.filter( token => token[ 0 ] !== CATEGORY_SPACE );
   }
 
-  if ( ignoreDepth ) {
+  if ( infoProperty ) {
+    tokens = tokens.map( token => [ token[ 0 ], token[ 1 ], token[ 2 ][ infoProperty ] ] );
+  } else {
     tokens = tokens.map( token => [ token[ 0 ], token[ 1 ] ] );
   }
 

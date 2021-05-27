@@ -1,5 +1,6 @@
 import { Language } from '../../../types';
 import { Lexer } from '../Lexer';
+import { getInfo } from './fixtues';
 
 
 describe( 'Lexer#tokenize()', () => {
@@ -27,18 +28,18 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( '(aaabbb)aaabbb(aaabbb)' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'paren', '(', 1 ],
-      [ 'parenA', 'aaa', 1 ],
-      [ 'parenB', 'bbb', 1 ],
-      [ 'paren', ')', 1 ],
+      [ 'paren', '(', getInfo( '#paren', 1 ) ],
+      [ 'parenA', 'aaa', getInfo( '#paren', 1 ) ],
+      [ 'parenB', 'bbb', getInfo( '#paren', 1 ) ],
+      [ 'paren', ')', getInfo( '#paren', 1 ) ],
 
-      [ 'a', 'aaa', 0 ],
-      [ 'b', 'bbb', 0 ],
+      [ 'a', 'aaa', getInfo( '#main', 0 ) ],
+      [ 'b', 'bbb', getInfo( '#main', 0 ) ],
 
-      [ 'paren', '(', 1 ],
-      [ 'parenA', 'aaa', 1 ],
-      [ 'parenB', 'bbb', 1 ],
-      [ 'paren', ')', 1 ],
+      [ 'paren', '(', getInfo( '#paren', 1 ) ],
+      [ 'parenA', 'aaa', getInfo( '#paren', 1 ) ],
+      [ 'parenB', 'bbb', getInfo( '#paren', 1 ) ],
+      [ 'paren', ')', getInfo( '#paren', 1 ) ],
     ] );
   } );
 
@@ -50,7 +51,7 @@ describe( 'Lexer#tokenize()', () => {
 
     lang.grammar.paren = [
       [ 'paren', /^\(/ ],
-      [ '#paren', /\(/, '@rest' ], // Recursively call #paren
+      [ '#paren', /\(/, '@rest' ], // Recursively calls #paren
       [ 'paren', /\)/, '@break' ],
       [ 'parenA', /a+/ ],
     ];
@@ -59,25 +60,25 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( 'aaa((aaa)((aaa)))aaa(aaa)aaa' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'a', 'aaa', 0 ],
-      [ 'paren', '(', 1 ],
-      [ 'paren', '(', 2 ],
-      [ 'parenA', 'aaa', 2 ],
-      [ 'paren', ')', 2 ],
-      [ 'paren', '(', 2 ],
-      [ 'paren', '(', 3 ],
-      [ 'parenA', 'aaa', 3 ],
-      [ 'paren', ')', 3 ],
-      [ 'paren', ')', 2 ],
-      [ 'paren', ')', 1 ],
+      [ 'a', 'aaa', getInfo( '#main', 0 ) ],
+      [ 'paren', '(', getInfo( '#paren', 1 ) ],
+      [ 'paren', '(', getInfo( '#paren', 2 ) ],
+      [ 'parenA', 'aaa', getInfo( '#paren', 2 ) ],
+      [ 'paren', ')', getInfo( '#paren', 2 ) ],
+      [ 'paren', '(', getInfo( '#paren', 2 ) ],
+      [ 'paren', '(', getInfo( '#paren', 3 ) ],
+      [ 'parenA', 'aaa', getInfo( '#paren', 3 ) ],
+      [ 'paren', ')', getInfo( '#paren', 3 ) ],
+      [ 'paren', ')', getInfo( '#paren', 2 ) ],
+      [ 'paren', ')', getInfo( '#paren', 1 ) ],
 
-      [ 'a', 'aaa', 0 ],
+      [ 'a', 'aaa', getInfo( '#main', 0 ) ],
 
-      [ 'paren', '(', 1 ],
-      [ 'parenA', 'aaa', 1 ],
-      [ 'paren', ')', 1 ],
+      [ 'paren', '(', getInfo( '#paren', 1 ) ],
+      [ 'parenA', 'aaa', getInfo( '#paren', 1 ) ],
+      [ 'paren', ')', getInfo( '#paren', 1 ) ],
 
-      [ 'a', 'aaa', 0 ],
+      [ 'a', 'aaa', getInfo( '#main', 0 ) ],
     ] );
   } );
 
@@ -101,18 +102,18 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( '"(("aaa(aaa(aaa"))"))aaa' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'string', '"(("', 0 ],
-      [ 'a', 'aaa', 0 ],
+      [ 'string', '"(("', getInfo( '#main', 0 ) ],
+      [ 'a', 'aaa', getInfo( '#main', 0 ) ],
 
-      [ 'paren', '(', 1 ],
-      [ 'parenA', 'aaa', 1 ],
-      [ 'paren', '(', 2 ],
-      [ 'parenA', 'aaa', 2 ],
-      [ 'string', '"))"', 2 ],
-      [ 'paren', ')', 2 ],
-      [ 'paren', ')', 1 ],
+      [ 'paren', '(', getInfo( '#paren', 1 ) ],
+      [ 'parenA', 'aaa', getInfo( '#paren', 1 ) ],
+      [ 'paren', '(', getInfo( '#paren', 2 ) ],
+      [ 'parenA', 'aaa', getInfo( '#paren', 2 ) ],
+      [ 'string', '"))"', getInfo( '#paren', 2 ) ],
+      [ 'paren', ')', getInfo( '#paren', 2 ) ],
+      [ 'paren', ')', getInfo( '#paren', 1 ) ],
 
-      [ 'a', 'aaa', 0 ],
+      [ 'a', 'aaa', getInfo( '#main', 0 ) ],
     ] );
   } );
 
@@ -136,10 +137,10 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( '(())' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'paren', '(', 1 ],
-      [ 'paren', '(', 2 ],
-      [ 'paren', ')', 1 ],
-      [ 'text', ')', 0 ],
+      [ 'paren', '(', getInfo( '#paren', 1 ) ],
+      [ 'paren', '(', getInfo( '#innerParen', 2 ) ],
+      [ 'paren', ')', getInfo( '#paren', 1 ) ],
+      [ 'text', ')', { depth: 0, language: 'test', state: '#main' } ],
     ] );
   } );
 } );

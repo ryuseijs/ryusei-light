@@ -19,5 +19,5 @@ export function toBeTokenizedWithDepth(
   expectedTokens: Required<Token>[],
   ignoreSpaces = true,
 ): jest.CustomMatcherResult {
-  return toBeTokenized.call( this, received, lang, expectedTokens, ignoreSpaces, false );
+  return toBeTokenized.call( this, received, lang, expectedTokens, ignoreSpaces, 'depth' );
 }

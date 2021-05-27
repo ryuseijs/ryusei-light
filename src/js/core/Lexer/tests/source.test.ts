@@ -1,5 +1,6 @@
 import { Language } from '../../../types';
 import { Lexer } from '../Lexer';
+import { getInfo } from './fixtues';
 
 
 describe( 'Lexer', () => {
@@ -26,9 +27,9 @@ describe( 'Lexer', () => {
     const tokenized = lexer.tokenize( 'aaabbbbbbaaa' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'ab', 'aaabbb', 0 ],
-      [ 'b', 'bbb', 0 ],
-      [ 'a', 'aaa', 0 ],
+      [ 'ab', 'aaabbb', getInfo( '#main', 0 ) ],
+      [ 'b', 'bbb', getInfo( '#main', 0 ) ],
+      [ 'a', 'aaa', getInfo( '#main', 0 ) ],
     ] );
   } );
 } );

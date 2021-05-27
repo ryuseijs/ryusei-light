@@ -1,4 +1,4 @@
-import { Language, Token, Tokenizer } from '../../types';
+import { Language, Token, TokenInfo, Tokenizer } from '../../types';
 import { LINE_BREAK } from '../../constants/characters';
 import { CATEGORY_LINEBREAK, CATEGORY_TEXT } from '../../constants/categories';
 import { assert, forOwn, isUndefined, startsWith } from '../../utils';
@@ -107,10 +107,11 @@ export class Lexer {
    * @param text       - A text to tokenize.
    * @param language   - A Language object.
    * @param tokenizers - An array with tokenizers.
+   * @param state      - Optional. The current state name.
    *
    * @return An index of the text where the handling ends.
    */
-  protected parse( text: string, language: Language, tokenizers: Tokenizer[] ): number {
+  protected parse( text: string, language: Language, tokenizers: Tokenizer[], state: string ): number {
     let index    = 0;
     let position = 0;
 
@@ -131,7 +132,7 @@ export class Lexer {
         }
 
         if ( position < index ) {
-          this.push( [ CATEGORY_TEXT, text.slice( position, index ) ] );
+          this.push( [ CATEGORY_TEXT, text.slice( position, index ) ], language, state );
         }
 
         if ( action === '@back' ) {
@@ -139,7 +140,7 @@ export class Lexer {
           break main;
         }
 
-        const offset = this.handle( match, language, tokenizer );
+        const offset = this.handle( match, language, tokenizer, state );
         index += offset || 1;
         position = index;
 
@@ -154,7 +155,7 @@ export class Lexer {
     }
 
     if ( position < index ) {
-      this.push( [ CATEGORY_TEXT, text.slice( position ) ] );
+      this.push( [ CATEGORY_TEXT, text.slice( position ) ], language, state );
     }
 
     this.depth--;
@@ -165,11 +166,14 @@ export class Lexer {
   /**
    * Pushes the provided token to the lines array.
    *
-   * @param token - A token to push.
+   * @param token    - A token to push.
+   * @param language - A Language object.
+   * @param state    - A state name.
    */
-  protected push( token: Token ): void {
+  protected push( token: Token, language: Language, state: string ): void {
     const { depth } = this;
     const [ category, text ] = token;
+    const start = this.index;
 
     let index = 0;
     let from  = 0;
@@ -177,18 +181,23 @@ export class Lexer {
     while ( index > -1 && ! this.aborted ) {
       index = text.indexOf( LINE_BREAK, from );
 
-      const line   = this.lines[ this.index ];
-      const sliced = text.slice( from, index < 0 ? undefined : index );
+      const line  = this.lines[ this.index ];
+      const empty = from === index && ! line.length;
+      const code  = empty ? LINE_BREAK : text.slice( from, index < 0 ? undefined : index );
+      const info  = { depth, language: language.id, state } as TokenInfo;
 
-      if ( sliced ) {
-        line.push( [ category, sliced, depth ] );
+      if ( code ) {
+        if ( category !== CATEGORY_TEXT ) {
+          info.head     = index > -1 && ! from;
+          info.tail     = index < 0 && !! from;
+          info.split    = index > -1 || !! from;
+          info.distance = this.index - start;
+        }
+
+        line.push( [ category === CATEGORY_TEXT && empty ? CATEGORY_LINEBREAK : category, code, info ] );
       }
 
       if ( index > -1 ) {
-        if ( ! line.length ) {
-          line.push( [ CATEGORY_LINEBREAK, LINE_BREAK, depth ] );
-        }
-
         this.index++;
         this.aborted = this.limit && this.index >= this.limit;
 
@@ -206,10 +215,11 @@ export class Lexer {
    * @param match     - A matched result.
    * @param language  - A Language object.
    * @param tokenizer - A tokenizer that has been matched with the text.
+   * @param state     - A state name.
    *
    * @return An index of the text where the handling ends.
    */
-  protected handle( match: RegExpExecArray, language: Language, tokenizer: Tokenizer ): number {
+  protected handle( match: RegExpExecArray, language: Language, tokenizer: Tokenizer, state: string ): number {
     const [ category ] = tokenizer;
 
     if ( ! category ) {
@@ -229,7 +239,7 @@ export class Lexer {
       const lang = language.use[ category.slice( 1 ) ];
       assert( lang );
 
-      return this.parse( text, lang, lang.grammar.main );
+      return this.parse( text, lang, lang.grammar.main, category );
     }
 
     if ( startsWith( category, '#' ) ) {
@@ -240,10 +250,10 @@ export class Lexer {
         text = match.input.slice( match.index );
       }
 
-      return this.parse( text, language, tokenizers );
+      return this.parse( text, language, tokenizers, category );
     }
 
-    this.push( [ category, text ] );
+    this.push( [ category, text ], language, state );
     return text.length;
   }
 
@@ -262,7 +272,7 @@ export class Lexer {
     this.limit   = limit || 0;
     this.aborted = false;
 
-    this.parse( text, this.language, this.language.grammar.main );
+    this.parse( text, this.language, this.language.grammar.main, '#main' );
 
     return this.lines;
   }

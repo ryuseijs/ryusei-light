@@ -1,9 +1,11 @@
 import { Language } from '../../../types';
 import { Lexer } from '../Lexer';
+import { getInfo } from './fixtues';
 
 
 describe( 'Lexer#tokenize()', () => {
   let lang: Language;
+  const mainInfo = getInfo( '#main', 0 );
 
   beforeEach( () => {
     lang = { id: 'test', name: 'Test', grammar: { main: [] } };
@@ -20,15 +22,15 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( 'abcaabbcc' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'a', 'a', 0 ],
-      [ 'b', 'b', 0 ],
-      [ 'c', 'c', 0 ],
-      [ 'a', 'a', 0 ],
-      [ 'a', 'a', 0 ],
-      [ 'b', 'b', 0 ],
-      [ 'b', 'b', 0 ],
-      [ 'c', 'c', 0 ],
-      [ 'c', 'c', 0 ],
+      [ 'a', 'a', mainInfo ],
+      [ 'b', 'b', mainInfo ],
+      [ 'c', 'c', mainInfo ],
+      [ 'a', 'a', mainInfo ],
+      [ 'a', 'a', mainInfo ],
+      [ 'b', 'b', mainInfo ],
+      [ 'b', 'b', mainInfo ],
+      [ 'c', 'c', mainInfo ],
+      [ 'c', 'c', mainInfo ],
     ] );
   } );
 
@@ -41,10 +43,10 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( 'aaa\naaa\naaa\naaa' );
 
     expect( tokenized ).toStrictEqual( [
-      [ [ 'a', 'aaa', 0 ] ],
-      [ [ 'a', 'aaa', 0 ] ],
-      [ [ 'a', 'aaa', 0 ] ],
-      [ [ 'a', 'aaa', 0 ] ],
+      [ [ 'a', 'aaa', mainInfo ] ],
+      [ [ 'a', 'aaa', mainInfo ] ],
+      [ [ 'a', 'aaa', mainInfo ] ],
+      [ [ 'a', 'aaa', mainInfo ] ],
     ] );
   } );
 
@@ -58,7 +60,7 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( 'aaa' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'a', 'aaa', 0 ],
+      [ 'a', 'aaa', mainInfo ],
     ] );
   } );
 
@@ -71,10 +73,10 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( 'aaabbbaaaccc' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'a', 'aaa', 0 ],
-      [ 'text', 'bbb', 0 ],
-      [ 'a', 'aaa', 0 ],
-      [ 'text', 'ccc', 0 ],
+      [ 'a', 'aaa', mainInfo ],
+      [ 'text', 'bbb', { depth: 0, language: 'test', state: '#main' } ],
+      [ 'a', 'aaa', mainInfo ],
+      [ 'text', 'ccc', { depth: 0, language: 'test', state: '#main' } ],
     ] );
   } );
 
@@ -87,7 +89,7 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( 'aaaAAAaaaAAA' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'a', 'aaaAAAaaaAAA', 0 ],
+      [ 'a', 'aaaAAAaaaAAA', mainInfo ],
     ] );
   } );
 
@@ -99,9 +101,35 @@ describe( 'Lexer#tokenize()', () => {
     const lexer     = new Lexer( lang );
     const tokenized = lexer.tokenize( '[aaa\naaa\naaa]' );
 
-    expect( tokenized[ 0 ][ 0 ] ).toStrictEqual( [ 'dotAll', '[aaa', 0 ] );
-    expect( tokenized[ 1 ][ 0 ] ).toStrictEqual( [ 'dotAll', 'aaa', 0 ] );
-    expect( tokenized[ 2 ][ 0 ] ).toStrictEqual( [ 'dotAll', 'aaa]', 0 ] );
+    expect( tokenized[ 0 ][ 0 ] ).toStrictEqual( [ 'dotAll', '[aaa', {
+      state: '#main',
+      depth: 0,
+      language: 'test',
+      split: true,
+      head: true,
+      tail: false,
+      distance: 0,
+    } ] );
+
+    expect( tokenized[ 1 ][ 0 ] ).toStrictEqual( [ 'dotAll', 'aaa', {
+      state: '#main',
+      depth: 0,
+      language: 'test',
+      split: true,
+      head: false,
+      tail: false,
+      distance: 1,
+    } ] );
+
+    expect( tokenized[ 2 ][ 0 ] ).toStrictEqual( [ 'dotAll', 'aaa]', {
+      state: '#main',
+      depth: 0,
+      language: 'test',
+      split: true,
+      head: false,
+      tail: true,
+      distance: 2,
+    } ] );
   } );
 
   test( 'should tokenize a matched string by sub tokenizers if required.', () => {
@@ -121,12 +149,12 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( '(aaabbb)aaabbb' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'paren', '(', 1 ],
-      [ 'parenA', 'aaa', 1 ],
-      [ 'parenB', 'bbb', 1 ],
-      [ 'paren', ')', 1 ],
-      [ 'a', 'aaa', 0 ],
-      [ 'b', 'bbb', 0 ],
+      [ 'paren', '(', getInfo( '#paren', 1 ) ],
+      [ 'parenA', 'aaa', getInfo( '#paren', 1 ) ],
+      [ 'parenB', 'bbb', getInfo( '#paren', 1 ) ],
+      [ 'paren', ')', getInfo( '#paren', 1 ) ],
+      [ 'a', 'aaa', mainInfo ],
+      [ 'b', 'bbb', mainInfo ],
     ] );
   } );
 
@@ -155,20 +183,20 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( '{(aaabbb)aaabbb}(aaabbb)aaabbb' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'bracket', '{', 1 ],
-      [ 'paren', '(', 2 ],
-      [ 'parenA', 'aaa', 2 ],
-      [ 'parenB', 'bbb', 2 ],
-      [ 'paren', ')', 2 ],
-      [ 'bracketA', 'aaa', 1 ],
-      [ 'bracketB', 'bbb', 1 ],
-      [ 'bracket', '}', 1 ],
-      [ 'paren', '(', 1 ],
-      [ 'parenA', 'aaa', 1 ],
-      [ 'parenB', 'bbb', 1 ],
-      [ 'paren', ')', 1 ],
-      [ 'a', 'aaa', 0 ],
-      [ 'b', 'bbb', 0 ],
+      [ 'bracket', '{', getInfo( '#bracket', 1 ) ],
+      [ 'paren', '(', getInfo( '#paren', 2 ) ],
+      [ 'parenA', 'aaa', getInfo( '#paren', 2 ) ],
+      [ 'parenB', 'bbb', getInfo( '#paren', 2 ) ],
+      [ 'paren', ')', getInfo( '#paren', 2 ) ],
+      [ 'bracketA', 'aaa', getInfo( '#bracket', 1 ) ],
+      [ 'bracketB', 'bbb', getInfo( '#bracket', 1 ) ],
+      [ 'bracket', '}', getInfo( '#bracket', 1 ) ],
+      [ 'paren', '(', getInfo( '#paren', 1 ) ],
+      [ 'parenA', 'aaa', getInfo( '#paren', 1 ) ],
+      [ 'parenB', 'bbb', getInfo( '#paren', 1 ) ],
+      [ 'paren', ')', getInfo( '#paren', 1 ) ],
+      [ 'a', 'aaa', mainInfo ],
+      [ 'b', 'bbb', mainInfo ],
     ] );
   } );
 
@@ -192,12 +220,12 @@ describe( 'Lexer#tokenize()', () => {
     const tokenized = lexer.tokenize( '(aaabbb)aaabbb' );
 
     expect( tokenized[ 0 ] ).toStrictEqual( [
-      [ 'paren', '(', 1 ],
-      [ 'a', 'aaa', 1 ],
-      [ 'b', 'bbb', 1 ],
-      [ 'paren', ')', 1 ],
-      [ 'a', 'aaa', 0 ],
-      [ 'b', 'bbb', 0 ],
+      [ 'paren', '(', getInfo( '#paren', 1 ) ],
+      [ 'a', 'aaa', getInfo( '#paren', 1 ) ],
+      [ 'b', 'bbb', getInfo( '#paren', 1 ) ],
+      [ 'paren', ')', getInfo( '#paren', 1 ) ],
+      [ 'a', 'aaa', mainInfo ],
+      [ 'b', 'bbb', mainInfo ],
     ] );
   } );
 } );

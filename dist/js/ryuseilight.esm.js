@@ -493,12 +493,13 @@ var Lexer = /*#__PURE__*/function () {
    * @param text       - A text to tokenize.
    * @param language   - A Language object.
    * @param tokenizers - An array with tokenizers.
+   * @param state      - Optional. The current state name.
    *
    * @return An index of the text where the handling ends.
    */
   ;
 
-  _proto.parse = function parse(text, language, tokenizers) {
+  _proto.parse = function parse(text, language, tokenizers, state) {
     var index = 0;
     var position = 0;
     this.depth++;
@@ -516,7 +517,7 @@ var Lexer = /*#__PURE__*/function () {
         }
 
         if (position < index) {
-          this.push([CATEGORY_TEXT, text.slice(position, index)]);
+          this.push([CATEGORY_TEXT, text.slice(position, index)], language, state);
         }
 
         if (action === '@back') {
@@ -524,7 +525,7 @@ var Lexer = /*#__PURE__*/function () {
           break main;
         }
 
-        var offset = this.handle(match, language, tokenizer);
+        var offset = this.handle(match, language, tokenizer, state);
         index += offset || 1;
         position = index;
 
@@ -539,7 +540,7 @@ var Lexer = /*#__PURE__*/function () {
     }
 
     if (position < index) {
-      this.push([CATEGORY_TEXT, text.slice(position)]);
+      this.push([CATEGORY_TEXT, text.slice(position)], language, state);
     }
 
     this.depth--;
@@ -548,31 +549,43 @@ var Lexer = /*#__PURE__*/function () {
   /**
    * Pushes the provided token to the lines array.
    *
-   * @param token - A token to push.
+   * @param token    - A token to push.
+   * @param language - A Language object.
+   * @param state    - A state name.
    */
   ;
 
-  _proto.push = function push(token) {
+  _proto.push = function push(token, language, state) {
     var depth = this.depth;
     var category = token[0],
         text = token[1];
+    var start = this.index;
     var index = 0;
     var from = 0;
 
     while (index > -1 && !this.aborted) {
       index = text.indexOf(LINE_BREAK, from);
       var line = this.lines[this.index];
-      var sliced = text.slice(from, index < 0 ? undefined : index);
+      var empty = from === index && !line.length;
+      var code = empty ? LINE_BREAK : text.slice(from, index < 0 ? undefined : index);
+      var info = {
+        depth: depth,
+        language: language.id,
+        state: state
+      };
 
-      if (sliced) {
-        line.push([category, sliced, depth]);
+      if (code) {
+        if (category !== CATEGORY_TEXT) {
+          info.head = index > -1 && !from;
+          info.tail = index < 0 && !!from;
+          info.split = index > -1 || !!from;
+          info.distance = this.index - start;
+        }
+
+        line.push([category === CATEGORY_TEXT && empty ? CATEGORY_LINEBREAK : category, code, info]);
       }
 
       if (index > -1) {
-        if (!line.length) {
-          line.push([CATEGORY_LINEBREAK, LINE_BREAK, depth]);
-        }
-
         this.index++;
         this.aborted = this.limit && this.index >= this.limit;
 
@@ -589,12 +602,13 @@ var Lexer = /*#__PURE__*/function () {
    * @param match     - A matched result.
    * @param language  - A Language object.
    * @param tokenizer - A tokenizer that has been matched with the text.
+   * @param state     - A state name.
    *
    * @return An index of the text where the handling ends.
    */
   ;
 
-  _proto.handle = function handle(match, language, tokenizer) {
+  _proto.handle = function handle(match, language, tokenizer, state) {
     var category = tokenizer[0];
 
     if (!category) {
@@ -612,7 +626,7 @@ var Lexer = /*#__PURE__*/function () {
       assert(language.use);
       var lang = language.use[category.slice(1)];
       assert(lang);
-      return this.parse(text, lang, lang.grammar.main);
+      return this.parse(text, lang, lang.grammar.main, category);
     }
 
     if (startsWith(category, '#')) {
@@ -623,10 +637,10 @@ var Lexer = /*#__PURE__*/function () {
         text = match.input.slice(match.index);
       }
 
-      return this.parse(text, language, tokenizers);
+      return this.parse(text, language, tokenizers, category);
     }
 
-    this.push([category, text]);
+    this.push([category, text], language, state);
     return text.length;
   }
   /**
@@ -645,7 +659,7 @@ var Lexer = /*#__PURE__*/function () {
     this.depth = -1;
     this.limit = limit || 0;
     this.aborted = false;
-    this.parse(text, this.language, this.language.grammar.main);
+    this.parse(text, this.language, this.language.grammar.main, '#main');
     return this.lines;
   };
 
