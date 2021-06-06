@@ -12,7 +12,7 @@ import { AnyFunction } from '../../../types';
  * @return A throttled function.
  */
 export function throttle( callback: AnyFunction, interval: number ): () => void {
-  let timer;
+  let timer: ReturnType<typeof setTimeout>;
 
   return function () {
     if ( ! timer ) {

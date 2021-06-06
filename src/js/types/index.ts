@@ -9,6 +9,23 @@ import { Renderer } from '../core/Renderer/Renderer';
 export type AnyFunction = ( ...args: any[] ) => any;
 
 /**
+ * The interface for each event handler object.
+ *
+ * @since 1.0.0
+ */
+export interface EventHandler {
+  /**
+   * A callback function.
+   */
+  callback: AnyFunction;
+
+  /**
+   * The priority of the handler.
+   */
+  priority: number;
+}
+
+/**
  * The type for a single tokenizer.
  *
  * @since 0.0.1

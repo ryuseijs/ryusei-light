@@ -30,7 +30,7 @@ export class Renderer {
   /**
    * Holds lines with tokens.
    */
-  readonly lines = [];
+  readonly lines: Token[][] = [];
 
   /**
    * Holds the language info.

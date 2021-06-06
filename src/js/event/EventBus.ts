@@ -1,4 +1,4 @@
-import { AnyFunction } from '../types';
+import { AnyFunction, EventHandler } from '../types';
 
 
 /**
@@ -11,7 +11,7 @@ export class EventBus {
   /**
    * Holds handlers.
    */
-  protected handlers = {};
+  protected handlers: Record<string, EventHandler[]> = {};
 
   /**
    * Attaches a handler.
@@ -32,7 +32,7 @@ export class EventBus {
    * @param event - An event name.
    * @param args  - Optional. Any number of arguments to pass to callbacks.
    */
-  emit( event, ...args ): void {
+  emit( event: string, ...args: any[] ): void {
     ( this.handlers[ event ] || [] ).forEach( handler => {
       handler.callback( ...args );
     } );

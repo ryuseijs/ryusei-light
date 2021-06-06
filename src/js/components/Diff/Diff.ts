@@ -52,9 +52,9 @@ export function Diff( { event, lines, options }: Renderer ): void {
 
   options.gutter = true;
 
-  const diffOptions = assign( {}, DEFAULT_OPTIONS, isObject( options.diff ) ? options.diff : null );
-  const added       = [];
-  const deleted     = [];
+  const diffOptions       = assign( {}, DEFAULT_OPTIONS, isObject( options.diff ) ? options.diff : null );
+  const added: number[]   = [];
+  const deleted: number[] = [];
 
   lines.forEach( ( tokens, index ) => {
     if ( tokens.length ) {

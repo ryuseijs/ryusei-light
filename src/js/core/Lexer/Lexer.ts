@@ -33,17 +33,17 @@ export class Lexer {
   /**
    * The depth of the state.
    */
-  protected depth;
+  protected depth: number;
 
   /**
    * Limits the number of lines.
    */
-  protected limit;
+  protected limit: number;
 
   /**
    * Turned to be `true` if the tokenization is manually aborted.
    */
-  protected aborted;
+  protected aborted: boolean;
 
   /**
    * The Lexer constructor.

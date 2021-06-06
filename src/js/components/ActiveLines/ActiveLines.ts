@@ -65,7 +65,7 @@ function parseData( elm: HTMLElement ): Array<number | [ number, number ]> | voi
  * @return An array with normalized line numbers.
  */
 function normalize( lines: Array<number | [ number, number ]> ): string[] {
-  const numbers = [];
+  const numbers: string[] = [];
 
   lines.forEach( range => {
     if ( ! isArray( range ) ) {
