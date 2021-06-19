@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
+    "declarationDir": "dist/types",
     "target": "es6",
     "module": "es2015",
-    "rootDir": "./src",
+    "rootDir": "./src/js",
     "allowJs": true,
-    "declaration": false,
+    "declaration": true,
+    "declarationMap": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,

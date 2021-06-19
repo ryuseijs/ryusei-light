@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 1.1.1
+ * Version  : 1.1.2
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -124,7 +124,7 @@ function toArray(value) {
  */
 
 
-function addClass(elm, classes) {
+function addClass$1(elm, classes) {
   toArray(classes).forEach(function (name) {
     if (name) {
       elm.classList.add(name);
@@ -225,7 +225,7 @@ function create(tag, classes, parent) {
   var elm = document.createElement(tag);
 
   if (classes) {
-    addClass(elm, classes);
+    addClass$1(elm, classes);
   }
 
   if (parent) {
@@ -1229,7 +1229,7 @@ function vue(options) {
 } // export { common }     from './common/common';
 
 
-var index = /*#__PURE__*/Object.freeze({
+var index$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
   css: css,
   html: html,
@@ -1369,7 +1369,7 @@ var RyuseiLight = /*#__PURE__*/function () {
         var isPre = elm instanceof HTMLPreElement;
 
         if (isPre) {
-          addClass(elm, [ROOT, ROOT + "--" + renderer.info.id]);
+          addClass$1(elm, [ROOT, ROOT + "--" + renderer.info.id]);
         }
 
         elm.innerHTML = renderer.html(!isPre);
@@ -1567,7 +1567,7 @@ function appendCaption(append, caption, bottom) {
  */
 
 
-var DEFAULT_OPTIONS = {
+var DEFAULT_OPTIONS$1 = {
   html: 'Copy',
   activeHtml: 'Done',
   duration: 1000,
@@ -1586,7 +1586,7 @@ function Copy(_ref3) {
       options = _ref3.options;
 
   if (options.copy) {
-    var copyOptions = assign({}, DEFAULT_OPTIONS, isObject(options.copy) ? options.copy : {});
+    var copyOptions = assign({}, DEFAULT_OPTIONS$1, isObject(options.copy) ? options.copy : {});
     var buttonClass = PROJECT_CODE_SHORT + "__copy";
     var labelClass = PROJECT_CODE_SHORT + "__button__label";
     options.tools = copyOptions.position;
@@ -1684,7 +1684,7 @@ function execCopy(code, onSuccess) {
 
 
 function toggleClass(button, duration) {
-  addClass(button, ACTIVE);
+  addClass$1(button, ACTIVE);
   var prop = '_rlTimer';
 
   if (button[prop]) {
@@ -1726,7 +1726,7 @@ var CLASS_DIFF = PROJECT_CODE_SHORT + "__diff";
  * @since 0.0.17
  */
 
-var DEFAULT_OPTIONS$1 = {
+var DEFAULT_OPTIONS = {
   addedSymbol: '+',
   deletedSymbol: '-'
 };
@@ -1746,7 +1746,7 @@ function Diff(_ref4) {
   }
 
   options.gutter = true;
-  var diffOptions = assign({}, DEFAULT_OPTIONS$1, isObject(options.diff) ? options.diff : null);
+  var diffOptions = assign({}, DEFAULT_OPTIONS, isObject(options.diff) ? options.diff : null);
   var added = [];
   var deleted = [];
   lines.forEach(function (tokens, index) {
@@ -1773,10 +1773,10 @@ function Diff(_ref4) {
   }
 
   event.on('line:open', function (append, classes, i) {
-    addClass$1(added, deleted, i, classes);
+    addClass(added, deleted, i, classes);
   });
   event.on('gutter:row:open', function (append, classes, i) {
-    addClass$1(added, deleted, i, classes);
+    addClass(added, deleted, i, classes);
   });
   event.on('gutter:row:opened', function (append, i) {
     var content = LINE_BREAK;
@@ -1803,7 +1803,7 @@ function Diff(_ref4) {
  */
 
 
-function addClass$1(added, deleted, index, classes) {
+function addClass(added, deleted, index, classes) {
   if (added.indexOf(index) > -1) {
     classes.push(CLASS_ADDED);
   } else if (deleted.indexOf(index) > -1) {
@@ -2074,7 +2074,7 @@ function appendTools(event, left) {
   });
 }
 
-var index$1 = /*#__PURE__*/Object.freeze({
+var index = /*#__PURE__*/Object.freeze({
   __proto__: null,
   ActiveLines: ActiveLines,
   Caption: Caption,
@@ -2094,14 +2094,14 @@ exports.LanguageName = LanguageName;
 exports.LineNumbers = LineNumbers;
 exports.Overlay = Overlay;
 exports.RyuseiLight = RyuseiLight;
-exports.components = index$1;
+exports.components = index;
 exports.css = css;
 exports["default"] = RyuseiLight;
 exports.html = html;
 exports.javascript = javascript;
 exports.json = json;
 exports.jsx = jsx;
-exports.languages = index;
+exports.languages = index$1;
 exports.none = none;
 exports.scss = scss;
 exports.svg = svg;
