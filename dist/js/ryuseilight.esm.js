@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 1.1.2
+ * Version  : 1.1.3
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -13,6 +13,7 @@
  */
 var LINE_BREAK = '\n';
 var CATEGORY_KEYWORD = 'keyword';
+var CATEGORY_CONSTANT = 'constant';
 var CATEGORY_COMMENT = 'comment';
 var CATEGORY_TAG = 'tag';
 var CATEGORY_TAG_CLOSE = 'tag.close';
@@ -36,10 +37,43 @@ var CATEGORY_REGEXP = 'regexp';
 var CATEGORY_OPERATOR = 'operator';
 var CATEGORY_BRACKET = 'bracket';
 var CATEGORY_DELIMITER = 'delimiter';
+var CATEGORY_SYMBOL = 'symbol';
 var CATEGORY_SPACE = 'space';
 var CATEGORY_TEXT = 'text'; // Internal use only
 
 var CATEGORY_LINEBREAK = 'lb';
+var categories = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  CATEGORY_KEYWORD: CATEGORY_KEYWORD,
+  CATEGORY_CONSTANT: CATEGORY_CONSTANT,
+  CATEGORY_COMMENT: CATEGORY_COMMENT,
+  CATEGORY_TAG: CATEGORY_TAG,
+  CATEGORY_TAG_CLOSE: CATEGORY_TAG_CLOSE,
+  CATEGORY_SELECTOR: CATEGORY_SELECTOR,
+  CATEGORY_ATRULE: CATEGORY_ATRULE,
+  CATEGORY_ATTRIBUTE: CATEGORY_ATTRIBUTE,
+  CATEGORY_PROPERTY: CATEGORY_PROPERTY,
+  CATEGORY_VALUE: CATEGORY_VALUE,
+  CATEGORY_VARIABLE: CATEGORY_VARIABLE,
+  CATEGORY_ENTITY: CATEGORY_ENTITY,
+  CATEGORY_CDATA: CATEGORY_CDATA,
+  CATEGORY_PROLOG: CATEGORY_PROLOG,
+  CATEGORY_IDENTIFIER: CATEGORY_IDENTIFIER,
+  CATEGORY_STRING: CATEGORY_STRING,
+  CATEGORY_NUMBER: CATEGORY_NUMBER,
+  CATEGORY_BOOLEAN: CATEGORY_BOOLEAN,
+  CATEGORY_FUNCTION: CATEGORY_FUNCTION,
+  CATEGORY_CLASS: CATEGORY_CLASS,
+  CATEGORY_DECORATOR: CATEGORY_DECORATOR,
+  CATEGORY_REGEXP: CATEGORY_REGEXP,
+  CATEGORY_OPERATOR: CATEGORY_OPERATOR,
+  CATEGORY_BRACKET: CATEGORY_BRACKET,
+  CATEGORY_DELIMITER: CATEGORY_DELIMITER,
+  CATEGORY_SYMBOL: CATEGORY_SYMBOL,
+  CATEGORY_SPACE: CATEGORY_SPACE,
+  CATEGORY_TEXT: CATEGORY_TEXT,
+  CATEGORY_LINEBREAK: CATEGORY_LINEBREAK
+});
 /**
  * Checks if the given subject is an object or not.
  *
@@ -2081,4 +2115,4 @@ var index = /*#__PURE__*/Object.freeze({
   Overlay: Overlay
 });
 export default RyuseiLight;
-export { ActiveLines, Caption, Copy, Diff, Gutter, LanguageName, LineNumbers, Overlay, RyuseiLight, index as components, css, html, javascript, json, jsx, index$1 as languages, none, scss, svg, tsx, typescript, vue, xml };
+export { ActiveLines, categories as CATEGORIES, Caption, Copy, Diff, Gutter, LanguageName, LineNumbers, Overlay, RyuseiLight, index as components, css, html, javascript, json, jsx, index$1 as languages, none, scss, svg, tsx, typescript, vue, xml };

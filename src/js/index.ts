@@ -8,3 +8,6 @@ export * as components from './components';
 
 // Exports all languages as a single object
 export * as languages from './languages';
+
+// Exports all categories
+export * as CATEGORIES from './constants/categories';
