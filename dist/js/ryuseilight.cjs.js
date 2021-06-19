@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 1.1.3
+ * Version  : 1.1.4
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -2126,6 +2126,7 @@ exports.Copy = Copy;
 exports.Diff = Diff;
 exports.Gutter = Gutter;
 exports.LanguageName = LanguageName;
+exports.Lexer = Lexer;
 exports.LineNumbers = LineNumbers;
 exports.Overlay = Overlay;
 exports.RyuseiLight = RyuseiLight;

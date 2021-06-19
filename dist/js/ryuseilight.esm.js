@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 1.1.3
+ * Version  : 1.1.4
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -2115,4 +2115,4 @@ var index = /*#__PURE__*/Object.freeze({
   Overlay: Overlay
 });
 export default RyuseiLight;
-export { ActiveLines, categories as CATEGORIES, Caption, Copy, Diff, Gutter, LanguageName, LineNumbers, Overlay, RyuseiLight, index as components, css, html, javascript, json, jsx, index$1 as languages, none, scss, svg, tsx, typescript, vue, xml };
+export { ActiveLines, categories as CATEGORIES, Caption, Copy, Diff, Gutter, LanguageName, Lexer, LineNumbers, Overlay, RyuseiLight, index as components, css, html, javascript, json, jsx, index$1 as languages, none, scss, svg, tsx, typescript, vue, xml };
