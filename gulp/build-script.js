@@ -1,12 +1,11 @@
 const { src, dest, parallel } = require( 'gulp' );
-const rollup      = require( 'rollup' );
-const typescript  = require( '@rollup/plugin-typescript' );
-const typescript2 = require( 'rollup-plugin-typescript2' );
-const babel       = require( '@rollup/plugin-babel' );
-const terser      = require( 'rollup-plugin-terser' );
-const path        = require( 'path' );
-const gzip        = require( 'gulp-gzip' );
-const info        = require( '../package' );
+const rollup     = require( 'rollup' );
+const typescript = require( 'rollup-plugin-typescript2' );
+const babel      = require( '@rollup/plugin-babel' );
+const terser     = require( 'rollup-plugin-terser' ).terser;
+const path       = require( 'path' );
+const gzip       = require( 'gulp-gzip' );
+const info       = require( '../package' );
 
 
 const banner = `/*!
@@ -22,14 +21,12 @@ function buildScript( type ) {
   return rollup.rollup( {
     input  : `./src/js/build/${ type }.ts`,
     plugins: [
-      typescript2( {
-        useTsconfigDeclarationDir: true,
-      } ),
+      typescript(),
       babel.getBabelOutputPlugin( {
         configFile: path.resolve( __dirname, '../.babelrc' ),
         allowAllFormats: true,
       } ),
-      terser.terser(),
+      terser(),
     ]
   } ).then( bundle => {
     return bundle.write( {
@@ -48,15 +45,23 @@ function buildScript( type ) {
   } );
 }
 
-function buildModule( format = 'esm' ) {
+function buildModule( format, declaration ) {
+  const options = declaration ? {
+    check: false,
+    useTsconfigDeclarationDir: true,
+    tsconfigOverride: {
+      compilerOptions: {
+        declarationDir: 'dist/types',
+        declaration   : true,
+        declarationMap: true,
+      },
+    },
+  } : {};
+
   return rollup.rollup( {
     input  : './src/js/index.ts',
     plugins: [
-      format === 'cjs'
-        ? typescript()
-        : typescript2( {
-          useTsconfigDeclarationDir: true,
-        } ),
+      typescript( options ),
       babel.getBabelOutputPlugin( {
         presets: [
           [
@@ -84,5 +89,5 @@ module.exports = parallel(
   function jsComponents() { return buildScript( 'components' ) },
   function jsComplete() { return buildScript( 'complete' ) },
   function moduleCjs() { return buildModule( 'cjs' ) },
-  function moduleEsm() { return buildModule( 'esm' ) },
+  function moduleEsm() { return buildModule( 'esm', true ) },
 );
