@@ -70,7 +70,7 @@ export class RyuseiLight {
    *
    * @param language - A language name.
    */
-  protected static getLexer( language: string ) {
+  private static getLexer( language: string ) {
     if ( ! lexers.none ) {
       RyuseiLight.register( none() );
     }
@@ -81,12 +81,12 @@ export class RyuseiLight {
   /**
    * Holds all renderers.
    */
-  protected readonly renderers: Renderer[] = [];
+  private readonly renderers: Renderer[] = [];
 
   /**
    * Holds options.
    */
-  protected readonly options: Options;
+  private readonly options: Options;
 
   /**
    * The RyuseiLight constructor.
@@ -104,7 +104,7 @@ export class RyuseiLight {
    * @param elm     - Optional. An element to highlight.
    * @param options - Optional. Options.
    */
-  protected getRenderer( code: string, elm?: HTMLElement, options?: Options ) {
+  private getRenderer( code: string, elm?: HTMLElement, options?: Options ) {
     options = assign( {}, this.options, options );
 
     const language     = options.language;

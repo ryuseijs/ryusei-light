@@ -23,27 +23,27 @@ export class Lexer {
   /**
    * Stores lines.
    */
-  protected lines: Token[][];
+  private lines: Token[][];
 
   /**
    * Indicates the current line index.
    */
-  protected index: number;
+  private index: number;
 
   /**
    * The depth of the state.
    */
-  protected depth: number;
+  private depth: number;
 
   /**
    * Limits the number of lines.
    */
-  protected limit: number;
+  private limit: number;
 
   /**
    * Turned to be `true` if the tokenization is manually aborted.
    */
-  protected aborted: boolean;
+  private aborted: boolean;
 
   /**
    * The Lexer constructor.
@@ -60,7 +60,7 @@ export class Lexer {
    *
    * @param language - A Language object to initialize.
    */
-  protected init( language: Language ): void {
+  private init( language: Language ): void {
     forOwn( language.grammar, ( tokenizers, key ) => {
       language.grammar[ key ] = this.merge( language, tokenizers );
     } );
@@ -76,7 +76,7 @@ export class Lexer {
    *
    * @return Merged tokenizers.
    */
-  protected merge( language: Language, tokenizers: Tokenizer[] ): Tokenizer[] {
+  private merge( language: Language, tokenizers: Tokenizer[] ): Tokenizer[] {
     const merged = [];
 
     for ( let i = 0; i < tokenizers.length; i++ ) {
@@ -111,7 +111,7 @@ export class Lexer {
    *
    * @return An index of the text where the handling ends.
    */
-  protected parse( text: string, language: Language, tokenizers: Tokenizer[], state: string ): number {
+  private parse( text: string, language: Language, tokenizers: Tokenizer[], state: string ): number {
     let index    = 0;
     let position = 0;
 
@@ -170,7 +170,7 @@ export class Lexer {
    * @param language - A Language object.
    * @param state    - A state name.
    */
-  protected push( token: Token, language: Language, state: string ): void {
+  private push( token: Token, language: Language, state: string ): void {
     const { depth } = this;
     const [ category, text ] = token;
     const start = this.index;
@@ -219,7 +219,7 @@ export class Lexer {
    *
    * @return An index of the text where the handling ends.
    */
-  protected handle( match: RegExpExecArray, language: Language, tokenizer: Tokenizer, state: string ): number {
+  private handle( match: RegExpExecArray, language: Language, tokenizer: Tokenizer, state: string ): number {
     const [ category ] = tokenizer;
 
     if ( ! category ) {

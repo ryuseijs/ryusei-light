@@ -1,4 +1,4 @@
-import { Language, Token, Tokenizer } from '../../types';
+import { Language, Token } from '../../types';
 /**
  * The class for creating a simple lexer by a Language object.
  *
@@ -12,23 +12,23 @@ export declare class Lexer {
     /**
      * Stores lines.
      */
-    protected lines: Token[][];
+    private lines;
     /**
      * Indicates the current line index.
      */
-    protected index: number;
+    private index;
     /**
      * The depth of the state.
      */
-    protected depth: number;
+    private depth;
     /**
      * Limits the number of lines.
      */
-    protected limit: number;
+    private limit;
     /**
      * Turned to be `true` if the tokenization is manually aborted.
      */
-    protected aborted: boolean;
+    private aborted;
     /**
      * The Lexer constructor.
      *
@@ -40,7 +40,7 @@ export declare class Lexer {
      *
      * @param language - A Language object to initialize.
      */
-    protected init(language: Language): void;
+    private init;
     /**
      * Includes tokenizers required by `#` annotation and flatten them.
      *
@@ -49,7 +49,7 @@ export declare class Lexer {
      *
      * @return Merged tokenizers.
      */
-    protected merge(language: Language, tokenizers: Tokenizer[]): Tokenizer[];
+    private merge;
     /**
      * Parses the text by the provided language and tokenizers.
      *
@@ -60,7 +60,7 @@ export declare class Lexer {
      *
      * @return An index of the text where the handling ends.
      */
-    protected parse(text: string, language: Language, tokenizers: Tokenizer[], state: string): number;
+    private parse;
     /**
      * Pushes the provided token to the lines array.
      *
@@ -68,7 +68,7 @@ export declare class Lexer {
      * @param language - A Language object.
      * @param state    - A state name.
      */
-    protected push(token: Token, language: Language, state: string): void;
+    private push;
     /**
      * Handles the matched text.
      *
@@ -79,7 +79,7 @@ export declare class Lexer {
      *
      * @return An index of the text where the handling ends.
      */
-    protected handle(match: RegExpExecArray, language: Language, tokenizer: Tokenizer, state: string): number;
+    private handle;
     /**
      * Tokenizes the text by the current language.
      *

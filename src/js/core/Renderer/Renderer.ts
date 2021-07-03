@@ -72,7 +72,7 @@ export class Renderer {
   /**
    * Initializes the instance.
    */
-  protected init(): void {
+  private init(): void {
     const { lines } = this;
 
     if ( lines.length ) {
@@ -98,7 +98,7 @@ export class Renderer {
    *
    * @return A rendered HTML string.
    */
-  protected renderLines( append: ( fragment: string ) => void ): void {
+  private renderLines( append: ( fragment: string ) => void ): void {
     const event   = this.event;
     const tagName = this.options.span ? 'span' : 'code';
 

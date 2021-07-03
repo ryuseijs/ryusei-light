@@ -1,6 +1,7 @@
 const { src, dest, parallel } = require( 'gulp' );
 const rollup     = require( 'rollup' );
 const typescript = require( 'rollup-plugin-typescript2' );
+const rename     = require( 'ts-transformer-properties-rename' ).default;
 const babel      = require( '@rollup/plugin-babel' );
 const terser     = require( 'rollup-plugin-terser' ).terser;
 const path       = require( 'path' );
@@ -21,12 +22,27 @@ function buildScript( type ) {
   return rollup.rollup( {
     input  : `./src/js/build/${ type }.ts`,
     plugins: [
-      typescript(),
+      typescript( {
+        transformers: [
+          service => ( {
+            before: [
+              rename( service.getProgram(), { internalPrefix: '' } ),
+            ],
+            after : [],
+          } ),
+        ],
+      } ),
       babel.getBabelOutputPlugin( {
         configFile: path.resolve( __dirname, '../.babelrc' ),
         allowAllFormats: true,
       } ),
-      terser(),
+      terser( {
+        mangle: {
+          properties: {
+            regex: /^_(private)_/,
+          },
+        }
+      } ),
     ]
   } ).then( bundle => {
     return bundle.write( {

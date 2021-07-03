@@ -1,5 +1,4 @@
 import { Language, Options, Token } from '../../types';
-import { Lexer } from '../Lexer/Lexer';
 import { Renderer } from '../Renderer/Renderer';
 /**
  * The class that tokenizes code for syntax highlighting.
@@ -41,15 +40,15 @@ export declare class RyuseiLight {
      *
      * @param language - A language name.
      */
-    protected static getLexer(language: string): Lexer;
+    private static getLexer;
     /**
      * Holds all renderers.
      */
-    protected readonly renderers: Renderer[];
+    private readonly renderers;
     /**
      * Holds options.
      */
-    protected readonly options: Options;
+    private readonly options;
     /**
      * The RyuseiLight constructor.
      *
@@ -63,7 +62,7 @@ export declare class RyuseiLight {
      * @param elm     - Optional. An element to highlight.
      * @param options - Optional. Options.
      */
-    protected getRenderer(code: string, elm?: HTMLElement, options?: Options): Renderer;
+    private getRenderer;
     /**
      * Applies the highlighter to elements that matches the selector or the provided element.
      *

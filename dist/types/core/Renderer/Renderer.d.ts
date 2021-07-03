@@ -44,7 +44,7 @@ export declare class Renderer {
     /**
      * Initializes the instance.
      */
-    protected init(): void;
+    private init;
     /**
      * Renders lines as HTML.
      *
@@ -52,7 +52,7 @@ export declare class Renderer {
      *
      * @return A rendered HTML string.
      */
-    protected renderLines(append: (fragment: string) => void): void;
+    private renderLines;
     /**
      * Returns all lines and wrapper elements.
      *
