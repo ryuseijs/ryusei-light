@@ -2,7 +2,7 @@ import { CATEGORY_COMMENT, CATEGORY_REGEXP, CATEGORY_STRING } from '../../../con
 
 
 describe( 'javascript', () => {
-  test( 'can tokenize regexes.', () => {
+  test( 'can tokenize regexps.', () => {
     [
       '/^.*?[\\n\\s]/gmsi',
       '/\\s+.+(?=[\\s/>])/gs',
