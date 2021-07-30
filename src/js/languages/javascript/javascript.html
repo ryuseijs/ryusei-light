@@ -141,6 +141,7 @@ export default ( Splide, Components ) => {
   a: /^.*?[\n\s]/gmsi,
   b: /\s+.+(?=[\s/>])/gs,
   c: /((?![*+?])(?:[^\r\n\[/\\]|\\.|\[(?:[^\r\n\]\\]|\\.)*\])+)\/((?:g(?:im?|mi?)?|i(?:gm?|mg?)?|m(?:gi?|ig?)?)?)/,
+  d: [[CATEGORY_STRING, /^`/], [CATEGORY_STRING, /(\$[^{]|\\[$`]|[^`$])+/], ['#expression', /\${/, '@rest'], [CATEGORY_STRING, /`/, '@break']]
 }
   </pre>
 

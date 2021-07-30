@@ -32,7 +32,7 @@ export function javascript(): Language {
         [ '#backtick', /`/, '@rest' ],
         [ CATEGORY_COMMENT, REGEXP_MULTILINE_COMMENT ],
         [ CATEGORY_COMMENT, REGEXP_SLASH_COMMENT ],
-        [ CATEGORY_REGEXP, /\/(\[.*[^\\]?]|\\\/|.)+?\/[gimsuy]*/ ],
+        [ CATEGORY_REGEXP, /\/(\[.*?[^\\]]|\\\/|.)+?\/[gimsuy]*/ ],
         [ CATEGORY_KEYWORD, REGEXP_GENERAL_KEYWORDS ],
         [ CATEGORY_KEYWORD, /\b(?:as|async|await|case|catch|const|debugger|default|delete|enum|export|from|import|let|package|private|protected|public|super|switch|static|this|typeof|undefined|var|void|with|yield)\b/ ],
         [ CATEGORY_KEYWORD, /\b((get|set)(?=\s+%func))/i ],
