@@ -102,7 +102,7 @@ function buildModule( format, declaration ) {
 
 module.exports = parallel(
   function jsDefault() { return buildScript( 'default' ) },
-  function jsComponents() { return buildScript( 'components' ) },
+  function jsExtensions() { return buildScript( 'extensions' ) },
   function jsComplete() { return buildScript( 'complete' ) },
   function moduleCjs() { return buildModule( 'cjs' ) },
   function moduleEsm() { return buildModule( 'esm', true ) },

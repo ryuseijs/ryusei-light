@@ -29,14 +29,14 @@ describe( 'Renderer#init()', () => {
     expect( tokens.length ).toBe( 3 );
   } );
 
-  test( 'can init components and emit the `mounted` event.', () => {
+  test( 'can init extensions and emit the `mounted` event.', () => {
     const mounted = jest.fn();
 
-    const Component = ( renderer: Renderer ) => {
+    const Extension = ( renderer: Renderer ) => {
       renderer.event.on( 'mounted', mounted );
     };
 
-    Renderer.compose( { Component } );
+    Renderer.compose( { Extension } );
 
     new Renderer( [], info );
     expect( mounted ).toHaveBeenCalled();

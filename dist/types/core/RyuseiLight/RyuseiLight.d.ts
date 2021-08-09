@@ -13,9 +13,9 @@ export declare class RyuseiLight {
      */
     static register(languages: Language | Language[]): void;
     /**
-     * Adds components.
+     * Composes extensions.
      *
-     * @param components - An object literal with Component functions.
+     * @param extensions - An object literal with Extension functions.
      */
     static compose: typeof Renderer.compose;
     /**

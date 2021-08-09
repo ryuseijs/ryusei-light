@@ -133,11 +133,11 @@ export interface LanguageInfo {
     name: string;
 }
 /**
- * The type for a Component function.
+ * The type for the Extension function.
  *
  * @since 0.0.1
  */
-export declare type Component = (renderer: Renderer) => void;
+export declare type Extension = (renderer: Renderer) => void;
 /**
  * The interface for options.
  *

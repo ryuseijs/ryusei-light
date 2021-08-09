@@ -1,5 +1,5 @@
 import { EventBus } from '../../event/EventBus';
-import { Component, LanguageInfo, Options, Token } from '../../types';
+import { Extension, LanguageInfo, Options, Token } from '../../types';
 /**
  * The class for highlighting code via provided tokens.
  *
@@ -7,11 +7,11 @@ import { Component, LanguageInfo, Options, Token } from '../../types';
  */
 export declare class Renderer {
     /**
-     * Adds components.
+     * Adds extensions.
      *
-     * @param components - An object literal with Component functions.
+     * @param extensions - An object literal with Component functions.
      */
-    static compose(components: Record<string, Component>): void;
+    static compose(extensions: Record<string, Extension>): void;
     /**
      * Holds lines with tokens.
      */

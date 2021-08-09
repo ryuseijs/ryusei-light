@@ -12,7 +12,7 @@ describe( 'javascript', () => {
     } );
   } );
 
-  test( 'should not tokenize a string or a comment as a regex.', () => {
+  test( 'should not tokenize a string or a comment as a regexp.', () => {
     const string = '"/a/gx"';
     expect( string ).toBeTokenized( 'javascript', [ [ CATEGORY_STRING, string ] ] );
 

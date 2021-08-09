@@ -6,7 +6,7 @@ import { Renderer } from '../Renderer';
 
 describe( 'Renderer#html()', () => {
   const info = { id: 'test', name: 'Test' };
-  let result;
+  let result: string[];
 
   beforeEach( () => {
     result = [

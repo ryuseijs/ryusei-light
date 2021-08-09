@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 $scrollbar-size: 10px !default;
 $scrollbar-track-background: #303f4d !default;
 $scrollbar-thumb-background: #647788 !default;
@@ -22,7 +24,7 @@ $scrollbar-corner-background: #222a33 !default;
 
     &::-webkit-scrollbar-thumb {
       background: $scrollbar-thumb-background;
-      border-radius: $scrollbar-size / 2;
+      border-radius: math.div( $scrollbar-size, 2 );
     }
 
     &::-webkit-scrollbar-corner {

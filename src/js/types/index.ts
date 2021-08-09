@@ -153,11 +153,11 @@ export interface LanguageInfo {
 }
 
 /**
- * The type for a Component function.
+ * The type for the Extension function.
  *
  * @since 0.0.1
  */
-export type Component = ( renderer: Renderer ) => void;
+export type Extension = ( renderer: Renderer ) => void;
 
 /**
  * The interface for options.

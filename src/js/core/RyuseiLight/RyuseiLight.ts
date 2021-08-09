@@ -36,9 +36,9 @@ export class RyuseiLight {
   }
 
   /**
-   * Adds components.
+   * Composes extensions.
    *
-   * @param components - An object literal with Component functions.
+   * @param extensions - An object literal with Extension functions.
    */
   static compose = Renderer.compose;
 

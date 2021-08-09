@@ -24,7 +24,7 @@ describe( 'forOwn', () => {
 
     const object = {};
 
-    forOwn( new Constructor(), ( value, key ) => {
+    forOwn( new ( Constructor as any )(), ( value, key ) => {
       object[ key ] = value;
     } );
 

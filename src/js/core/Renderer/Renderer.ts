@@ -1,14 +1,14 @@
 import { BODY, CODE, CONTAINER, LINE, ROOT, TOKEN } from '../../constants/classes';
 import { PROJECT_CODE_SHORT } from '../../constants/project';
 import { EventBus } from '../../event/EventBus';
-import { Component, LanguageInfo, Options, Token } from '../../types';
+import { Extension, LanguageInfo, Options, Token } from '../../types';
 import { escapeHtml, forOwn, tag } from '../../utils';
 
 
 /**
- * Stores all Component functions.
+ * Stores all Extensions functions.
  */
-const Components: Record<string, Component> = {};
+const Extensions: Record<string, Extension> = {};
 
 /**
  * The class for highlighting code via provided tokens.
@@ -17,13 +17,13 @@ const Components: Record<string, Component> = {};
  */
 export class Renderer {
   /**
-   * Adds components.
+   * Adds extensions.
    *
-   * @param components - An object literal with Component functions.
+   * @param extensions - An object literal with Component functions.
    */
-  static compose( components: Record<string, Component> ): void {
-    forOwn( components, ( Component, name ) => {
-      Components[ name ] = Component;
+  static compose( extensions: Record<string, Extension> ): void {
+    forOwn( extensions, ( Component, name ) => {
+      Extensions[ name ] = Component;
     } );
   }
 
@@ -84,7 +84,7 @@ export class Renderer {
       }
     }
 
-    forOwn( Components, Component => {
+    forOwn( Extensions, Component => {
       Component( this );
     } );
 

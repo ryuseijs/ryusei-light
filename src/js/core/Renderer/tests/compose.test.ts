@@ -2,7 +2,7 @@ import { Renderer } from '../Renderer';
 
 
 describe( 'Renderer.compose()', () => {
-  test( 'can compose components.', () => {
+  test( 'can compose extensions.', () => {
     const Component = ( renderer: Renderer ) => {
       expect( renderer.info.id ).toBe( 'langId' );
       expect( renderer.info.name ).toBe( 'langName' );

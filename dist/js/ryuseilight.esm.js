@@ -1,6 +1,6 @@
 /*!
  * RyuseiLight.js
- * Version  : 1.1.8
+ * Version  : 1.2.0
  * License  : MIT
  * Copyright: 2020 Naotoshi Fujita
  */
@@ -743,11 +743,11 @@ var EventBus = /*#__PURE__*/function () {
   return EventBus;
 }();
 /**
- * Stores all Component functions.
+ * Stores all Extensions functions.
  */
 
 
-var Components = {};
+var Extensions = {};
 /**
  * The class for highlighting code via provided tokens.
  *
@@ -784,15 +784,15 @@ var Renderer = /*#__PURE__*/function () {
     this.init();
   }
   /**
-   * Adds components.
+   * Adds extensions.
    *
-   * @param components - An object literal with Component functions.
+   * @param extensions - An object literal with Component functions.
    */
 
 
-  Renderer.compose = function compose(components) {
-    forOwn(components, function (Component, name) {
-      Components[name] = Component;
+  Renderer.compose = function compose(extensions) {
+    forOwn(extensions, function (Component, name) {
+      Extensions[name] = Component;
     });
   }
   /**
@@ -816,7 +816,7 @@ var Renderer = /*#__PURE__*/function () {
       }
     }
 
-    forOwn(Components, function (Component) {
+    forOwn(Extensions, function (Component) {
       Component(_this2);
     });
     this.event.emit('mounted');
@@ -1403,9 +1403,9 @@ var RyuseiLight = /*#__PURE__*/function () {
   return RyuseiLight;
 }();
 /**
- * Adds components.
+ * Composes extensions.
  *
- * @param components - An object literal with Component functions.
+ * @param extensions - An object literal with Extension functions.
  */
 
 
@@ -1861,7 +1861,7 @@ var GUTTER_CLASS_NAME = PROJECT_CODE_SHORT + "__gutter";
 var GUTTER_ROW_CLASS_NAME = GUTTER_CLASS_NAME + "__row";
 /**
  * The component for creating a gutter and its rows.
- * This is usually activated by other components through the `gutter` option.
+ * This is usually activated by other extensions through the `gutter` option.
  *
  * @since 0.0.1
  */
@@ -1871,7 +1871,7 @@ function Gutter(_ref5) {
       event = _ref5.event,
       root = _ref5.root,
       options = _ref5.options;
-  // Wait for initialization of other components.
+  // Wait for initialization of other extensions.
   event.on('mounted', function () {
     if (!options.gutter) {
       return;
@@ -2082,5 +2082,4 @@ var index = /*#__PURE__*/Object.freeze({
   LineNumbers: LineNumbers,
   Overlay: Overlay
 });
-export default RyuseiLight;
-export { ActiveLines, CATEGORY_ATRULE, CATEGORY_ATTRIBUTE, CATEGORY_BOOLEAN, CATEGORY_BRACKET, CATEGORY_CDATA, CATEGORY_CLASS, CATEGORY_COMMENT, CATEGORY_CONSTANT, CATEGORY_DECORATOR, CATEGORY_DELIMITER, CATEGORY_ENTITY, CATEGORY_FUNCTION, CATEGORY_IDENTIFIER, CATEGORY_KEYWORD, CATEGORY_LINEBREAK, CATEGORY_NUMBER, CATEGORY_OPERATOR, CATEGORY_PROLOG, CATEGORY_PROPERTY, CATEGORY_REGEXP, CATEGORY_SELECTOR, CATEGORY_SPACE, CATEGORY_STRING, CATEGORY_SYMBOL, CATEGORY_TAG, CATEGORY_TAG_CLOSE, CATEGORY_TEXT, CATEGORY_VALUE, CATEGORY_VARIABLE, Caption, Copy, Diff, Gutter, LanguageName, Lexer, LineNumbers, Overlay, RyuseiLight, index as components, css, html, javascript, json, jsx, index$1 as languages, none, scss, svg, tsx, typescript, vue, xml };
+export { ActiveLines, CATEGORY_ATRULE, CATEGORY_ATTRIBUTE, CATEGORY_BOOLEAN, CATEGORY_BRACKET, CATEGORY_CDATA, CATEGORY_CLASS, CATEGORY_COMMENT, CATEGORY_CONSTANT, CATEGORY_DECORATOR, CATEGORY_DELIMITER, CATEGORY_ENTITY, CATEGORY_FUNCTION, CATEGORY_IDENTIFIER, CATEGORY_KEYWORD, CATEGORY_LINEBREAK, CATEGORY_NUMBER, CATEGORY_OPERATOR, CATEGORY_PROLOG, CATEGORY_PROPERTY, CATEGORY_REGEXP, CATEGORY_SELECTOR, CATEGORY_SPACE, CATEGORY_STRING, CATEGORY_SYMBOL, CATEGORY_TAG, CATEGORY_TAG_CLOSE, CATEGORY_TEXT, CATEGORY_VALUE, CATEGORY_VARIABLE, Caption, Copy, Diff, index as Extensions, Gutter, LanguageName, Lexer, LineNumbers, Overlay, RyuseiLight, css, RyuseiLight as default, html, javascript, json, jsx, index$1 as languages, none, scss, svg, tsx, typescript, vue, xml };
